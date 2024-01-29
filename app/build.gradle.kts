@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.google.material)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.runtime.livedata)
 
     // hilt
     implementation(libs.hilt.android)

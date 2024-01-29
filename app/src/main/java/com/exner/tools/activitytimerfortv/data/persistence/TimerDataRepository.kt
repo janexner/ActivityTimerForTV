@@ -10,6 +10,11 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
         timerDataDAO.observeProcessesAlphabeticallyOrdered()
 
     @WorkerThread
+    suspend fun loadProcessById(uid: Long) : TimerProcess? {
+        return timerDataDAO.getTimerProcess(uid)
+    }
+
+    @WorkerThread
     suspend fun insert(timerProcess: TimerProcess) {
         timerDataDAO.insert(timerProcess)
     }
