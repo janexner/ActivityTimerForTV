@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProcessListViewModel @Inject constructor(
-    private val repository: TimerDataRepository
+    repository: TimerDataRepository
 ): ViewModel() {
 
-    private val observeProcessesRaw = repository.observeProcesses
+    val observeProcessesRaw = repository.observeProcesses
 }

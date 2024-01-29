@@ -61,9 +61,9 @@ object AppComponent {
                     "Info",
                     30,
                     10,
-                    true,
-                    2L,
-                    -1L
+                    false,
+                    0L,
+                    0L
                 )
             provider.get().insert(meditationTimerProcess)
             meditationTimerProcess =
@@ -73,8 +73,41 @@ object AppComponent {
                     15,
                     5,
                     false,
-                    0,
-                    -1L
+                    0L,
+                    0L
+                )
+            provider.get().insert(meditationTimerProcess)
+            meditationTimerProcess =
+                TimerProcess(
+                    "Test Process 3",
+                    "Info",
+                    10,
+                    10,
+                    false,
+                    0L,
+                    0L
+                )
+            provider.get().insert(meditationTimerProcess)
+            meditationTimerProcess =
+                TimerProcess(
+                    "Test Process 4",
+                    "Info",
+                    45,
+                    10,
+                    true,
+                    1L,
+                    0L
+                )
+            provider.get().insert(meditationTimerProcess)
+            meditationTimerProcess =
+                TimerProcess(
+                    "Test Process 5",
+                    "Info",
+                    60,
+                    30,
+                    false,
+                    0L,
+                    0L
                 )
             provider.get().insert(meditationTimerProcess)
         }

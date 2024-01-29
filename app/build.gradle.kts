@@ -69,16 +69,22 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.google.material)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.dagger.hilt.compiler)
-//    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Room components
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+
+    // compose destinations
+    implementation(libs.compose.destinations.core)
+    ksp(libs.compose.destinations.ksp)
 }
 
 hilt {
