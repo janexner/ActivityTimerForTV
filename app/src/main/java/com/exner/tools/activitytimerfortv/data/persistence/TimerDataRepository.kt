@@ -15,6 +15,11 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
+    suspend fun doesProcessWithIdExist(id: Long): Boolean {
+        return (timerDataDAO.getTimerProcess(id) !== null)
+    }
+
+    @WorkerThread
     suspend fun insert(timerProcess: TimerProcess) {
         timerDataDAO.insert(timerProcess)
     }
