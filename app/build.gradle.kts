@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -22,10 +24,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            isDebuggable = false
+        }
+        debug {
+            isDebuggable = true
         }
     }
     compileOptions {
@@ -47,6 +49,13 @@ android {
 
 kotlin {
     jvmToolchain(17)
+
+    sourceSets.main {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+    sourceSets.test {
+        kotlin.srcDir("build/generated/ksp/test/kotlin")
+    }
 }
 
 dependencies {
@@ -60,4 +69,23 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.google.material)
+
+    // hilt
+    implementation(libs.hilt.android)
+    ksp(libs.dagger.hilt.compiler)
+//    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Room components
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
+}
+
+hilt {
+    enableAggregatingTask = true
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/src/main/assets/schemas")
+    arg("room.incremental"   , "true")
 }
