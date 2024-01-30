@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
@@ -18,10 +21,14 @@ import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.material3.ClassicCard
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.Icon
+import androidx.tv.material3.IconButton
 import androidx.tv.material3.Text
+import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDetailsDestination
+import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -43,8 +50,18 @@ fun ProcessList(
         modifier = Modifier.padding(24.dp)
     ) {
         Row {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "+ Add Process")
+            WideButton(
+                onClick = { /*TODO*/ },
+                title = { Text(text = "Add Process") },
+                icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Process") }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(
+                onClick = {
+                    navigator.navigate(SettingsDestination)
+                },
+            ) {
+                Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))

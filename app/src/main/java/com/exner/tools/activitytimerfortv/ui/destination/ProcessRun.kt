@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,13 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.Icon
+import androidx.tv.material3.IconButton
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.steps.ProcessLeadInDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
+import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlin.time.Duration.Companion.seconds
@@ -58,11 +63,21 @@ fun ProcessRun(
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Row {
-            Button(onClick = {
-                processRunViewModel.cancel()
-                navigator.navigateUp()
-            }) {
-                Text(text = "Cancel")
+            WideButton(
+                onClick = {
+                    processRunViewModel.cancel()
+                    navigator.navigateUp()
+                },
+                title = { Text(text = "Cancel") },
+                icon = { Icon(imageVector = Icons.Filled.Close, contentDescription = "Cancel") }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(
+                onClick = {
+                    navigator.navigate(SettingsDestination)
+                },
+            ) {
+                Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -87,7 +102,10 @@ fun ProcessRun(
                 val plAction = (displayAction as ProcessLeadInDisplayStepAction)
                 BigTimerText(
                     duration = plAction.currentLeadInTime.seconds,
-                    hasHours == true
+                    withHours = hasHours == true,
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .align(Alignment.End)
                 )
             }
 
@@ -98,14 +116,16 @@ fun ProcessRun(
                     duration = pdAction.currentIntervalTime.seconds,
                     withHours = hasHours == true,
                     modifier = Modifier
-                        .fillMaxWidth(0.75f).align(Alignment.End)
+                        .fillMaxWidth(0.5f)
+                        .align(Alignment.End)
                 )
                 MediumTimerAndIntervalText(
                     duration = pdAction.currentProcessTime.seconds,
                     withHours = hasHours == true,
                     intervalText = "${pdAction.currentRound} of ${pdAction.totalRounds}",
                     modifier = Modifier
-                        .fillMaxWidth(0.75f).align(Alignment.End)
+                        .fillMaxWidth(0.5f)
+                        .align(Alignment.End)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = pdAction.processInfo, style = MaterialTheme.typography.bodyLarge)
