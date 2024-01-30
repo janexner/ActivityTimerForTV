@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.exner.tools.activitytimerfortv.audio.SoundPoolHolder
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
+import com.exner.tools.activitytimerfortv.data.preferences.UserPreferencesManager
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.steps.ProcessGotoAction
 import com.exner.tools.activitytimerfortv.steps.ProcessJumpbackAction
@@ -21,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProcessRunViewModel @Inject constructor(
     private val repository: TimerDataRepository,
-//    private val userPreferencesRepository: UserPreferencesManager
+    private val userPreferencesRepository: UserPreferencesManager
 ) : ViewModel() {
 
     private val _displayAction: MutableLiveData<ProcessStepAction> = MutableLiveData(null)
@@ -76,9 +78,9 @@ class ProcessRunViewModel @Inject constructor(
                         val partialResult =
                             getProcessStepListForOneProcess(
                                 process = process,
-                                hasLeadIn = firstRound && false,
-                                leadInTime = 5,
-                                countBackwards = false,
+                                hasLeadIn = firstRound && userPreferencesRepository.beforeCountingWait().firstOrNull() ?: false,
+                                leadInTime = userPreferencesRepository.howLongToWaitBeforeCounting().firstOrNull() ?: 5,
+                                countBackwards = userPreferencesRepository.countBackwards().firstOrNull() ?: false,
                             )
                         result.addAll(partialResult)
                         // do we need hours in the display?
@@ -161,7 +163,7 @@ class ProcessRunViewModel @Inject constructor(
                                     }
 
                                     is ProcessSoundAction -> {
-                                        if (false) { // nosound
+                                        if (userPreferencesRepository.noSounds().firstOrNull() != true) {
                                             SoundPoolHolder.playSound(action.soundId)
                                         }
                                     }

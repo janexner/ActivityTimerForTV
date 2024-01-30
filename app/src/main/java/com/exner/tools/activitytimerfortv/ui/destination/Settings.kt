@@ -1,7 +1,10 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,12 +19,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
-import com.exner.tools.activitytimerfortv.ui.TextAndSwitch
 import com.exner.tools.activitytimerfortv.ui.TextFieldForTimes
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Destination
@@ -44,16 +46,28 @@ fun Settings(
     ) {
         Text(
             text = "Settings",
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.displayLarge,
             modifier = Modifier.padding(8.dp)
         )
         HorizontalDivider()
-        TextAndSwitch(text = "Before counting, wait", checked = beforeCountingWait) {
-            settingsViewModel.updateBeforeCountingWait(it)
+        Row(
+            modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
+                settingsViewModel.updateBeforeCountingWait(!beforeCountingWait)
+            }
+        ) {
+            Text(
+                text = "Before counting, wait",
+                style = MaterialTheme.typography.displaySmall
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = beforeCountingWait,
+                onCheckedChange = { settingsViewModel.updateBeforeCountingWait(it) }
+            )
         }
         AnimatedVisibility(visible = beforeCountingWait) {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.padding(8.dp).fillMaxWidth()
             ) {
                 TextFieldForTimes(
                     value = howLongToWaitBeforeCounting,
@@ -64,17 +78,39 @@ fun Settings(
                 ) { Text(text = "5") }
             }
         }
-        TextAndSwitch(
-            text = "Count backwards (down to 0)",
-            checked = countBackwards
+        Row(
+            modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
+                settingsViewModel.updateCountBackwards(!countBackwards)
+            }
         ) {
-            settingsViewModel.updateCountBackwards(it)
+            Text(
+                text = "Count backwards (down to 0)",
+                style = MaterialTheme.typography.displaySmall
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = countBackwards,
+                onCheckedChange = {
+                    settingsViewModel.updateCountBackwards(it)
+                }
+            )
         }
-        TextAndSwitch(
-            text = "No Sound (count silently)",
-            checked = noSounds
+        Row(
+            modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
+                settingsViewModel.updateNoSounds(!noSounds)
+            }
         ) {
-            settingsViewModel.updateNoSounds(it)
+            Text(
+                text = "No Sound (count silently)",
+                style = MaterialTheme.typography.displaySmall
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = noSounds,
+                onCheckedChange = {
+                    settingsViewModel.updateNoSounds(it)
+                }
+            )
         }
     }
 }

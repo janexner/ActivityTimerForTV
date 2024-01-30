@@ -1,11 +1,8 @@
 package com.exner.tools.activitytimerfortv.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
@@ -40,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.LocalTextStyle
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
 import java.util.Locale
 import kotlin.time.Duration
@@ -188,31 +184,6 @@ private fun AutoSizeText(
         onTextLayout = onTextLayout,
         style = style
     )
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-fun TextAndSwitch(
-    text: String,
-    checked: Boolean,
-    onCheckedChange: ((Boolean) -> Unit)?
-) {
-    Row(
-        modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
-            onCheckedChange
-        }
-    ) {
-        Text(
-            text = text,
-            maxLines = 3,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange
-        )
-    }
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
