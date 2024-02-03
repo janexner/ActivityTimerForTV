@@ -1,6 +1,7 @@
 package com.exner.tools.activitytimerfortv.data.persistence
 
 import androidx.annotation.WorkerThread
+import androidx.room.Delete
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -20,7 +21,17 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
+    suspend fun getUuidsOfDependentProcesses(fotoTimerProcess: TimerProcess): List<String> {
+        return timerDataDAO.getUuidsOfDependantProcesses(fotoTimerProcess.uuid)
+    }
+
+    @WorkerThread
     suspend fun insert(timerProcess: TimerProcess) {
         timerDataDAO.insert(timerProcess)
+    }
+
+    @WorkerThread
+    suspend fun delete(timerProcess: TimerProcess) {
+        timerDataDAO.delete(timerProcess)
     }
 }
