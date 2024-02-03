@@ -37,7 +37,7 @@ import kotlin.time.Duration.Companion.seconds
 @Destination
 @Composable
 fun ProcessRun(
-    processId: Long,
+    processUuid: String,
     processRunViewModel: ProcessRunViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
@@ -49,7 +49,7 @@ fun ProcessRun(
     val hasHours by processRunViewModel.hasHours.observeAsState()
 
     processRunViewModel.initialiseRun(
-        processId = processId,
+        processUuid = processUuid,
     )
 
     processRunViewModel.setDoneEventHandler {

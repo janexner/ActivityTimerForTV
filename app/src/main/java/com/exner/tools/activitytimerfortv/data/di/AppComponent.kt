@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Provider
 import javax.inject.Singleton
 
@@ -55,36 +56,43 @@ object AppComponent {
 
         private suspend fun populateDatabaseWithSampleProcesses() {
             // Add sample words.
+            val secondUuid = UUID.randomUUID().toString()
             var meditationTimerProcess =
                 TimerProcess(
-                    "Test Process 1",
-                    "Info",
-                    30,
-                    10,
-                    false,
-                    0L,
-                    0L
+                    name = "Test Process 1",
+                    info = "A test process that runs for 30 minutes, then leads directly into 'Test Process 2'",
+                    uuid = UUID.randomUUID().toString(),
+                    processTime = 30,
+                    intervalTime = 10,
+                    hasAutoChain = true,
+                    gotoUuid = secondUuid,
+                    gotoName = "Test Process 2",
+                    uid = 0L,
                 )
             provider.get().insert(meditationTimerProcess)
             meditationTimerProcess =
                 TimerProcess(
-                    "Test Process 2",
-                    "Info",
-                    15,
-                    5,
-                    false,
-                    0L,
-                    0L
+                    name = "Test Process 2",
+                    info = "Test process that is launched by 'Test Process 2'. It runs for 15 minutes.",
+                    uuid = secondUuid,
+                    processTime = 15,
+                    intervalTime = 5,
+                    hasAutoChain = false,
+                    gotoUuid = null,
+                    gotoName = null,
+                    uid = 0L,
                 )
             provider.get().insert(meditationTimerProcess)
             meditationTimerProcess =
                 TimerProcess(
                     "Test Process 3",
                     "Info",
+                    uuid = UUID.randomUUID().toString(),
                     10,
                     10,
                     false,
-                    0L,
+                    null,
+                    null,
                     0L
                 )
             provider.get().insert(meditationTimerProcess)
@@ -92,10 +100,12 @@ object AppComponent {
                 TimerProcess(
                     "Test Process 4",
                     "Info",
+                    uuid = UUID.randomUUID().toString(),
                     45,
                     10,
-                    true,
-                    1L,
+                    false,
+                    null,
+                    null,
                     0L
                 )
             provider.get().insert(meditationTimerProcess)
@@ -103,10 +113,12 @@ object AppComponent {
                 TimerProcess(
                     "Test Process 5",
                     "Info",
+                    uuid = UUID.randomUUID().toString(),
                     60,
                     30,
                     false,
-                    0L,
+                    null,
+                    null,
                     0L
                 )
             provider.get().insert(meditationTimerProcess)

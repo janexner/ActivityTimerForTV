@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,12 +69,13 @@ fun ProcessList(
         TvLazyVerticalGrid(columns = TvGridCells.Adaptive(minSize = 250.dp)) {
             items(processes.size) { index ->
                 val process = processes[index]
+                val infoText = process.info + if (process.hasAutoChain) " > ${process.gotoName}" else ""
                 ClassicCard(
                     modifier = Modifier.padding(8.dp),
                     onClick = {
                         navigator.navigate(
                             ProcessDetailsDestination(
-                                processId = process.uid
+                                processUuid = process.uuid
                             )
                         )
                     },
@@ -88,7 +88,7 @@ fun ProcessList(
                             text = "${process.processTime} / ${process.intervalTime}",
                         )
                     },
-                    description = { Text(text = process.info) },
+                    description = { Text(text = infoText) },
                     image = {}
                 )
             }

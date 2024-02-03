@@ -34,7 +34,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun ProcessDetails(
-    processId: Long,
+    processUuid: String,
     processDetailsViewModel: ProcessDetailsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
@@ -43,11 +43,10 @@ fun ProcessDetails(
     val processTime by processDetailsViewModel.processTime.observeAsState()
     val intervalTime by processDetailsViewModel.intervalTime.observeAsState()
     val hasAutoChain by processDetailsViewModel.hasAutoChain.observeAsState()
-    val gotoId by processDetailsViewModel.gotoId.observeAsState()
-    // this one is the odd one out
-    val nextProcessesName by processDetailsViewModel.nextProcessesName.observeAsState()
+    val gotoId by processDetailsViewModel.gotoUuid.observeAsState()
+    val gotoName by processDetailsViewModel.gotoName.observeAsState()
 
-    processDetailsViewModel.getProcess(processId)
+    processDetailsViewModel.getProcess(processUuid)
 
     Column(
         modifier = Modifier
@@ -59,7 +58,7 @@ fun ProcessDetails(
             WideButton(
                 onClick = {
                     navigator.navigate(
-                        ProcessRunDestination(processId = processId)
+                        ProcessRunDestination(processUuid = processUuid)
                     )
                 },
                 title = { Text(text = "Start Process") },

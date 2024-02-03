@@ -11,8 +11,8 @@ interface TimerDataDAO {
     @Query("SELECT * FROM timerprocess ORDER BY name ASC")
     fun observeProcessesAlphabeticallyOrdered(): Flow<List<TimerProcess>>
 
-    @Query("SELECT * FROM timerprocess WHERE uid=:id")
-    suspend fun getTimerProcess(id : Long): TimerProcess?
+    @Query("SELECT * FROM timerprocess WHERE uuid=:uuid")
+    suspend fun getTimerProcessByUuid(uuid: String): TimerProcess?
 
     @Insert
     suspend fun insert(process: TimerProcess)

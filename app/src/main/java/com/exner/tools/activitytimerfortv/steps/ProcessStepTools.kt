@@ -50,7 +50,7 @@ fun getProcessStepListForOneProcess(
             // first things first
             val ftpstartAction = ProcessStartAction(
                 process.name,
-                process.uid
+                process.uuid
             )
             actionsList.add(ftpstartAction)
         }
@@ -94,11 +94,11 @@ fun getProcessStepListForOneProcess(
     }
 
     // does this process chain?
-    if (process.hasAutoChain && process.gotoId != null && process.gotoId >= 0) {
+    if (process.hasAutoChain && process.gotoUuid != null && process.gotoUuid != "0") {
         val actionsList = mutableListOf<ProcessStepAction>()
         val ftpchainAction = ProcessGotoAction(
             process.name,
-            process.gotoId
+            process.gotoUuid
         )
         actionsList.add(ftpchainAction)
         result.add(actionsList)
