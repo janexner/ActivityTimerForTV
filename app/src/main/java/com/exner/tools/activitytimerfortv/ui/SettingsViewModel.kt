@@ -35,6 +35,11 @@ class SettingsViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(),
         false
     )
+    val importAndUploadRestOfChainAutomatically: StateFlow<Boolean> = userPreferencesManager.importAndUploadRestOfChainAutomatically().stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        false
+    )
 
     fun updateBeforeCountingWait(newBeforeCountingWait: Boolean) {
         viewModelScope.launch {
@@ -60,4 +65,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun updateImportAndUploadRestOfChainAutomatically(doThemAll: Boolean) {
+        viewModelScope.launch {
+            userPreferencesManager.setImportAndUploadRestOfChainAutomatically(doThemAll)
+        }
+    }
 }

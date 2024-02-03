@@ -87,6 +87,10 @@ dependencies {
     // compose destinations
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
+
+    // retrofit
+    implementation(libs.squareup.retrofit)
+    implementation(libs.squareup.retrofit.converter.gson)
 }
 
 hilt {

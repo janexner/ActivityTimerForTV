@@ -3,6 +3,7 @@ package com.exner.tools.activitytimerfortv.ui
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
@@ -208,5 +209,24 @@ fun TextFieldForTimes(
         },
         placeholder = placeholder,
         textStyle = MaterialTheme.typography.bodyLarge
+    )
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun HeaderText(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.headlineSmall,
+        modifier = modifier.fillMaxWidth().padding(8.dp),
+    )
+}
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun BodyText(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = modifier,
     )
 }

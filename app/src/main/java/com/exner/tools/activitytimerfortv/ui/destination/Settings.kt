@@ -36,6 +36,7 @@ fun Settings(
     val howLongToWaitBeforeCounting by settingsViewModel.howLongToWaitBeforeCounting.collectAsStateWithLifecycle()
     val countBackwards by settingsViewModel.countBackwards.collectAsStateWithLifecycle()
     val noSounds by settingsViewModel.noSounds.collectAsStateWithLifecycle()
+    val importAndUploadRestOfChainAutomatically by settingsViewModel.importAndUploadRestOfChainAutomatically.collectAsStateWithLifecycle()
 
     // show vertically
     Column(
@@ -109,6 +110,23 @@ fun Settings(
                 checked = noSounds,
                 onCheckedChange = {
                     settingsViewModel.updateNoSounds(it)
+                }
+            )
+        }
+        Row(
+            modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
+                settingsViewModel.updateNoSounds(!noSounds)
+            }
+        ) {
+            Text(
+                text = "When selecting a process for import or upload, automatically select rest of chain, too",
+                style = MaterialTheme.typography.displaySmall
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = importAndUploadRestOfChainAutomatically,
+                onCheckedChange = {
+                    settingsViewModel.updateImportAndUploadRestOfChainAutomatically(it)
                 }
             )
         }

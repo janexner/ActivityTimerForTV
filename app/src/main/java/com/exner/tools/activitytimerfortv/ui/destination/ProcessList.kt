@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDetailsDestination
+import com.exner.tools.activitytimerfortv.ui.destination.destinations.RemoteProcessManagementDestination
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -53,6 +56,14 @@ fun ProcessList(
                 onClick = { /*TODO*/ },
                 title = { Text(text = "Add Process") },
                 icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Process") }
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            WideButton(
+                onClick = {
+                    navigator.navigate(RemoteProcessManagementDestination)
+                },
+                title = { Text(text = "Import Processes") },
+                icon = { Icon(imageVector = Icons.Filled.AddCircle, contentDescription = "Import Processes") }
             )
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
