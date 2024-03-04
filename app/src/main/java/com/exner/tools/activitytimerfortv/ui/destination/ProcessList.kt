@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -74,8 +73,6 @@ fun ProcessList(
                 Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings")
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        HorizontalDivider()
         Spacer(modifier = Modifier.height(8.dp))
         TvLazyVerticalGrid(columns = TvGridCells.Adaptive(minSize = 250.dp)) {
             items(processes.size) { index ->
