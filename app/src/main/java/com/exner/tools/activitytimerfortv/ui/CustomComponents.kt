@@ -119,6 +119,26 @@ fun MediumTimerAndIntervalText(
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun InfoText(
+    infoText: String,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        val annotatedInfoText = AnnotatedString(infoText)
+        BoxWithConstraints {
+            AutoSizeText(
+                text = annotatedInfoText,
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                fontSize = 49.dp.toTextDp(),
+                constraints = constraints
+            )
+        }
+    }
+}
+
 @Composable
 fun Dp.toTextDp(): TextUnit = textSp(density = LocalDensity.current)
 
@@ -218,7 +238,9 @@ fun HeaderText(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
         style = MaterialTheme.typography.headlineSmall,
-        modifier = modifier.fillMaxWidth().padding(8.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp),
     )
 }
 @OptIn(ExperimentalTvMaterial3Api::class)

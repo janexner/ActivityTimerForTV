@@ -3,6 +3,7 @@ package com.exner.tools.activitytimerfortv.ui.destination
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.steps.ProcessLeadInDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.BigTimerText
+import com.exner.tools.activitytimerfortv.ui.InfoText
 import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
@@ -127,8 +129,13 @@ fun ProcessRun(
                         .fillMaxWidth(0.5f)
                         .align(Alignment.End)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = pdAction.processInfo, style = MaterialTheme.typography.bodyLarge)
+                Spacer(modifier = Modifier.height(24.dp))
+                InfoText(
+                    infoText = pdAction.processInfo,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.CenterHorizontally)
+                )
             }
 
             else -> {
