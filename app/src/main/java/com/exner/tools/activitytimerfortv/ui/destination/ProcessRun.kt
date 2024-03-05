@@ -20,12 +20,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
-import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.steps.ProcessLeadInDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.BigTimerText
+import com.exner.tools.activitytimerfortv.ui.InfoText
 import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
@@ -128,7 +128,7 @@ fun ProcessRun(
                         .align(Alignment.End)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = pdAction.processInfo, style = MaterialTheme.typography.bodyLarge)
+                InfoText(infoText = pdAction.processInfo)
             }
 
             else -> {
