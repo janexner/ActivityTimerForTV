@@ -87,9 +87,8 @@ fun MediumTimerAndIntervalText(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        val completeText = durationToAnnotatedString(duration, withHours, " | Round $intervalText")
         AutoSizeText(
-            text = completeText,
+            text = durationToAnnotatedString(duration, withHours, " | Round $intervalText"),
             maxLines = 1,
             color = MaterialTheme.colorScheme.onSurface,
         )
