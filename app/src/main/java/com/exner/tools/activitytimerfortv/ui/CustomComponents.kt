@@ -109,6 +109,7 @@ fun InfoText(
             text = infoText,
             alignment = Alignment.BottomStart,
             color = MaterialTheme.colorScheme.onSurface,
+            lineSpacingRatio = 1.75f,
         )
     }
 }
