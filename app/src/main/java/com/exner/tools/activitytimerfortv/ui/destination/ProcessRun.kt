@@ -127,7 +127,7 @@ fun ProcessRun(
                         .fillMaxWidth(0.5f)
                         .align(Alignment.End)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 InfoText(infoText = pdAction.processInfo)
             }
 

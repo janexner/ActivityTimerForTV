@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -19,6 +20,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.LocalContentColor
+import androidx.tv.material3.LocalTextStyle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
@@ -41,7 +44,7 @@ fun durationToAnnotatedString(
         var myStyle = SpanStyle()
         if (withHours) {
             if ("00" == tmp[0]) {
-                myStyle = SpanStyle(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f))
+                myStyle = SpanStyle(color = LocalContentColor.current.copy(alpha = 0.2f))
             }
             withStyle(style = myStyle) {
                 append(tmp[0])
@@ -49,9 +52,9 @@ fun durationToAnnotatedString(
             append(":")
         }
         myStyle = if ("00" == tmp[1]) {
-            SpanStyle(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f))
+            SpanStyle(color = LocalContentColor.current.copy(alpha = 0.2f))
         } else {
-            SpanStyle(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 1f))
+            SpanStyle(color = LocalContentColor.current.copy(alpha = 1f))
         }
         withStyle(style = myStyle) {
             append(tmp[1])
@@ -66,15 +69,18 @@ fun durationToAnnotatedString(
     return styledOutput
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun BigTimerText(duration: Duration, withHours: Boolean, modifier: Modifier = Modifier) {
     AutoSizeText(
         text = durationToAnnotatedString(duration, withHours),
         modifier = modifier,
         maxLines = 1,
+        color = MaterialTheme.colorScheme.onSurface,
     )
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun MediumTimerAndIntervalText(
     duration: Duration,
@@ -87,10 +93,12 @@ fun MediumTimerAndIntervalText(
         AutoSizeText(
             text = completeText,
             maxLines = 1,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun InfoText(
     infoText: String,
@@ -100,6 +108,7 @@ fun InfoText(
         AutoSizeText(
             text = infoText,
             alignment = Alignment.BottomStart,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
