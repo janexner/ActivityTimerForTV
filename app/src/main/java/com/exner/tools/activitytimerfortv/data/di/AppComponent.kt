@@ -60,7 +60,7 @@ object AppComponent {
             var meditationTimerProcess =
                 TimerProcess(
                     name = "Test Process 1",
-                    info = "A test process that runs for 30 minutes, then leads directly into 'Test Process 2'",
+                    info = "A test process that runs for 30 seconds, then leads directly into 'Test Process 2'",
                     uuid = UUID.randomUUID().toString(),
                     processTime = 30,
                     intervalTime = 10,
@@ -73,7 +73,7 @@ object AppComponent {
             meditationTimerProcess =
                 TimerProcess(
                     name = "Test Process 2",
-                    info = "Test process that is launched by 'Test Process 2'. It runs for 15 minutes.",
+                    info = "Test process that is launched by 'Test Process 1'. It runs for 15 seconds.",
                     uuid = secondUuid,
                     processTime = 15,
                     intervalTime = 5,
@@ -96,16 +96,17 @@ object AppComponent {
                     0L
                 )
             provider.get().insert(meditationTimerProcess)
+            val fourthUuid = UUID.randomUUID().toString()
             meditationTimerProcess =
                 TimerProcess(
                     "Test Process 4",
-                    "Info",
-                    uuid = UUID.randomUUID().toString(),
+                    "A self-referential process, in that it loops back to itself once it has finished. This process runs for 45 seconds, with an interval every 10 seconds.",
+                    uuid = fourthUuid,
                     45,
                     10,
-                    false,
-                    null,
-                    null,
+                    hasAutoChain = true,
+                    gotoUuid = fourthUuid,
+                    gotoName = "Test Process 4",
                     0L
                 )
             provider.get().insert(meditationTimerProcess)
