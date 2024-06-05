@@ -5,6 +5,4 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.compose.compiler) apply false
-
-    id("com.autonomousapps.dependency-analysis") version "1.31.0"
 }

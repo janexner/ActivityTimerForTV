@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.exner.tools.activitytimerfortv"
-    compileSdkPreview = "VanillaIceCream"
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.exner.tools.activitytimerfortv"
@@ -43,7 +43,19 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    buildToolsVersion = "35.0.0 rc3"
+    buildToolsVersion = "34.0.0"
+
+    applicationVariants.all {
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val outputFileName = "Activity_Timer_${variant.baseName}_${variant.versionName}_${variant.versionCode}.apk"
+                println("OutputFileName: $outputFileName")
+                output.outputFileName = outputFileName
+            }
+    }
+
 }
 
 kotlin {
