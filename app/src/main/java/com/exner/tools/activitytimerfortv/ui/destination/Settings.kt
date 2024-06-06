@@ -41,7 +41,8 @@ fun Settings(
     NavigationDrawer(drawerContent = {
         ActivityTimerNavigationDrawerContent(
             navigator = navigator,
-            defaultSelectedIndex = settingsIndex)
+            defaultSelectedIndex = settingsIndex
+        )
     }) {
         // show vertically
         Column(

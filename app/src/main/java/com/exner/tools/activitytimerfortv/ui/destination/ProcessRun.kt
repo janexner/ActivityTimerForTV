@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,9 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
-import androidx.tv.material3.IconButton
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
@@ -27,12 +24,10 @@ import com.exner.tools.activitytimerfortv.ui.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.InfoText
 import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Destination
 @Composable
 fun ProcessRun(
@@ -70,14 +65,6 @@ fun ProcessRun(
                 title = { Text(text = "Cancel") },
                 icon = { Icon(imageVector = Icons.Filled.Close, contentDescription = "Cancel") }
             )
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                onClick = {
-                    navigator.navigate(SettingsDestination)
-                },
-            ) {
-                Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings")
-            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         // first, a nice process indicator (if possible)

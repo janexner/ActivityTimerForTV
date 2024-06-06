@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,7 +30,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
 @Destination
 @Composable
@@ -42,12 +41,11 @@ fun Home(
     val processes: List<TimerProcess> by processListViewModel.observeProcessesRaw.collectAsStateWithLifecycle(
         initialValue = emptyList()
     )
-    val currentCategory: TimerProcessCategory by processListViewModel.currentCategory.collectAsStateWithLifecycle(
-        initialValue = TimerProcessCategory("All", -1L)
-    )
     val categories: List<TimerProcessCategory> by processListViewModel.observeCategoriesRaw.collectAsStateWithLifecycle(
         initialValue = emptyList()
     )
+
+    var selectedCategory by remember { mutableLongStateOf(-2L) }
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -66,42 +64,54 @@ fun Home(
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .padding(top = 32.dp, bottom = 16.dp),
                 ) {
                     Tab(
                         selected = 0 == selectedTabIndex,
-                        onFocus = { selectedTabIndex = 0 }
+                        onFocus = {
+                            selectedCategory = -2L // ALL
+                            selectedTabIndex = 0
+                        }
                     ) {
                         Text(
-                            text = "All",
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                            text = "View All",
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
                     }
-                    categories.forEachIndexed() { index, category ->
+                    categories.forEachIndexed { index, category ->
                         Tab(
                             selected = (index + 1) == selectedTabIndex, // the +1 is a hack for the "All" category
-                            onFocus = { selectedTabIndex = index + 1 }
+                            onFocus = {
+                                selectedCategory = category.uid
+                                selectedTabIndex = index + 1
+                            }
                         ) {
                             Text(
                                 text = category.name,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                             )
                         }
                     }
                     Tab(
                         selected = (1 + categories.size) == selectedTabIndex,
-                        onFocus = { selectedTabIndex = 1 + categories.size }
+                        onFocus = {
+                            selectedCategory = -1L // NONE
+                            selectedTabIndex = 1 + categories.size
+                        }
                     ) {
                         Text(
                             text = "None",
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
                     }
                 }
 
+                val filteredProcesses = processes.filter { process ->
+                    selectedCategory == process.categoryId || selectedCategory == -2L
+                }
                 TvLazyVerticalGrid(columns = TvGridCells.Adaptive(minSize = 250.dp)) {
-                    items(processes.size) { index ->
-                        val process = processes[index]
+                    items(filteredProcesses.size) { index ->
+                        val process = filteredProcesses[index]
                         val infoText =
                             process.info + if (process.hasAutoChain) " > ${process.gotoName}" else ""
                         ClassicCard(

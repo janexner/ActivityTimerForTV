@@ -1,6 +1,5 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -9,30 +8,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
-import androidx.tv.material3.Button
 import androidx.tv.material3.ClassicCard
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
@@ -60,9 +53,6 @@ fun ProcessList(
 
     val processes: List<TimerProcess> by processListViewModel.observeProcessesRaw.collectAsStateWithLifecycle(
         initialValue = emptyList()
-    )
-    val currentCategory: TimerProcessCategory by processListViewModel.currentCategory.collectAsStateWithLifecycle(
-        initialValue = TimerProcessCategory("All", -1L)
     )
     val categories: List<TimerProcessCategory> by processListViewModel.observeCategoriesRaw.collectAsStateWithLifecycle(
         initialValue = emptyList()
@@ -131,59 +121,6 @@ fun ProcessList(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                var categoryExpanded by remember {
-                    mutableStateOf(false)
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp, 0.dp)
-                        .wrapContentSize(Alignment.TopEnd)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Category: ")
-                        Button(
-                            onClick = { categoryExpanded = true }
-                        ) {
-                            Text(text = currentCategory.name)
-                        }
-                    }
-                    DropdownMenu(
-                        expanded = categoryExpanded,
-                        onDismissRequest = { categoryExpanded = false }) {
-                        DropdownMenuItem(
-                            text = { Text(text = "All") },
-                            onClick = {
-                                processListViewModel.updateCategoryId(-2L)
-                                modified = true
-                                categoryExpanded = false
-                            },
-                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                        )
-                        categories.forEach { category ->
-                            DropdownMenuItem(
-                                text = { Text(text = category.name) },
-                                onClick = {
-                                    processListViewModel.updateCategoryId(category.uid)
-                                    modified = true
-                                    categoryExpanded = false
-                                },
-                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                            )
-                        }
-                        DropdownMenuItem(
-                            text = { Text(text = "None") },
-                            onClick = {
-                                processListViewModel.updateCategoryId(-1L)
-                                modified = true
-                                categoryExpanded = false
-                            },
-                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                        )
-                    }
-                }
 
                 TvLazyVerticalGrid(columns = TvGridCells.Adaptive(minSize = 250.dp)) {
                     items(processes.size) { index ->
