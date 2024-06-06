@@ -1,7 +1,6 @@
 package com.exner.tools.activitytimerfortv.data.persistence
 
 import androidx.annotation.WorkerThread
-import androidx.room.Delete
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -9,6 +8,13 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
 
     val observeProcesses: Flow<List<TimerProcess>> =
         timerDataDAO.observeProcessesAlphabeticallyOrdered()
+
+    val observeCategories: Flow<List<TimerProcessCategory>> =
+        timerDataDAO.observeCategoriesAlphabeticallyOrdered()
+
+    val observeCategoryUsageCount: Flow<List<TimerCategoryIdNameCount>> =
+        timerDataDAO.observeCategoryUsageCount()
+
 
     @WorkerThread
     suspend fun loadProcessByUuid(uuid: String): TimerProcess? {
@@ -26,6 +32,11 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
+    suspend fun getCategoryById(id: Long): TimerProcessCategory? {
+        return timerDataDAO.getCategoryById(id)
+    }
+
+    @WorkerThread
     suspend fun insert(timerProcess: TimerProcess) {
         timerDataDAO.insert(timerProcess)
     }
@@ -33,5 +44,22 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     @WorkerThread
     suspend fun delete(timerProcess: TimerProcess) {
         timerDataDAO.delete(timerProcess)
+    }
+
+    @WorkerThread
+    suspend fun insertCategory(category: TimerProcessCategory) {
+        timerDataDAO.insertCategory(category)
+    }
+
+    @WorkerThread
+    suspend fun updateCategory(category: TimerProcessCategory) {
+        timerDataDAO.updateCategory(category)
+    }
+
+    @WorkerThread
+    suspend fun deleteCategoriesByIdsFromList(listOfIds: List<Long>) {
+        if (listOfIds.isNotEmpty()) {
+            timerDataDAO.deleteCategoriesByIdsFromList(listOfIds)
+        }
     }
 }

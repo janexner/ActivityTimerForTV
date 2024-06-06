@@ -17,5 +17,7 @@ data class TimerProcess(
     @ColumnInfo(name = "goto_uuid") val gotoUuid: String?,
     @ColumnInfo(name = "goto_name") val gotoName: String?,
 
+    @ColumnInfo(name = "category_id") val categoryId: Long?,
+
     @PrimaryKey(autoGenerate = true) val uid: Long = 0
 )

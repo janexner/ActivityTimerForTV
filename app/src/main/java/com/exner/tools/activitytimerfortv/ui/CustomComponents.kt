@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +18,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -26,7 +25,6 @@ import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import java.util.Locale
 import kotlin.time.Duration
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun durationToAnnotatedString(
     duration: Duration,
@@ -67,7 +65,6 @@ fun durationToAnnotatedString(
     return styledOutput
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun BigTimerText(duration: Duration, withHours: Boolean, modifier: Modifier = Modifier) {
     AutoSizeText(
@@ -78,7 +75,6 @@ fun BigTimerText(duration: Duration, withHours: Boolean, modifier: Modifier = Mo
     )
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun MediumTimerAndIntervalText(
     duration: Duration,
@@ -95,7 +91,6 @@ fun MediumTimerAndIntervalText(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun InfoText(
     infoText: String,
@@ -111,7 +106,6 @@ fun InfoText(
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun TextFieldForTimes(
     value: Int,
@@ -120,7 +114,7 @@ fun TextFieldForTimes(
     placeholder: @Composable (() -> Unit)? = null,
 ) {
     var text by remember(value) { mutableStateOf(value.toString()) }
-    OutlinedTextField(
+    TextField(
         value = text,
         label = label,
         modifier = Modifier.fillMaxWidth(),
@@ -136,7 +130,6 @@ fun TextFieldForTimes(
     )
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun HeaderText(text: String, modifier: Modifier = Modifier) {
     Text(
@@ -148,7 +141,6 @@ fun HeaderText(text: String, modifier: Modifier = Modifier) {
     )
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun BodyText(text: String, modifier: Modifier = Modifier) {
     Text(

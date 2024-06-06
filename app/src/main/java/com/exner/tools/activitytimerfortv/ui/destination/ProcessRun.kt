@@ -23,7 +23,6 @@ import androidx.tv.material3.IconButton
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
-import com.exner.tools.activitytimerfortv.steps.ProcessLeadInDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.InfoText
 import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
@@ -97,18 +96,6 @@ fun ProcessRun(
         Spacer(modifier = Modifier.height(8.dp))
         // show the display, depending on where we are right now
         when (displayAction) {
-            is ProcessLeadInDisplayStepAction -> {
-                // TODO
-                val plAction = (displayAction as ProcessLeadInDisplayStepAction)
-                BigTimerText(
-                    duration = plAction.currentLeadInTime.seconds,
-                    withHours = hasHours == true,
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .align(Alignment.End)
-                )
-            }
-
             is ProcessDisplayStepAction -> {
                 // TODO
                 val pdAction = (displayAction as ProcessDisplayStepAction)

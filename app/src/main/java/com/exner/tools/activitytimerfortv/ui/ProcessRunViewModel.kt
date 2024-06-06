@@ -7,10 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.exner.tools.activitytimerfortv.audio.SoundPoolHolder
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.exner.tools.activitytimerfortv.data.preferences.UserPreferencesManager
-import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.steps.ProcessGotoAction
 import com.exner.tools.activitytimerfortv.steps.ProcessJumpbackAction
-import com.exner.tools.activitytimerfortv.steps.ProcessLeadInDisplayStepAction
 import com.exner.tools.activitytimerfortv.steps.ProcessSoundAction
 import com.exner.tools.activitytimerfortv.steps.ProcessStartAction
 import com.exner.tools.activitytimerfortv.steps.ProcessStepAction
@@ -69,7 +67,6 @@ class ProcessRunViewModel @Inject constructor(
                 val processIdList = mutableListOf<String>()
                 var currentID: String? = processUuid
                 var noLoopDetectedSoFar = true
-                var firstRound = true
 
                 while (currentID != null && noLoopDetectedSoFar) {
                     processIdList.add(currentID)
@@ -78,15 +75,12 @@ class ProcessRunViewModel @Inject constructor(
                         val partialResult =
                             getProcessStepListForOneProcess(
                                 process = process,
-                                hasLeadIn = firstRound && userPreferencesRepository.beforeCountingWait().firstOrNull() ?: false,
-                                leadInTime = userPreferencesRepository.howLongToWaitBeforeCounting().firstOrNull() ?: 5,
                                 countBackwards = userPreferencesRepository.countBackwards().firstOrNull() ?: false,
                             )
                         result.addAll(partialResult)
                         // do we need hours in the display?
                         _hasHours.value = hasHours.value == true || process.processTime > 60
                         // prepare for the next iteration
-                        firstRound = false
                         if (process.gotoUuid != null && process.gotoUuid != "" && repository.doesProcessWithUuidExist(
                                 process.gotoUuid
                             )
@@ -153,10 +147,6 @@ class ProcessRunViewModel @Inject constructor(
                             val actionsList = result[step]
                             actionsList.forEach { action ->
                                 when (action) {
-                                    is ProcessLeadInDisplayStepAction, is ProcessDisplayStepAction -> {
-                                        _displayAction.value = action
-                                    }
-
                                     is ProcessJumpbackAction -> {
                                         _currentStepNumber.value = action.stepNumber - 1 // aim left
                                         // bcs 4 lines down, we count up by one

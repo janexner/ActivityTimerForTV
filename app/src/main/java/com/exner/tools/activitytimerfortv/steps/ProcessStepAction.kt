@@ -19,12 +19,6 @@ class ProcessDisplayStepAction(
     val currentIntervalTime: Int
 ) : ProcessStepAction(processName)
 
-class ProcessLeadInDisplayStepAction(
-    processName: String,
-    val processParameters: String,
-    val currentLeadInTime: Int
-) : ProcessStepAction(processName)
-
 class ProcessSoundAction(
     processName: String,
     val soundId: Long

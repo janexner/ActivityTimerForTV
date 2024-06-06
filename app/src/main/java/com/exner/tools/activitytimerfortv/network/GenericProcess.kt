@@ -23,11 +23,12 @@ fun createTimerProcessFrom(genericProcess: GenericProcess): TimerProcess {
         name = genericProcess.name,
         info = genericProcess.info,
         uuid = genericProcess.uuid,
-        processTime = genericProcess.processTime / 60, // minutes!
-        intervalTime = genericProcess.intervalTime / 60,
+        processTime = genericProcess.processTime,
+        intervalTime = genericProcess.intervalTime,
         hasAutoChain = genericProcess.hasAutoChain,
         gotoUuid = genericProcess.gotoUuid,
         gotoName = genericProcess.gotoName,
+        categoryId = genericProcess.categoryId,
         uid = 0
     )
     return result

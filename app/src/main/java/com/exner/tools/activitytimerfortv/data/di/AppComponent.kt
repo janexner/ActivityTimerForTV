@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataDAO
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRoomDatabase
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
+import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,32 +58,43 @@ object AppComponent {
         private suspend fun populateDatabaseWithSampleProcesses() {
             // Add sample words.
             val secondUuid = UUID.randomUUID().toString()
+            val breathingCategory = TimerProcessCategory(
+                name = "Breathing",
+                uid = 0L
+            )
+            provider.get().insertCategory(breathingCategory)
             var meditationTimerProcess =
                 TimerProcess(
-                    name = "Test Process 1",
+                    name = "Basic 1 - Arriving",
                     info = "A test process that runs for 30 seconds, then leads directly into 'Test Process 2'",
                     uuid = UUID.randomUUID().toString(),
-                    processTime = 30,
-                    intervalTime = 10,
+                    processTime = 300,
+                    intervalTime = 300,
                     hasAutoChain = true,
                     gotoUuid = secondUuid,
-                    gotoName = "Test Process 2",
+                    gotoName = "Basic 1 - Mindful Breathing",
+                    categoryId = breathingCategory.uid,
                     uid = 0L,
                 )
             provider.get().insert(meditationTimerProcess)
             meditationTimerProcess =
                 TimerProcess(
-                    name = "Test Process 2",
+                    name = "Basic 1 - Mindful Breathing",
                     info = "Test process that is launched by 'Test Process 1'. It runs for 15 seconds.",
                     uuid = secondUuid,
-                    processTime = 15,
-                    intervalTime = 5,
+                    processTime = 15 * 60,
+                    intervalTime = 15 * 60,
                     hasAutoChain = false,
                     gotoUuid = null,
                     gotoName = null,
+                    categoryId = breathingCategory.uid,
                     uid = 0L,
                 )
             provider.get().insert(meditationTimerProcess)
+            val tabathaCategory = TimerProcessCategory(
+                name = "Tabatha",
+                uid = 0L
+            )
             meditationTimerProcess =
                 TimerProcess(
                     "Test Process 3",
@@ -93,7 +105,8 @@ object AppComponent {
                     false,
                     null,
                     null,
-                    0L
+                    categoryId = tabathaCategory.uid,
+                    uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
             val fourthUuid = UUID.randomUUID().toString()
@@ -107,7 +120,8 @@ object AppComponent {
                     hasAutoChain = true,
                     gotoUuid = fourthUuid,
                     gotoName = "Test Process 4",
-                    0L
+                    categoryId = tabathaCategory.uid,
+                    uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
             meditationTimerProcess =
@@ -120,7 +134,8 @@ object AppComponent {
                     false,
                     null,
                     null,
-                    0L
+                    categoryId = tabathaCategory.uid,
+                    uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
         }
