@@ -26,6 +26,7 @@ import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDetailsDestination
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
+import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -69,7 +70,7 @@ fun Home(
                     Tab(
                         selected = 0 == selectedTabIndex,
                         onFocus = {
-                            selectedCategory = -2L // ALL
+                            selectedCategory = CategoryListDefinitions.CATEGORY_UID_ALL
                             selectedTabIndex = 0
                         }
                     ) {
@@ -95,7 +96,7 @@ fun Home(
                     Tab(
                         selected = (1 + categories.size) == selectedTabIndex,
                         onFocus = {
-                            selectedCategory = -1L // NONE
+                            selectedCategory = CategoryListDefinitions.CATEGORY_UID_NONE
                             selectedTabIndex = 1 + categories.size
                         }
                     ) {
@@ -106,8 +107,20 @@ fun Home(
                     }
                 }
 
-                val filteredProcesses = processes.filter { process ->
-                    selectedCategory == process.categoryId || selectedCategory == -2L
+                val filteredProcesses = when (selectedCategory) {
+                    CategoryListDefinitions.CATEGORY_UID_ALL -> {
+                        processes
+                    }
+                    CategoryListDefinitions.CATEGORY_UID_NONE -> {
+                        processes.filter { process ->
+                            CategoryListDefinitions.CATEGORY_UID_NONE == process.categoryId || 0L == process.categoryId || null == process.categoryId
+                        }
+                    }
+                    else -> {
+                        processes.filter { process ->
+                            selectedCategory == process.categoryId
+                        }
+                    }
                 }
                 TvLazyVerticalGrid(columns = TvGridCells.Adaptive(minSize = 250.dp)) {
                     items(filteredProcesses.size) { index ->
