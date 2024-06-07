@@ -1,7 +1,11 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -11,18 +15,23 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.material3.ClassicCard
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.Tab
 import androidx.tv.material3.TabRow
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
+import com.exner.tools.activitytimerfortv.ui.BigTimerText
+import com.exner.tools.activitytimerfortv.ui.InfoText
+import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDetailsDestination
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
@@ -30,6 +39,8 @@ import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @RootNavGraph(start = true)
 @Destination
@@ -125,8 +136,6 @@ fun Home(
                 TvLazyVerticalGrid(columns = TvGridCells.Adaptive(minSize = 250.dp)) {
                     items(filteredProcesses.size) { index ->
                         val process = filteredProcesses[index]
-                        val infoText =
-                            process.info + if (process.hasAutoChain) " > ${process.gotoName}" else ""
                         ClassicCard(
                             modifier = Modifier.padding(8.dp),
                             onClick = {
@@ -140,13 +149,31 @@ fun Home(
                             title = {
                                 Text(text = process.name)
                             },
-                            subtitle = {
-                                Text(
-                                    text = "${process.processTime} / ${process.intervalTime}",
-                                )
-                            },
-                            description = { Text(text = infoText) },
-                            image = {}
+                            image = {
+                                Box(
+                                    modifier = Modifier
+                                        .aspectRatio(1.5f)
+                                        .background(brush = Brush.verticalGradient(
+                                            colors = listOf(
+                                                MaterialTheme.colorScheme.borderVariant,
+                                                MaterialTheme.colorScheme.tertiaryContainer
+                                            )
+                                        ))
+                                ) {
+                                    Column(modifier = Modifier.fillMaxSize()) {
+                                        BigTimerText(
+                                            duration = process.processTime.toDuration(DurationUnit.SECONDS),
+                                            withHours = true
+                                        )
+                                        MediumTimerAndIntervalText(
+                                            duration = process.intervalTime.toDuration(DurationUnit.SECONDS),
+                                            withHours = true,
+                                            intervalText = (process.intervalTime / process.processTime).toString()
+                                        )
+                                        InfoText(infoText = process.info)
+                                    }
+                                }
+                            }
                         )
                     }
                 }

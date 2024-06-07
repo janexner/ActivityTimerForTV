@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.exner.tools.activitytimerfortv.audio.SoundPoolHolder
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.exner.tools.activitytimerfortv.data.preferences.UserPreferencesManager
+import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.steps.ProcessGotoAction
 import com.exner.tools.activitytimerfortv.steps.ProcessJumpbackAction
 import com.exner.tools.activitytimerfortv.steps.ProcessSoundAction
@@ -46,6 +47,9 @@ class ProcessRunViewModel @Inject constructor(
     private val _hasHours: MutableLiveData<Boolean> = MutableLiveData(false)
     val hasHours: LiveData<Boolean> = _hasHours
 
+    private val _showStages: MutableLiveData<Boolean> = MutableLiveData(false)
+    val showStages: LiveData<Boolean> = _showStages
+
     private var job: Job? = null
 
     private var isRunning: Boolean = false
@@ -57,6 +61,8 @@ class ProcessRunViewModel @Inject constructor(
         processUuid: String,
     ) {
         val result = mutableListOf<List<ProcessStepAction>>()
+
+        _showStages.value = false // bcs default for simple screen is yes
 
         if (!isRunning) {
             isRunning = true
@@ -80,6 +86,8 @@ class ProcessRunViewModel @Inject constructor(
                         result.addAll(partialResult)
                         // do we need hours in the display?
                         _hasHours.value = hasHours.value == true || process.processTime > 60
+                        // do we want to simplify the display?
+                        _showStages.value = process.processTime != process.intervalTime
                         // prepare for the next iteration
                         if (process.gotoUuid != null && process.gotoUuid != "" && repository.doesProcessWithUuidExist(
                                 process.gotoUuid
@@ -147,6 +155,10 @@ class ProcessRunViewModel @Inject constructor(
                             val actionsList = result[step]
                             actionsList.forEach { action ->
                                 when (action) {
+                                    is ProcessDisplayStepAction -> {
+                                        _displayAction.value = action
+                                    }
+
                                     is ProcessJumpbackAction -> {
                                         _currentStepNumber.value = action.stepNumber - 1 // aim left
                                         // bcs 4 lines down, we count up by one

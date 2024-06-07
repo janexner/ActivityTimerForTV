@@ -34,7 +34,6 @@ import androidx.tv.foundation.lazy.grid.TvGridCells
 import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.foundation.lazy.grid.rememberTvLazyGridState
 import androidx.tv.material3.Checkbox
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.ListItem
@@ -55,7 +54,6 @@ sealed class ProcessListTabs(val name: String) {
     data object RemoteOnlyTab : ProcessListTabs("Remote")
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Destination
 @Composable
 fun RemoteProcessManagement(

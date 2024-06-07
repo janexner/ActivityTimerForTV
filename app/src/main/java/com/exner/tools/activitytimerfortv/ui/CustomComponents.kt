@@ -71,7 +71,7 @@ fun BigTimerText(duration: Duration, withHours: Boolean, modifier: Modifier = Mo
         text = durationToAnnotatedString(duration, withHours),
         modifier = modifier,
         maxLines = 1,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = MaterialTheme.colorScheme.onSurface,
     )
 }
 
@@ -86,7 +86,7 @@ fun MediumTimerAndIntervalText(
         AutoSizeText(
             text = durationToAnnotatedString(duration, withHours, " | Round $intervalText"),
             maxLines = 1,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
@@ -100,7 +100,7 @@ fun InfoText(
         AutoSizeText(
             text = infoText,
             alignment = Alignment.BottomStart,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
             lineSpacingRatio = 1.75f,
         )
     }

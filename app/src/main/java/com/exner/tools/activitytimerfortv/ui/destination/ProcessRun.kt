@@ -41,6 +41,7 @@ fun ProcessRun(
     val currentStepNumber by processRunViewModel.currentStepNumber.observeAsState()
     val hasLoop by processRunViewModel.hasLoop.observeAsState()
     val hasHours by processRunViewModel.hasHours.observeAsState()
+    val showStages by processRunViewModel.showStages.observeAsState()
 
     processRunViewModel.initialiseRun(
         processUuid = processUuid,
@@ -93,14 +94,16 @@ fun ProcessRun(
                         .fillMaxWidth(0.5f)
                         .align(Alignment.End)
                 )
-                MediumTimerAndIntervalText(
-                    duration = pdAction.currentProcessTime.seconds,
-                    withHours = hasHours == true,
-                    intervalText = "${pdAction.currentRound} of ${pdAction.totalRounds}",
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .align(Alignment.End)
-                )
+                if (showStages == true) {
+                    MediumTimerAndIntervalText(
+                        duration = pdAction.currentProcessTime.seconds,
+                        withHours = hasHours == true,
+                        intervalText = "${pdAction.currentRound} of ${pdAction.totalRounds}",
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .align(Alignment.End)
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 InfoText(infoText = pdAction.processInfo)
             }
