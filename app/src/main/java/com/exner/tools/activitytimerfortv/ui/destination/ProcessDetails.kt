@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -56,31 +55,6 @@ fun ProcessDetails(
             .fillMaxSize()
             .padding(24.dp, 12.dp)
     ) {
-        // content
-        Box(
-            modifier = Modifier.fillMaxHeight(0.8f)
-        ) {
-            if (null !== processTime && null !== intervalTime) {
-                TimerDisplay(
-                    processTime = processTime!!.toDuration(DurationUnit.SECONDS),
-                    intervalTime = intervalTime!!.toDuration(DurationUnit.SECONDS),
-                    info = info,
-                    forceWithHours = true
-                )
-            }
-        }
-        // spacer
-        Spacer(modifier = Modifier.weight(0.1f))
-        // more process information
-        Row {
-            val tempName: String = name ?: ""
-            Text(text = "Process: '$tempName'")
-            if (hasAutoChain == true) {
-                Text(text = ", when complete, will lead into '$gotoName'")
-            }
-        }
-        // spacer
-        Spacer(modifier = Modifier.weight(0.1f))
         // buttons
         Row {
             WideButton(
@@ -123,6 +97,31 @@ fun ProcessDetails(
                     )
                 }
             )
+        }
+        // spacer
+        Spacer(modifier = Modifier.size(16.dp))
+        // more process information
+        Row {
+            val tempName: String = name ?: ""
+            Text(text = "Process: '$tempName'")
+            if (hasAutoChain == true) {
+                Text(text = ", when complete, will lead into '$gotoName'")
+            }
+        }
+        // spacer
+        Spacer(modifier = Modifier.weight(0.1f))
+        // content
+        Box(
+//            modifier = Modifier.fillMaxHeight(0.8f)
+        ) {
+            if (null !== processTime && null !== intervalTime) {
+                TimerDisplay(
+                    processTime = processTime!!.toDuration(DurationUnit.SECONDS),
+                    intervalTime = intervalTime!!.toDuration(DurationUnit.SECONDS),
+                    info = info,
+                    forceWithHours = true
+                )
+            }
         }
     }
 }

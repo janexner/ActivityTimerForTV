@@ -126,14 +126,21 @@ fun TimerDisplay(
                 .fillMaxWidth(0.66f)
                 .align(Alignment.End)
         )
-        MediumTimerAndIntervalText(
-            duration = intervalTime,
-            withHours = forceWithHours,
-            intervalText = (processTime / intervalTime).roundToInt().toString(),
+        Row(
             modifier = Modifier
                 .fillMaxWidth(0.66f)
                 .align(Alignment.End)
-        )
+        ) {
+            AutoSizeText(
+                text = durationToAnnotatedString(
+                    duration = intervalTime,
+                    withHours = forceWithHours,
+                    postText = " | ${(processTime / intervalTime).roundToInt().toString()} round(s)"
+                ),
+                maxLines = 1,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
         if (null != info) {
             Spacer(modifier = Modifier.height(16.dp))
             InfoText(infoText = info)

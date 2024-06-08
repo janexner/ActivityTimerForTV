@@ -62,8 +62,6 @@ class ProcessRunViewModel @Inject constructor(
     ) {
         val result = mutableListOf<List<ProcessStepAction>>()
 
-        _showStages.value = false // bcs default for simple screen is yes
-
         if (!isRunning) {
             isRunning = true
 
