@@ -66,7 +66,7 @@ object AppComponent {
             var meditationTimerProcess =
                 TimerProcess(
                     name = "Basic 1 - Arriving",
-                    info = "A test process that runs for 30 seconds, then leads directly into 'Test Process 2'",
+                    info = "5 minutes to help you arrive. After that, 'Basic 1 - Mindful Breathing' will be started.",
                     uuid = UUID.randomUUID().toString(),
                     processTime = 300,
                     intervalTime = 300,
@@ -80,7 +80,7 @@ object AppComponent {
             meditationTimerProcess =
                 TimerProcess(
                     name = "Basic 1 - Mindful Breathing",
-                    info = "Test process that is launched by 'Test Process 1'. It runs for 15 seconds.",
+                    info = "15 minutes for mindful breathing.",
                     uuid = secondUuid,
                     processTime = 15 * 60,
                     intervalTime = 15 * 60,
@@ -98,7 +98,7 @@ object AppComponent {
             meditationTimerProcess =
                 TimerProcess(
                     "Test Process 3",
-                    "Info",
+                    "Not much to say. 10 seconds, just one interval.",
                     uuid = UUID.randomUUID().toString(),
                     10,
                     10,
@@ -127,7 +127,7 @@ object AppComponent {
             meditationTimerProcess =
                 TimerProcess(
                     "Test Process 5",
-                    "Info",
+                    "A 1-minute process with two 30-second intervals.",
                     uuid = UUID.randomUUID().toString(),
                     60,
                     30,
