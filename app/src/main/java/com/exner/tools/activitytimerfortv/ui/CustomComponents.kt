@@ -1,7 +1,11 @@
 package com.exner.tools.activitytimerfortv.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextField
@@ -23,6 +27,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import java.util.Locale
+import kotlin.math.roundToInt
 import kotlin.time.Duration
 
 @Composable
@@ -103,6 +108,36 @@ fun InfoText(
             color = MaterialTheme.colorScheme.onSurface,
             lineSpacingRatio = 1.75f,
         )
+    }
+}
+
+@Composable
+fun TimerDisplay(
+    processTime: Duration,
+    intervalTime: Duration,
+    info: String?,
+    forceWithHours: Boolean = false
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        BigTimerText(
+            duration = processTime,
+            withHours = forceWithHours,
+            modifier = Modifier
+                .fillMaxWidth(0.66f)
+                .align(Alignment.End)
+        )
+        MediumTimerAndIntervalText(
+            duration = intervalTime,
+            withHours = forceWithHours,
+            intervalText = (processTime / intervalTime).roundToInt().toString(),
+            modifier = Modifier
+                .fillMaxWidth(0.66f)
+                .align(Alignment.End)
+        )
+        if (null != info) {
+            Spacer(modifier = Modifier.height(16.dp))
+            InfoText(infoText = info)
+        }
     }
 }
 

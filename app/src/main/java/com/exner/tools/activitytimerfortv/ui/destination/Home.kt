@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -29,10 +28,8 @@ import androidx.tv.material3.TabRow
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
-import com.exner.tools.activitytimerfortv.ui.BigTimerText
-import com.exner.tools.activitytimerfortv.ui.InfoText
-import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
+import com.exner.tools.activitytimerfortv.ui.TimerDisplay
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDetailsDestination
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
@@ -152,26 +149,22 @@ fun Home(
                             image = {
                                 Box(
                                     modifier = Modifier
-                                        .aspectRatio(1.5f)
-                                        .background(brush = Brush.verticalGradient(
-                                            colors = listOf(
-                                                MaterialTheme.colorScheme.borderVariant,
-                                                MaterialTheme.colorScheme.tertiaryContainer
+                                        .aspectRatio(1.77f)
+                                        .background(
+                                            brush = Brush.horizontalGradient(
+                                                colors = listOf(
+                                                    MaterialTheme.colorScheme.borderVariant,
+                                                    MaterialTheme.colorScheme.tertiaryContainer
+                                                )
                                             )
-                                        ))
+                                        )
                                 ) {
-                                    Column(modifier = Modifier.fillMaxSize()) {
-                                        BigTimerText(
-                                            duration = process.processTime.toDuration(DurationUnit.SECONDS),
-                                            withHours = true
-                                        )
-                                        MediumTimerAndIntervalText(
-                                            duration = process.intervalTime.toDuration(DurationUnit.SECONDS),
-                                            withHours = true,
-                                            intervalText = (process.intervalTime / process.processTime).toString()
-                                        )
-                                        InfoText(infoText = process.info)
-                                    }
+                                    TimerDisplay(
+                                        processTime = process.processTime.toDuration(DurationUnit.SECONDS),
+                                        intervalTime = process.intervalTime.toDuration(DurationUnit.SECONDS),
+                                        info = process.info,
+                                        forceWithHours = true
+                                    )
                                 }
                             }
                         )

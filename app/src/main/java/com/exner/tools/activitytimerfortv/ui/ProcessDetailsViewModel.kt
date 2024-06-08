@@ -26,11 +26,11 @@ class ProcessDetailsViewModel @Inject constructor(
     private val _uuid: MutableLiveData<String> = MutableLiveData("")
     val uuid: LiveData<String> = _uuid
 
-    private val _processTime: MutableLiveData<String> = MutableLiveData("30")
-    val processTime: LiveData<String> = _processTime
+    private val _processTime: MutableLiveData<Int> = MutableLiveData(30)
+    val processTime: LiveData<Int> = _processTime
 
-    private val _intervalTime: MutableLiveData<String> = MutableLiveData("10")
-    val intervalTime: LiveData<String> = _intervalTime
+    private val _intervalTime: MutableLiveData<Int> = MutableLiveData(10)
+    val intervalTime: LiveData<Int> = _intervalTime
 
     private val _hasAutoChain: MutableLiveData<Boolean> = MutableLiveData(false)
     val hasAutoChain: LiveData<Boolean> = _hasAutoChain
@@ -50,8 +50,8 @@ class ProcessDetailsViewModel @Inject constructor(
             if (process != null) {
                 _name.value = process.name
                 _info.value = process.info
-                _processTime.value = process.processTime.toString()
-                _intervalTime.value = process.intervalTime.toString()
+                _processTime.value = process.processTime
+                _intervalTime.value = process.intervalTime
                 _hasAutoChain.value = process.hasAutoChain
                 _gotoUuid.value = process.gotoUuid
                 _gotoName.value = process.gotoName
