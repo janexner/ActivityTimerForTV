@@ -130,6 +130,10 @@ dependencies {
     // retrofit
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.converter.gson)
+
+    // nearby
+    implementation(libs.play.services.nearby)
+    implementation(libs.accompanist.permissions)
 }
 
 hilt {

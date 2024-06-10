@@ -92,7 +92,7 @@ fun Settings(
             }
             Row(
                 modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
-                    settingsViewModel.updateImportAndUploadRestOfChainAutomatically(!noSounds)
+                    settingsViewModel.updateImportAndUploadRestOfChainAutomatically(!importAndUploadRestOfChainAutomatically)
                 }
             ) {
                 Text(

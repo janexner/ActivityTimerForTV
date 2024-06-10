@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.CategoryListDestination
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.HomeDestination
+import com.exner.tools.activitytimerfortv.ui.destination.destinations.ImportFromNearbyDeviceDestination
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessListDestination
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.RemoteProcessManagementDestination
 import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
@@ -37,8 +38,14 @@ val navigationItems = listOf(
         destination = HomeDestination
     ),
     NavigationItems(
-        title = "Import Processes",
-        description = "Import Processes",
+        title = "Import Processes (Nearby)",
+        description = "Import Processes from nearby device",
+        icon = Icons.Default.AddCircle,
+        destination = ImportFromNearbyDeviceDestination
+    ),
+    NavigationItems(
+        title = "Import Processes (Web)",
+        description = "Import Processes from the web",
         icon = Icons.Default.AddCircle,
         destination = RemoteProcessManagementDestination
     ),
