@@ -1,4 +1,4 @@
-package com.exner.tools.activitytimerfortv.ui.tools
+package com.exner.tools.activitytimerfortv.network
 
 import android.content.Context
 import android.content.pm.PackageManager

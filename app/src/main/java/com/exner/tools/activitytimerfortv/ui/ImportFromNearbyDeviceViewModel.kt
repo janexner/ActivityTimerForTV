@@ -1,6 +1,7 @@
 package com.exner.tools.activitytimerfortv.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.exner.tools.activitytimerfortv.network.TimerConnectionLifecycleCallback
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 enum class ProcessStateConstants {
     AWAITING_PERMISSIONS,
+    PERMISSIONS_GRANTED,
     PERMISSIONS_DENIED,
     AWAITING_DISCOVERY,
     DISCOVERED,
@@ -23,6 +25,10 @@ enum class ProcessStateConstants {
     DISCONNECTED,
     ERROR
 }
+
+const val endpointId = "com.exner.tools.activitytimerfortv"
+const val userName = "Anonymous"
+
 data class ProcessState(
     val currentState: ProcessStateConstants = ProcessStateConstants.AWAITING_PERMISSIONS
 )
@@ -30,7 +36,7 @@ data class ProcessState(
 @HiltViewModel
 class ImportFromNearbyDeviceViewModel @Inject constructor(
     repository: TimerDataRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _processStateFlow = MutableStateFlow(ProcessState())
     val processStateFlow: StateFlow<ProcessState> = _processStateFlow.asStateFlow()
@@ -39,15 +45,31 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
         _processStateFlow.value = ProcessState(newState)
     }
 
-fun startAdvertising(context: Context) {
+    fun startAdvertising(context: Context) {
         val advertisingOptions: AdvertisingOptions =
             AdvertisingOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT).build()
-        val connectionLifecycleCallback = TimerConnectionLifecycleCallback()
+        val connectionLifecycleCallback = TimerConnectionLifecycleCallback(context)
+        Log.d("STARTADV", "Starting to advertise...")
         Nearby.getConnectionsClient(context)
             .startAdvertising(
-                "Anonymous", "com.exner.tools.activitytimerfortv", connectionLifecycleCallback, advertisingOptions
+                userName,
+                endpointId,
+                connectionLifecycleCallback,
+                advertisingOptions
             )
-            .addOnSuccessListener { unused: Void? -> }
-            .addOnFailureListener { e: Exception? -> }
+            .addOnSuccessListener { unused: Void? ->
+                Log.d("STARTADV", "Success! Was found by nearby device!")
+                Log.d("STARTADV", unused.toString())
+            }
+            .addOnFailureListener { e: Exception? ->
+                if (e != null) {
+                    Log.d("STARTADV", "Advertising failed: ${e.message}")
+                }
+            }
+    }
+
+    fun stopAdvertising(context: Context) {
+        Log.d("STOPADV", "Stop advertising.")
+        Nearby.getConnectionsClient(context).stopAdvertising()
     }
 }

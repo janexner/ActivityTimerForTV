@@ -38,23 +38,23 @@ val navigationItems = listOf(
         destination = HomeDestination
     ),
     NavigationItems(
-        title = "Import Processes (Nearby)",
-        description = "Import Processes from nearby device",
-        icon = Icons.Default.AddCircle,
-        destination = ImportFromNearbyDeviceDestination
-    ),
-    NavigationItems(
-        title = "Import Processes (Web)",
-        description = "Import Processes from the web",
-        icon = Icons.Default.AddCircle,
-        destination = RemoteProcessManagementDestination
-    ),
-    NavigationItems(
         title = "Manage Processes",
         description = "Manage Processes",
         icon = Icons.Default.Edit,
         destination = ProcessListDestination
     ),
+    NavigationItems(
+        title = "Import from nearby",
+        description = "Import Processes from nearby device",
+        icon = Icons.Default.AddCircle,
+        destination = ImportFromNearbyDeviceDestination
+    ),
+//    NavigationItems(
+//        title = "Import Processes (Web)",
+//        description = "Import Processes from the web",
+//        icon = Icons.Default.AddCircle,
+//        destination = RemoteProcessManagementDestination
+//    ),
     NavigationItems(
         title = "Manage Categories",
         description = "Manage categories",

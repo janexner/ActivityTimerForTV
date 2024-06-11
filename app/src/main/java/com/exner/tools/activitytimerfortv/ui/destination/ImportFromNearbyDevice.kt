@@ -25,7 +25,7 @@ import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
-import com.exner.tools.activitytimerfortv.ui.tools.Permissions
+import com.exner.tools.activitytimerfortv.network.Permissions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -71,32 +71,62 @@ fun ImportFromNearbyDevice(
                     }
                 )
                 Spacer(modifier = Modifier.weight(0.5f))
-                WideButton(
-                    enabled = permissionsNeeded.allPermissionsGranted,
-                    onClick = {
-                        try {
-                            importFromNearbyDeviceViewModel.setCurrentState(ProcessStateConstants.AWAITING_DISCOVERY)
-                            importFromNearbyDeviceViewModel.startAdvertising(context = context)
-                        } catch (se: SecurityException) {
-                            Log.e("NEARBY", "Unable to advertise: " + se.cause)
-                            importFromNearbyDeviceViewModel.setCurrentState(ProcessStateConstants.ERROR)
+                if (processState.currentState == ProcessStateConstants.PERMISSIONS_GRANTED) {
+                    WideButton(
+                        enabled = permissionsNeeded.allPermissionsGranted,
+                        onClick = {
+                            try {
+                                importFromNearbyDeviceViewModel.setCurrentState(
+                                    ProcessStateConstants.AWAITING_DISCOVERY
+                                )
+                                importFromNearbyDeviceViewModel.startAdvertising(context = context)
+                            } catch (se: SecurityException) {
+                                Log.e("NEARBY", "Unable to advertise: " + se.cause)
+                                importFromNearbyDeviceViewModel.setCurrentState(
+                                    ProcessStateConstants.ERROR
+                                )
+                            }
+                        },
+                        title = { Text(text = "Discover Devices") },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Call,
+                                contentDescription = "Discover Devices"
+                            )
                         }
-                    },
-                    title = { Text(text = "Discover Devices") },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Filled.Call,
-                            contentDescription = "Discover Devices"
-                        )
-                    }
-                )
+                    )
+                } else if (processState.currentState == ProcessStateConstants.AWAITING_DISCOVERY) {
+                    WideButton(
+                        enabled = permissionsNeeded.allPermissionsGranted,
+                        onClick = {
+                            try {
+                                importFromNearbyDeviceViewModel.setCurrentState(
+                                    ProcessStateConstants.DISCONNECTED
+                                )
+                                importFromNearbyDeviceViewModel.stopAdvertising(context = context)
+                            } catch (se: SecurityException) {
+                                Log.e("NEARBY", "Unable to advertise: " + se.cause)
+                                importFromNearbyDeviceViewModel.setCurrentState(
+                                    ProcessStateConstants.ERROR
+                                )
+                            }
+                        },
+                        title = { Text(text = "Cancel Discovery") },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Call,
+                                contentDescription = "Cancel Discovery"
+                            )
+                        }
+                    )
+                }
             }
             // spacer
             Spacer(modifier = Modifier.weight(0.1f))
 
             // some sanity checking for state
             if (processState.currentState == ProcessStateConstants.AWAITING_PERMISSIONS && permissionsNeeded.allPermissionsGranted) {
-                importFromNearbyDeviceViewModel.setCurrentState(ProcessStateConstants.AWAITING_DISCOVERY)
+                importFromNearbyDeviceViewModel.setCurrentState(ProcessStateConstants.PERMISSIONS_GRANTED)
             }
 
             // UI, depending on state
@@ -112,6 +142,11 @@ fun ImportFromNearbyDevice(
                         ) {
                             Text(text = "Request permissions")
                         }
+                    }
+                }
+                ProcessStateConstants.PERMISSIONS_GRANTED -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "All permissions OK, ready to advertise.")
                     }
                 }
                 ProcessStateConstants.PERMISSIONS_DENIED -> {
