@@ -23,11 +23,13 @@ import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.network.Permissions
+import com.exner.tools.activitytimerfortv.network.TimerConnectionLifecycleCallback
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.nearby.Nearby
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -45,6 +47,10 @@ fun ImportFromNearbyDevice(
         rememberMultiplePermissionsState(permissions = permissions.getAllNecessaryPermissionsAsListOfStrings())
 
     val processState by importFromNearbyDeviceViewModel.processStateFlow.collectAsState()
+
+    val connectionAuthenticationCallback = { true }
+    importFromNearbyDeviceViewModel.provideLifecycleCallback(TimerConnectionLifecycleCallback(context = context, connectionAuthenticationUICallback = connectionAuthenticationCallback))
+    importFromNearbyDeviceViewModel.provideConnectionsClient(Nearby.getConnectionsClient(context))
 
     NavigationDrawer(drawerContent = {
         ActivityTimerNavigationDrawerContent(
@@ -106,7 +112,7 @@ fun ImportFromNearbyDevice(
                     },
                     onClick = {
                         importFromNearbyDeviceViewModel.transitionToNewState(
-                            ProcessStateConstants.DONE,
+                            ProcessStateConstants.CANCELLED,
                             "Cancelled by user"
                         )
                     }
@@ -119,6 +125,10 @@ fun ImportFromNearbyDevice(
             if (processState.currentState == ProcessStateConstants.AWAITING_PERMISSIONS && permissionsNeeded.allPermissionsGranted) {
                 importFromNearbyDeviceViewModel.transitionToNewState(ProcessStateConstants.PERMISSIONS_GRANTED)
             }
+
+            // TEMP / TODO
+            Text(text = "Current ProcessState is ${processState.currentState.name}")
+            Spacer(modifier = Modifier.size(16.dp))
 
             // UI, depending on state
             when (processState.currentState) {
@@ -204,6 +214,11 @@ fun ImportFromNearbyDevice(
                 }
 
                 ProcessStateConstants.DONE -> TODO()
+                ProcessStateConstants.CANCELLED -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "Cancelled")
+                    }
+                }
             }
         }
     }

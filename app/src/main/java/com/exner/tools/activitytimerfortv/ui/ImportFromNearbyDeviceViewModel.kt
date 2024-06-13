@@ -7,6 +7,7 @@ import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.exner.tools.activitytimerfortv.network.TimerConnectionLifecycleCallback
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.AdvertisingOptions
+import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.Strategy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,7 @@ enum class ProcessStateConstants {
     RECEIVING,
     DISCONNECTED,
     DONE,
+    CANCELLED,
     ERROR
 }
 
@@ -58,6 +60,16 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
     private val _processStateFlow = MutableStateFlow(ProcessState())
     val processStateFlow: StateFlow<ProcessState> = _processStateFlow.asStateFlow()
 
+    lateinit var connectionLifecycleCallback: TimerConnectionLifecycleCallback
+    lateinit var connectionsClient: ConnectionsClient
+
+    fun provideLifecycleCallback(connectionLifecycleCallback: TimerConnectionLifecycleCallback) {
+        this.connectionLifecycleCallback = connectionLifecycleCallback
+    }
+    fun provideConnectionsClient(connectionsClient: ConnectionsClient) {
+        this.connectionsClient = connectionsClient
+    }
+
     fun transitionToNewState(
         newState: ProcessStateConstants,
         message: String = "OK"
@@ -75,6 +87,10 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                         _processStateFlow.value = ProcessState(newState, "Denied: $message")
                     }
 
+                    ProcessStateConstants.CANCELLED -> {
+                        _processStateFlow.value = ProcessState(newState, "Cancelled")
+                    }
+
                     else -> {
                         _processStateFlow.value = invalidTransitionProcessState(
                             currentState = processStateFlow.value.currentState,
@@ -89,8 +105,33 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 when (newState) {
                     ProcessStateConstants.ADVERTISING -> {
                         // trigger the actual advertising
-                        // TODO
+                        val advertisingOptions: AdvertisingOptions =
+                            AdvertisingOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT)
+                                .build()
+                        Log.d("STARTADV", "Starting to advertise...")
+                        connectionsClient
+                            .startAdvertising(
+                                userName,
+                                endpointId,
+                                connectionLifecycleCallback,
+                                advertisingOptions
+                            )
+                            .addOnSuccessListener { unused: Void? ->
+                                Log.d("STARTADV", "Success! Was found by nearby device!")
+                                _processStateFlow.value = ProcessState(ProcessStateConstants.DISCOVERED, "OK")
+                            }
+                            .addOnFailureListener { e: Exception? ->
+                                val errorMessage = "Error discovering devices" + if (e != null) {
+                                    ": ${e.message}"
+                                } else {
+                                    ""
+                                }
+                            }
                         _processStateFlow.value = ProcessState(newState, "OK")
+                    }
+
+                    ProcessStateConstants.CANCELLED -> {
+                        _processStateFlow.value = ProcessState(newState, "Cancelled")
                     }
 
                     else -> {
@@ -109,6 +150,10 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                         _processStateFlow.value = ProcessState(newState, "OK")
                     }
 
+                    ProcessStateConstants.CANCELLED -> {
+                        _processStateFlow.value = ProcessState(newState, "Cancelled")
+                    }
+
                     else -> {
                         _processStateFlow.value = invalidTransitionProcessState(
                             currentState = processStateFlow.value.currentState,
@@ -124,6 +169,11 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                     ProcessStateConstants.DISCOVERED -> {
                         _processStateFlow.value = ProcessState(newState, "OK")
                     }
+
+                    ProcessStateConstants.CANCELLED -> {
+                        _processStateFlow.value = ProcessState(newState, "Cancelled")
+                    }
+
                     else -> {
                         _processStateFlow.value = invalidTransitionProcessState(
                             currentState = processStateFlow.value.currentState,
@@ -131,7 +181,6 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                         )
                     }
                 }
-
             }
             ProcessStateConstants.DISCOVERED -> {
                 // trigger authentication (it'll happen on both devices)
@@ -145,34 +194,8 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
             ProcessStateConstants.DISCONNECTED -> TODO()
             ProcessStateConstants.DONE -> TODO()
             ProcessStateConstants.ERROR -> TODO()
+            ProcessStateConstants.CANCELLED -> TODO()
         }
-    }
-
-    fun startAdvertising(
-        context: Context,
-        connectionAuthenticationUICallback: () -> Boolean
-    ) {
-        val advertisingOptions: AdvertisingOptions =
-            AdvertisingOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT).build()
-        val connectionLifecycleCallback =
-            TimerConnectionLifecycleCallback(context, connectionAuthenticationUICallback)
-        Log.d("STARTADV", "Starting to advertise...")
-        Nearby.getConnectionsClient(context)
-            .startAdvertising(
-                userName,
-                endpointId,
-                connectionLifecycleCallback,
-                advertisingOptions
-            )
-            .addOnSuccessListener { unused: Void? ->
-                Log.d("STARTADV", "Success! Was found by nearby device!")
-                Log.d("STARTADV", unused.toString())
-            }
-            .addOnFailureListener { e: Exception? ->
-                if (e != null) {
-                    Log.d("STARTADV", "Advertising failed: ${e.message}")
-                }
-            }
     }
 
     fun stopAdvertising(context: Context) {
