@@ -1,6 +1,5 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,14 +22,15 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
+import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
-import com.exner.tools.activitytimerfortv.network.Permissions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Destination
@@ -40,7 +41,8 @@ fun ImportFromNearbyDevice(
 ) {
     val context = LocalContext.current
     val permissions = Permissions(context = context)
-    val permissionsNeeded = rememberMultiplePermissionsState(permissions = permissions.getAllNecessaryPermissionsAsListOfStrings())
+    val permissionsNeeded =
+        rememberMultiplePermissionsState(permissions = permissions.getAllNecessaryPermissionsAsListOfStrings())
 
     val processState by importFromNearbyDeviceViewModel.processStateFlow.collectAsState()
 
@@ -58,7 +60,7 @@ fun ImportFromNearbyDevice(
             // buttons
             Row {
                 WideButton(
-                    enabled = processState.currentState == ProcessStateConstants.CONNECTED,
+                    enabled = processState.currentState == ProcessStateConstants.PROCESSES_SELECTED,
                     onClick = {
                         // TODO
                     },
@@ -70,63 +72,52 @@ fun ImportFromNearbyDevice(
                         )
                     }
                 )
-                Spacer(modifier = Modifier.weight(0.5f))
-                if (processState.currentState == ProcessStateConstants.PERMISSIONS_GRANTED) {
-                    WideButton(
-                        enabled = permissionsNeeded.allPermissionsGranted,
-                        onClick = {
-                            try {
-                                importFromNearbyDeviceViewModel.setCurrentState(
-                                    ProcessStateConstants.AWAITING_DISCOVERY
+                Spacer(modifier = Modifier.size(24.dp))
+                when (processState.currentState) {
+                    ProcessStateConstants.PERMISSIONS_GRANTED -> {
+                        WideButton(
+                            enabled = permissionsNeeded.allPermissionsGranted,
+                            onClick = {
+                                importFromNearbyDeviceViewModel.transitionToNewState(
+                                    ProcessStateConstants.ADVERTISING
                                 )
-                                importFromNearbyDeviceViewModel.startAdvertising(context = context)
-                            } catch (se: SecurityException) {
-                                Log.e("NEARBY", "Unable to advertise: " + se.cause)
-                                importFromNearbyDeviceViewModel.setCurrentState(
-                                    ProcessStateConstants.ERROR
-                                )
-                            }
-                        },
-                        title = { Text(text = "Discover Devices") },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Call,
-                                contentDescription = "Discover Devices"
-                            )
-                        }
-                    )
-                } else if (processState.currentState == ProcessStateConstants.AWAITING_DISCOVERY) {
-                    WideButton(
-                        enabled = permissionsNeeded.allPermissionsGranted,
-                        onClick = {
-                            try {
-                                importFromNearbyDeviceViewModel.setCurrentState(
-                                    ProcessStateConstants.DISCONNECTED
-                                )
-                                importFromNearbyDeviceViewModel.stopAdvertising(context = context)
-                            } catch (se: SecurityException) {
-                                Log.e("NEARBY", "Unable to advertise: " + se.cause)
-                                importFromNearbyDeviceViewModel.setCurrentState(
-                                    ProcessStateConstants.ERROR
+                            },
+                            title = { Text(text = "Discover Devices") },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Call,
+                                    contentDescription = "Discover Devices"
                                 )
                             }
-                        },
-                        title = { Text(text = "Cancel Discovery") },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Call,
-                                contentDescription = "Cancel Discovery"
-                            )
-                        }
-                    )
+                        )
+                    }
+
+                    else -> {}
                 }
+                Spacer(modifier = Modifier.weight(0.5f))
+                WideButton(
+                    enabled = true,
+                    title = { Text(text = "Cancel") },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Cancel"
+                        )
+                    },
+                    onClick = {
+                        importFromNearbyDeviceViewModel.transitionToNewState(
+                            ProcessStateConstants.DONE,
+                            "Cancelled by user"
+                        )
+                    }
+                )
             }
             // spacer
             Spacer(modifier = Modifier.weight(0.1f))
 
             // some sanity checking for state
             if (processState.currentState == ProcessStateConstants.AWAITING_PERMISSIONS && permissionsNeeded.allPermissionsGranted) {
-                importFromNearbyDeviceViewModel.setCurrentState(ProcessStateConstants.PERMISSIONS_GRANTED)
+                importFromNearbyDeviceViewModel.transitionToNewState(ProcessStateConstants.PERMISSIONS_GRANTED)
             }
 
             // UI, depending on state
@@ -144,11 +135,13 @@ fun ImportFromNearbyDevice(
                         }
                     }
                 }
+
                 ProcessStateConstants.PERMISSIONS_GRANTED -> {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Text(text = "All permissions OK, ready to advertise.")
                     }
                 }
+
                 ProcessStateConstants.PERMISSIONS_DENIED -> {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Text(text = "Without the necessary permissions, importing from nearby devices is not possible.")
@@ -162,20 +155,55 @@ fun ImportFromNearbyDevice(
                         }
                     }
                 }
-                ProcessStateConstants.AWAITING_DISCOVERY -> {
+
+                ProcessStateConstants.ADVERTISING -> {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Text(text = "All permissions OK, waiting for devices...")
                     }
                 }
-                ProcessStateConstants.DISCOVERED -> TODO()
-                ProcessStateConstants.CONNECTED -> TODO()
-                ProcessStateConstants.RECEIVING -> TODO()
-                ProcessStateConstants.DISCONNECTED -> TODO()
+
+                ProcessStateConstants.DISCOVERED -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "We have been discovered!")
+                    }
+                }
+
+                ProcessStateConstants.AUTHENTICATED_OK -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "Authentication OK")
+                    }
+                }
+                ProcessStateConstants.AUTHENTICATED_DENIED -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "Authentication denied")
+                    }
+                }
+                ProcessStateConstants.CONNECTION_ESTABLISHED, ProcessStateConstants.PROCESSES_SELECTED -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "Connection has been established")
+                    }
+                }
+
+                ProcessStateConstants.CONNECTION_FAILED -> TODO()
+                ProcessStateConstants.RECEIVING -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "We are receiving data!")
+                    }
+                }
+
+                ProcessStateConstants.DISCONNECTED -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "Disconnected. All good.")
+                    }
+                }
+
                 ProcessStateConstants.ERROR -> {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Text(text = "Some error occurred. It may help to move away from this screen and try it all again.")
                     }
                 }
+
+                ProcessStateConstants.DONE -> TODO()
             }
         }
     }
