@@ -46,15 +46,16 @@ import com.exner.tools.activitytimerfortv.ui.BodyText
 import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.exner.tools.activitytimerfortv.ui.RemoteProcessManagementViewModel
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 sealed class ProcessListTabs(val name: String) {
     data object RemoteOnlyTab : ProcessListTabs("Remote")
 }
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun RemoteProcessManagement(
     remoteProcessManagementViewModel: RemoteProcessManagementViewModel = hiltViewModel(),

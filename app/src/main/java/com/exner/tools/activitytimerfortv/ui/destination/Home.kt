@@ -30,17 +30,16 @@ import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.TimerDisplay
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDetailsDestination
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-@RootNavGraph(start = true)
-@Destination
+@Destination<RootGraph>(start = true)
 @Composable
 fun Home(
     processListViewModel: ProcessListViewModel = hiltViewModel(),

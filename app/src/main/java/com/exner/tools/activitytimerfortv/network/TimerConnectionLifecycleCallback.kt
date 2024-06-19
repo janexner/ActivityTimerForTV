@@ -21,6 +21,7 @@ class TimerConnectionLifecycleCallback(
         if (connectionAuthenticationUICallback()) {
             // not sure what to do here, tbh
             Log.d("TCLC", "Main body of authenticationcallback if statement")
+            true
         }
     }
 

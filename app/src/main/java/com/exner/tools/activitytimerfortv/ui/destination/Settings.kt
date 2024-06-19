@@ -23,9 +23,10 @@ import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.exner.tools.activitytimerfortv.ui.tools.navigationItems
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun Settings(
     settingsViewModel: SettingsViewModel = hiltViewModel(),

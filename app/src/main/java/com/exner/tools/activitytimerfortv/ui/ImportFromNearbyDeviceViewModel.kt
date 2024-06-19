@@ -117,11 +117,11 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                                 advertisingOptions
                             )
                             .addOnSuccessListener { unused: Void? ->
-                                Log.d("STARTADV", "Success! Was found by nearby device!")
-                                _processStateFlow.value = ProcessState(ProcessStateConstants.DISCOVERED, "OK")
+                                Log.d("STARTADV", "Advertising started")
+                                _processStateFlow.value = ProcessState(ProcessStateConstants.ADVERTISING, "OK")
                             }
                             .addOnFailureListener { e: Exception? ->
-                                val errorMessage = "Error discovering devices" + if (e != null) {
+                                val errorMessage = "Error starting advertising" + if (e != null) {
                                     ": ${e.message}"
                                 } else {
                                     ""
@@ -131,6 +131,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                     }
 
                     ProcessStateConstants.CANCELLED -> {
+                        connectionsClient.stopAdvertising()
                         _processStateFlow.value = ProcessState(newState, "Cancelled")
                     }
 
@@ -164,6 +165,8 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
             }
 
             ProcessStateConstants.ADVERTISING -> {
+                // stop advertising
+                connectionsClient.stopAdvertising()
                 // nothing to do, this is handled in the UI
                 when (newState) {
                     ProcessStateConstants.DISCOVERED -> {
@@ -194,7 +197,11 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
             ProcessStateConstants.DISCONNECTED -> TODO()
             ProcessStateConstants.DONE -> TODO()
             ProcessStateConstants.ERROR -> TODO()
-            ProcessStateConstants.CANCELLED -> TODO()
+            ProcessStateConstants.CANCELLED -> {
+                // just in case...
+                connectionsClient.stopAllEndpoints()
+                connectionsClient.stopDiscovery()
+            }
         }
     }
 

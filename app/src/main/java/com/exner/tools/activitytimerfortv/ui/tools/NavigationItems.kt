@@ -7,12 +7,11 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.CategoryListDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.HomeDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.ImportFromNearbyDeviceDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessListDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.RemoteProcessManagementDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
+import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
+import com.ramcosta.composedestinations.generated.destinations.HomeDestination
+import com.ramcosta.composedestinations.generated.destinations.ImportFromNearbyDeviceDestination
+import com.ramcosta.composedestinations.generated.destinations.ProcessListDestination
+import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.spec.Direction
 
 // Create Navigation Items Class to Select UnSelect items

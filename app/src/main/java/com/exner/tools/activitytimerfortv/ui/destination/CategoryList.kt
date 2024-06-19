@@ -41,10 +41,11 @@ import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
 import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
+@Destination<RootGraph>
 @Composable
 fun CategoryList(
     categoryListViewModel: CategoryListViewModel = hiltViewModel(),
