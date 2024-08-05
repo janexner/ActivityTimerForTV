@@ -24,16 +24,16 @@ import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.TimerDisplay
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDeleteDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessRunDestination
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.ProcessDeleteDestination
+import com.ramcosta.composedestinations.generated.destinations.ProcessRunDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Destination
+@Destination<RootGraph>
 @Composable
 fun ProcessDetails(
     processUuid: String,

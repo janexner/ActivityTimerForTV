@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -30,9 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.grid.TvGridCells
-import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
-import androidx.tv.foundation.lazy.grid.rememberTvLazyGridState
 import androidx.tv.material3.Checkbox
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
@@ -46,15 +46,16 @@ import com.exner.tools.activitytimerfortv.ui.BodyText
 import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.exner.tools.activitytimerfortv.ui.RemoteProcessManagementViewModel
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 sealed class ProcessListTabs(val name: String) {
     data object RemoteOnlyTab : ProcessListTabs("Remote")
 }
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun RemoteProcessManagement(
     remoteProcessManagementViewModel: RemoteProcessManagementViewModel = hiltViewModel(),
@@ -70,7 +71,7 @@ fun RemoteProcessManagement(
 //    }
 
     val loadingRemote = remember { mutableStateOf(false) }
-    val listStateRemote = rememberTvLazyGridState()
+    val listStateRemote = rememberLazyGridState()
     val remoteProcesses by remoteProcessManagementViewModel.remoteProcessesRaw.collectAsStateWithLifecycle()
 
     val listOfProcessUuidsToImport = remember {
@@ -146,8 +147,8 @@ fun RemoteProcessManagement(
                     modifier = Modifier.padding(8.dp, 0.dp)
                 )
 //                        Spacer(modifier = Modifier.size(8.dp))
-                TvLazyVerticalGrid(
-                    columns = TvGridCells.Adaptive(minSize = 250.dp),
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 250.dp),
                     state = listStateRemote,
                     modifier = Modifier.fillMaxSize()
                 ) {

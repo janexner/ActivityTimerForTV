@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,8 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.grid.TvGridCells
-import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.material3.ClassicCard
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
@@ -35,16 +34,16 @@ import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.CategoryListDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.ProcessDetailsDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.RemoteProcessManagementDestination
-import com.exner.tools.activitytimerfortv.ui.destination.destinations.SettingsDestination
 import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
+import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
+import com.ramcosta.composedestinations.generated.destinations.RemoteProcessManagementDestination
+import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Destination
+@Destination<RootGraph>
 @Composable
 fun ProcessList(
     processListViewModel: ProcessListViewModel = hiltViewModel(),
@@ -122,7 +121,7 @@ fun ProcessList(
                 modifier = Modifier.fillMaxWidth()
             ) {
 
-                TvLazyVerticalGrid(columns = TvGridCells.Adaptive(minSize = 250.dp)) {
+                LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 250.dp)) {
                     items(processes.size) { index ->
                         val process = processes[index]
                         val infoText =

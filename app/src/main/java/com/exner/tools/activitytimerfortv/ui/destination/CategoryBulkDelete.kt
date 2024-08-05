@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -16,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.foundation.lazy.grid.TvGridCells
-import androidx.tv.foundation.lazy.grid.TvLazyVerticalGrid
 import androidx.tv.material3.Checkbox
 import androidx.tv.material3.ClassicCard
 import androidx.tv.material3.Text
@@ -27,9 +27,10 @@ import com.exner.tools.activitytimerfortv.ui.BodyText
 import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
 import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun CategoryBulkDelete(
     categoryListViewModel: CategoryListViewModel = hiltViewModel(),
@@ -54,8 +55,8 @@ fun CategoryBulkDelete(
             .fillMaxWidth()
             .imePadding()
     ) {
-        TvLazyVerticalGrid(
-            columns = TvGridCells.Adaptive(minSize = 250.dp),
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 250.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
