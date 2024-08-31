@@ -1,5 +1,6 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
@@ -23,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -78,7 +81,22 @@ fun ImportFromNearbyDevice(
             // buttons
             Row {
                 when (processState.currentState) {
-                    ProcessStateConstants.PERMISSIONS_GRANTED -> {
+                    ProcessStateConstants.AWAITING_PERMISSIONS,
+                    ProcessStateConstants.PERMISSIONS_DENIED -> {
+                        WideButton(
+                            enabled = !permissionsNeeded.allPermissionsGranted,
+                            onClick = {
+                                permissionsNeeded.launchMultiplePermissionRequest()
+                            },
+                            title = { Text(text = "Request permissions") },
+                            icon = {
+                                Icon(imageVector = Icons.Filled.CheckCircle, contentDescription = "Request permissions")
+                            }
+                        )
+                    }
+                    ProcessStateConstants.PERMISSIONS_GRANTED,
+                    ProcessStateConstants.CANCELLED,
+                    ProcessStateConstants.DONE -> {
                         WideButton(
                             enabled = permissionsNeeded.allPermissionsGranted,
                             onClick = {
@@ -86,11 +104,11 @@ fun ImportFromNearbyDevice(
                                     ProcessStateConstants.ADVERTISING
                                 )
                             },
-                            title = { Text(text = "Discover Devices") },
+                            title = { Text(text = "Start advertising") },
                             icon = {
                                 Icon(
                                     imageVector = Icons.Filled.Call,
-                                    contentDescription = "Discover Devices"
+                                    contentDescription = "Start advertising"
                                 )
                             }
                         )
@@ -131,31 +149,12 @@ fun ImportFromNearbyDevice(
                 ProcessStateConstants.AWAITING_PERMISSIONS -> {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(text = "If you would like to receive processes from your phone, this app needs permission for Bluetooth, WiFi, and the discovery of nearby devices, which may also need location permissions.")
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Button(
-                            onClick = {
-                                permissionsNeeded.launchMultiplePermissionRequest()
-                            }
-                        ) {
-                            Text(text = "Request permissions")
-                        }
                     }
                 }
 
                 ProcessStateConstants.PERMISSIONS_GRANTED -> {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(text = "All permissions OK, ready to advertise.")
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Button(
-                            onClick = {
-                                importFromNearbyDeviceViewModel.transitionToNewState(
-                                    ProcessStateConstants.START_ADVERTISING,
-                                    "OK"
-                                )
-                            }
-                        ) {
-                            Text(text = "Start advertising")
-                        }
                     }
                 }
 
@@ -168,14 +167,6 @@ fun ImportFromNearbyDevice(
                 ProcessStateConstants.PERMISSIONS_DENIED -> {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(text = "Without the necessary permissions, importing from nearby devices is not possible.")
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Button(
-                            onClick = {
-                                permissionsNeeded.launchMultiplePermissionRequest()
-                            }
-                        ) {
-                            Text(text = "Request permissions")
-                        }
                     }
                 }
 
@@ -251,18 +242,7 @@ fun ImportFromNearbyDevice(
                 ProcessStateConstants.DONE,
                 ProcessStateConstants.CANCELLED -> {
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        Text(text = "Cancelled")
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Button(
-                            onClick = {
-                                importFromNearbyDeviceViewModel.transitionToNewState(
-                                    ProcessStateConstants.START_ADVERTISING,
-                                    "OK"
-                                )
-                            }
-                        ) {
-                            Text(text = "Restart advertising")
-                        }
+                        Text(text = "Done or Cancelled")
                     }
                 }
             }
@@ -279,6 +259,7 @@ fun ProcessStateAuthenticationRequestedScreen(
 ) {
     if (openAuthenticationDialog) {
         AlertDialog(
+            modifier = Modifier.background(color = Color.DarkGray),
             title = { Text(text = "Accept connection to " + info.connectionInfo.endpointName) },
             text = { Text(text = "Confirm the code matches on both devices: " + info.connectionInfo.authenticationDigits) },
             icon = { Icon(imageVector = Icons.Default.Warning, contentDescription = "Alert") },
