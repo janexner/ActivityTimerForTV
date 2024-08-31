@@ -39,10 +39,13 @@ import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawer
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.nearby.Nearby
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @OptIn(ExperimentalPermissionsApi::class)
+@Destination<RootGraph>
 @Composable
 fun ImportFromNearbyDevice(
     importFromNearbyDeviceViewModel: ImportFromNearbyDeviceViewModel = hiltViewModel(),
