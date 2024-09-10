@@ -1,33 +1,34 @@
 package com.exner.tools.activitytimerfortv.ui.tools
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.TextUnit
+import android.util.Log
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.InternalFoundationTextApi
-import androidx.compose.foundation.text.TextDelegate
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -36,10 +37,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
-import com.exner.tools.activitytimerfortv.ui.tools.SuggestedFontSizesStatus.Companion.rememberSuggestedFontSizesStatus
+import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastFilter
+import com.exner.tools.activitytimerfortv.ui.tools.SuggestedFontSizesStatus.Companion.validSuggestedFontSizes
 import kotlin.math.min
+
+private const val TAG = "AutoSizeText"
 
 /**
  * Composable function that automatically adjusts the text size to fit within given constraints, considering the ratio of line spacing to text size.
@@ -57,9 +63,9 @@ import kotlin.math.min
  * this will be [LocalContentColor].
  * @param suggestedFontSizes The suggested font sizes to choose from (Should be sorted from smallest to largest, not empty and contains only sp text unit).
  * @param suggestedFontSizesStatus Whether or not suggestedFontSizes is valid: not empty - contains oly sp text unit - sorted.
- * You can check validity by invoking [List<TextUnit>.suggestedFontSizesStatus]
- * @param stepGranularityTextSize The step size for adjusting the text size.
- * @param minTextSize The minimum text size allowed.
+ * You can check validity by invoking [List<TextUnit>.suggestedFontSizesStatus].
+ * @param stepGranularityTextSize The step size for adjusting the text size. this parameter is ignored if [suggestedFontSizes] is specified and [suggestedFontSizesStatus] is [SuggestedFontSizesStatus.VALID].
+ * @param minTextSize The minimum text size allowed. this parameter is ignored if [suggestedFontSizes] is specified or [suggestedFontSizesStatus] is [SuggestedFontSizesStatus.VALID].
  * @param maxTextSize The maximum text size allowed.
  * @param fontStyle the typeface variant to use when drawing the letters (e.g., italic).
  * See [TextStyle.fontStyle].
@@ -85,7 +91,7 @@ import kotlin.math.min
  * text, baselines and other details. The callback can be used to add additional decoration or
  * functionality to the text. For example, to draw selection around the text.
  * @param style style configuration for the text such as color, font, line height etc.
- * @param lineSpacingRatio The ratio of line spacing to text size.
+ * @param lineSpaceRatio The ratio of line spacing to text size.
  *
  * @author Reda El Madini - For support, contact gladiatorkilo@gmail.com
  */
@@ -94,8 +100,8 @@ fun AutoSizeText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    suggestedFontSizes: ImmutableWrapper<List<TextUnit>> = emptyList<TextUnit>().toImmutableWrapper(),
-    suggestedFontSizesStatus: SuggestedFontSizesStatus = suggestedFontSizes.rememberSuggestedFontSizesStatus,
+    suggestedFontSizes: List<TextUnit> = emptyList(),
+    suggestedFontSizesStatus: SuggestedFontSizesStatus = SuggestedFontSizesStatus.UNKNOWN,
     stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
     minTextSize: TextUnit = TextUnit.Unspecified,
     maxTextSize: TextUnit = TextUnit.Unspecified,
@@ -111,7 +117,7 @@ fun AutoSizeText(
     minLines: Int = 1,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
-    lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
+    lineSpaceRatio: Float = style.lineHeight.value / style.fontSize.value,
 ) {
     AutoSizeText(
         text = AnnotatedString(text),
@@ -134,7 +140,7 @@ fun AutoSizeText(
         minLines = minLines,
         onTextLayout = onTextLayout,
         style = style,
-        lineSpacingRatio = lineSpacingRatio,
+        lineSpacingRatio = lineSpaceRatio,
     )
 }
 
@@ -153,8 +159,8 @@ fun AutoSizeText(
     text: AnnotatedString,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    suggestedFontSizes: ImmutableWrapper<List<TextUnit>> = emptyList<TextUnit>().toImmutableWrapper(),
-    suggestedFontSizesStatus: SuggestedFontSizesStatus = suggestedFontSizes.rememberSuggestedFontSizesStatus,
+    suggestedFontSizes: List<TextUnit> = emptyList(),
+    suggestedFontSizesStatus: SuggestedFontSizesStatus = SuggestedFontSizesStatus.UNKNOWN,
     stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
     minTextSize: TextUnit = TextUnit.Unspecified,
     maxTextSize: TextUnit = TextUnit.Unspecified,
@@ -168,16 +174,14 @@ fun AutoSizeText(
     softWrap: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
-    inlineContent: ImmutableWrapper<Map<String, InlineTextContent>> = mapOf<String, InlineTextContent>().toImmutableWrapper(),
+    inlineContent: Map<String, InlineTextContent> = mapOf(),
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
     lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
 ) {
-    val density = LocalDensity.current
     // Change font scale to 1F
-    CompositionLocalProvider(
-        LocalDensity provides Density(density = density.density, fontScale = 1F)
-    ) {
+    val newDensity = Density(density = LocalDensity.current.density, fontScale = 1F)
+    CompositionLocalProvider(LocalDensity provides newDensity) {
         BoxWithConstraints(
             modifier = modifier,
             contentAlignment = alignment,
@@ -198,8 +202,9 @@ fun AutoSizeText(
             )
 
             val layoutDirection = LocalLayoutDirection.current
-            val currentDensity = LocalDensity.current
+            val density = LocalDensity.current
             val fontFamilyResolver = LocalFontFamilyResolver.current
+            val textMeasurer = rememberTextMeasurer()
             val coercedLineSpacingRatio = lineSpacingRatio.takeIf { it.isFinite() && it >= 1 } ?: 1F
             val shouldMoveBackward: (TextUnit) -> Boolean = {
                 shouldShrink(
@@ -209,35 +214,56 @@ fun AutoSizeText(
                         lineHeight = it * coercedLineSpacingRatio,
                     ),
                     maxLines = maxLines,
-                    minLines = minLines,
-                    softWrap = softWrap,
                     layoutDirection = layoutDirection,
-                    density = currentDensity,
+                    softWrap = softWrap,
+                    density = density,
                     fontFamilyResolver = fontFamilyResolver,
+                    textMeasurer = textMeasurer,
                 )
             }
 
-            val electedFontSize = kotlin.run {
+            val electedFontSize = remember(
+                key1 = suggestedFontSizes,
+                key2 = suggestedFontSizesStatus,
+            ) {
                 if (suggestedFontSizesStatus == SuggestedFontSizesStatus.VALID)
-                    suggestedFontSizes.value
+                    suggestedFontSizes
                 else
-                    remember(suggestedFontSizes) {
-                        suggestedFontSizes.value
-                            .filter { it.isSp }
-                            .takeIf { it.isNotEmpty() }
-                            ?.sortedBy { it.value }
-                    }
-            }
-                ?.findElectedValue(shouldMoveBackward = shouldMoveBackward)
-                ?: rememberCandidateFontSizesIntProgress(
+                    suggestedFontSizes.validSuggestedFontSizes
+            }?.let {
+                remember(
+                    key1 = it,
+                    key2 = shouldMoveBackward,
+                ) {
+                    it.findElectedValue(shouldMoveBackward = shouldMoveBackward)
+                }
+            } ?: run {
+                val candidateFontSizesIntProgress = rememberCandidateFontSizesIntProgress(
                     density = density,
-                    dpSize = DpSize(maxWidth, maxHeight),
+                    containerDpSize = DpSize(maxWidth, maxHeight),
                     maxTextSize = maxTextSize,
                     minTextSize = minTextSize,
                     stepGranularityTextSize = stepGranularityTextSize,
-                ).findElectedValue(
-                    transform = { density.toSp(it) },
-                    shouldMoveBackward = shouldMoveBackward,
+                )
+                remember(
+                    key1 = candidateFontSizesIntProgress,
+                    key2 = shouldMoveBackward,
+                ) {
+                    candidateFontSizesIntProgress.findElectedValue(
+                        transform = { density.intPxToSp(it) },
+                        shouldMoveBackward = shouldMoveBackward,
+                    )
+                }
+            }
+
+            if (electedFontSize == 0.sp)
+                Log.w(
+                    TAG,
+                    """The text cannot be displayed. Please consider the following options:
+                      |  1. Providing 'suggestedFontSizes' with smaller values that can be utilized.
+                      |  2. Decreasing the 'stepGranularityTextSize' value.
+                      |  3. Adjusting the 'minTextSize' parameter to a suitable value and ensuring the overflow parameter is set to "TextOverflow.Ellipsis".
+                    """.trimMargin(),
                 )
 
             Text(
@@ -246,7 +272,7 @@ fun AutoSizeText(
                 softWrap = softWrap,
                 maxLines = maxLines,
                 minLines = minLines,
-                inlineContent = inlineContent.value,
+                inlineContent = inlineContent,
                 onTextLayout = onTextLayout,
                 style = combinedTextStyle.copy(
                     fontSize = electedFontSize,
@@ -257,72 +283,77 @@ fun AutoSizeText(
     }
 }
 
-@OptIn(InternalFoundationTextApi::class)
 private fun BoxWithConstraintsScope.shouldShrink(
     text: AnnotatedString,
     textStyle: TextStyle,
     maxLines: Int,
-    minLines: Int,
-    softWrap: Boolean,
     layoutDirection: LayoutDirection,
+    softWrap: Boolean,
     density: Density,
     fontFamilyResolver: FontFamily.Resolver,
-) = TextDelegate(
+    textMeasurer: TextMeasurer,
+) = textMeasurer.measure(
     text = text,
     style = textStyle,
-    maxLines = maxLines,
-    minLines = minLines,
-    softWrap = softWrap,
     overflow = TextOverflow.Clip,
-    density = density,
-    fontFamilyResolver = fontFamilyResolver,
-).layout(
+    softWrap = softWrap,
+    maxLines = maxLines,
     constraints = constraints,
     layoutDirection = layoutDirection,
+    density = density,
+    fontFamilyResolver = fontFamilyResolver,
 ).hasVisualOverflow
 
+@Stable
 @Composable
 private fun rememberCandidateFontSizesIntProgress(
     density: Density,
-    dpSize: DpSize,
+    containerDpSize: DpSize,
     minTextSize: TextUnit = TextUnit.Unspecified,
     maxTextSize: TextUnit = TextUnit.Unspecified,
     stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
 ): IntProgression {
-    val max = remember(maxTextSize, dpSize, density) {
-        val intSize = density.toIntSize(dpSize)
+    val max = remember(key1 = density, key2 = maxTextSize, key3 = containerDpSize) {
+        val intSize = density.dpSizeRoundToIntSize(containerDpSize)
         min(intSize.width, intSize.height).let { max ->
             maxTextSize
                 .takeIf { it.isSp }
-                ?.let { density.roundToPx(it) }
+                ?.let { density.spRoundToPx(it) }
                 ?.coerceIn(range = 0..max)
                 ?: max
         }
     }
 
-    val min = remember(minTextSize, max, density) {
+    val min = remember(key1 = density, key2 = minTextSize, key3 = max) {
         minTextSize
             .takeIf { it.isSp }
-            ?.let { density.roundToPx(it) }
+            ?.let { density.spToIntPx(it) }
             ?.coerceIn(range = 0..max)
             ?: 0
     }
 
-    val step = remember(stepGranularityTextSize, min, max, density) {
+    val step = remember(
+        key1 = listOf(
+            density,
+            min,
+            max,
+            stepGranularityTextSize,
+        )
+    ) {
         stepGranularityTextSize
             .takeIf { it.isSp }
-            ?.let { density.roundToPx(it) }
-            ?.coerceAtLeast(minimumValue = 1)
+            ?.let { density.spToIntPx(it) }
+            ?.coerceIn(1, max - min)
             ?: 1
     }
 
-    return remember(min, max, step) {
+    return remember(key1 = min, key2 = max, key3 = step) {
         min..max step step
     }
 }
 
 // This function works by using a binary search algorithm
-fun <E> List<E>.findElectedValue(shouldMoveBackward: (E) -> Boolean) = run {
+fun <T> List<T>.findElectedValue(shouldMoveBackward: (T) -> Boolean) = run {
     indices.findElectedValue(
         transform = { this[it] },
         shouldMoveBackward = shouldMoveBackward,
@@ -330,20 +361,20 @@ fun <E> List<E>.findElectedValue(shouldMoveBackward: (E) -> Boolean) = run {
 }
 
 // This function works by using a binary search algorithm
-private fun <E> IntProgression.findElectedValue(
-    transform: (Int) -> E,
-    shouldMoveBackward: (E) -> Boolean,
+private fun <T> IntProgression.findElectedValue(
+    transform: (Int) -> T,
+    shouldMoveBackward: (T) -> Boolean,
 ) = run {
-    var low = first
-    var high = last
+    var low = first / step
+    var high = last / step
     while (low <= high) {
         val mid = low + (high - low) / 2
-        if (shouldMoveBackward(transform(mid)))
+        if (shouldMoveBackward(transform(mid * step)))
             high = mid - 1
         else
             low = mid + 1
     }
-    transform(high.coerceAtLeast(minimumValue = first))
+    transform((high * step).coerceAtLeast(first * step))
 }
 
 enum class SuggestedFontSizesStatus {
@@ -351,12 +382,16 @@ enum class SuggestedFontSizesStatus {
 
     companion object {
         val List<TextUnit>.suggestedFontSizesStatus
-            get() = if (isNotEmpty() && all { it.isSp } && sortedBy { it.value } == this)
+            get() = if (isNotEmpty() && fastAll { it.isSp } && sortedBy { it.value } == this)
                 VALID
             else
                 INVALID
-        val ImmutableWrapper<List<TextUnit>>.rememberSuggestedFontSizesStatus
-            @Composable get() = remember(this) { value.suggestedFontSizesStatus }
+
+        val List<TextUnit>.validSuggestedFontSizes
+            get() = takeIf { it.isNotEmpty() } // Optimization: empty check first to immediately return null
+                ?.fastFilter { it.isSp }
+                ?.takeIf { it.isNotEmpty() }
+                ?.sortedBy { it.value }
     }
 }
 
@@ -425,7 +460,7 @@ fun PreviewAutoSizeTextWithMCharacter() {
                 modifier = Modifier.fillMaxSize(),
                 alignment = Alignment.Center,
                 style = MaterialTheme.typography.bodyMedium,
-                lineSpacingRatio = 1F,
+                lineSpaceRatio = 1F,
             )
         }
     }

@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.exner.tools.activitytimerfortv"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.exner.tools.activitytimerfortv"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
         vectorDrawables {
@@ -43,7 +43,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "35.0.0"
 
     applicationVariants.all {
         val variant = this

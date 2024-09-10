@@ -39,8 +39,8 @@ enum class ProcessStateConstants {
     ERROR
 }
 
-const val endpointId = "com.exner.tools.activitytimerfortv"
-const val userName = "Timer"
+const val endpointId = "com.exner.tools.ActivityTimer"
+const val userName = "anonymous"
 
 data class ProcessState(
     val currentState: ProcessStateConstants = ProcessStateConstants.AWAITING_PERMISSIONS,

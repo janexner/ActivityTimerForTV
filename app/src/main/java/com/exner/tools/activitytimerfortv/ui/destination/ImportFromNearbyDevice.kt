@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,6 +36,7 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
+import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
@@ -110,6 +113,16 @@ fun ImportFromNearbyDevice(
                                     imageVector = Icons.Filled.Call,
                                     contentDescription = "Start advertising"
                                 )
+                            }
+                        )
+                    }
+                    ProcessStateConstants.RECEIVING -> {
+                        WideButton(
+                            enabled = true,
+                            onClick = { /*TODO*/ },
+                            title = { Text(text = "Import selected") },
+                            icon = {
+                                Icon(imageVector = Icons.Default.Add, contentDescription = "Add selected")
                             }
                         )
                     }
@@ -201,7 +214,7 @@ fun ImportFromNearbyDevice(
                         item { Text(text = "We are receiving data!") }
                         items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
                             Box(modifier = Modifier.padding(PaddingValues(8.dp))) {
-                                Text(text = process.name)
+                                ProcessToImportRow(process = process)
                             }
                         }
                     }
@@ -247,6 +260,18 @@ fun ImportFromNearbyDevice(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ProcessToImportRow(process: TimerProcess) {
+    Row {
+        Text(text = process.name)
+//        Spacer(modifier = Modifier.fillMaxWidth(0.5f))
+        Checkbox(
+            checked = false,
+            onCheckedChange = {}
+        )
     }
 }
 

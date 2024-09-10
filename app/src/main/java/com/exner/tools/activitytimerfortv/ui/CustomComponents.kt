@@ -101,6 +101,22 @@ fun InfoText(
     infoText: String,
     modifier: Modifier = Modifier
 ) {
+    val annotatedInfoText = AnnotatedString(infoText)
+    Row(modifier = modifier) {
+        AutoSizeText(
+            text = annotatedInfoText,
+            alignment = Alignment.BottomStart,
+            color = MaterialTheme.colorScheme.onSurface,
+            lineSpacingRatio = 1.75f,
+        )
+    }
+}
+
+@Composable
+fun InfoText(
+    infoText: AnnotatedString,
+    modifier: Modifier = Modifier
+) {
     Row(modifier = modifier) {
         AutoSizeText(
             text = infoText,
