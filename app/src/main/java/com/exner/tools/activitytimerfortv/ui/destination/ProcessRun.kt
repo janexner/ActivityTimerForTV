@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.LinearProgressIndicator
@@ -16,9 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
-import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.InfoText
@@ -59,14 +61,22 @@ fun ProcessRun(
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Row {
-            WideButton(
+            Button(
                 onClick = {
                     processRunViewModel.cancel()
                     navigator.navigateUp()
                 },
-                title = { Text(text = "Cancel") },
-                icon = { Icon(imageVector = Icons.Filled.Close, contentDescription = "Cancel") }
-            )
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Close,
+                    contentDescription = "Cancel",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                Text(text = "Start Process")
+            }
+
         }
         Spacer(modifier = Modifier.height(8.dp))
         // first, a nice process indicator (if possible)
