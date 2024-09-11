@@ -32,8 +32,18 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
+    suspend fun getFeaturedProcessList(): List<TimerProcess> {
+        return timerDataDAO.getAllProcesses().shuffled()
+    }
+
+    @WorkerThread
     suspend fun getCategoryById(id: Long): TimerProcessCategory? {
         return timerDataDAO.getCategoryById(id)
+    }
+
+    @WorkerThread
+    suspend fun getMovieListByCategory(categoryName: String): List<TimerProcess> {
+        return timerDataDAO.getProcessesByCategory(categoryName)
     }
 
     @WorkerThread

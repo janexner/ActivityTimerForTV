@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -31,9 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.Button
 import androidx.tv.material3.Icon
-import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
@@ -41,7 +38,6 @@ import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
-import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.nearby.Nearby
@@ -69,13 +65,6 @@ fun ImportFromNearbyDevice(
     val openAuthenticationDialog = remember { mutableStateOf(false) }
     val connectionInfo by importFromNearbyDeviceViewModel.connectionInfo.collectAsState()
 
-    // actual UI
-    NavigationDrawer(drawerContent = {
-        ActivityTimerNavigationDrawerContent(
-            navigator = navigator,
-            defaultSelectedIndex = 2
-        )
-    }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -261,7 +250,6 @@ fun ImportFromNearbyDevice(
             }
         }
     }
-}
 
 @Composable
 fun ProcessToImportRow(process: TimerProcess) {

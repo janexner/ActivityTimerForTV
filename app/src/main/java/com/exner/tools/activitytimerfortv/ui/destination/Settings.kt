@@ -16,12 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
-import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
-import com.exner.tools.activitytimerfortv.ui.tools.navigationItems
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -37,14 +34,6 @@ fun Settings(
     val noSounds by settingsViewModel.noSounds.collectAsStateWithLifecycle()
     val importAndUploadRestOfChainAutomatically by settingsViewModel.importAndUploadRestOfChainAutomatically.collectAsStateWithLifecycle()
 
-    val settingsIndex = 1 + navigationItems.size
-
-    NavigationDrawer(drawerContent = {
-        ActivityTimerNavigationDrawerContent(
-            navigator = navigator,
-            defaultSelectedIndex = settingsIndex
-        )
-    }) {
         // show vertically
         Column(
             modifier = Modifier
@@ -110,5 +99,4 @@ fun Settings(
             }
         }
     }
-}
 

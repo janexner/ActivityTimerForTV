@@ -10,7 +10,7 @@ foundationLayout = "1.7.0"
 fragment = "1.8.3"
 hiltCore = "2.52"
 javaxInject = "1"
-kotlin = "2.0.0"
+kotlin = "2.0.10"
 appcompat = "1.7.0"
 composeBom = "2024.09.00"
 kotlinxCoroutinesCore = "1.8.1"
@@ -25,7 +25,7 @@ tvFoundation = "1.0.0-alpha11"
 tvMaterial = "1.0.0"
 activityCompose = "1.9.2"
 hiltCompiler = "2.52"
-ksp = "2.0.0-1.0.23"
+ksp = "2.0.10-1.0.24"
 room = "2.6.1"
 composeDestinations = "2.0.0-beta09"
 androidxHiltNavigationCompose = "1.2.0"
@@ -40,6 +40,7 @@ uiText = "1.7.0"
 uiUnit = "1.7.0"
 playServicesNearby = "19.3.0"
 accompanistPermissions = "0.36.0"
+coil-compose = "2.7.0"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activity" }
@@ -93,6 +94,7 @@ squareup-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", versi
 squareup-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "squareupRetrofit" }
 play-services-nearby = { group = "com.google.android.gms", name = "play-services-nearby", version.ref = "playServicesNearby" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

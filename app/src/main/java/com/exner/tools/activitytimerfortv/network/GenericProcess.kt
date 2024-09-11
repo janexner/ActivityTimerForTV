@@ -1,6 +1,7 @@
 package com.exner.tools.activitytimerfortv.network
 
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
+import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 
 data class GenericProcess (
     var name: String,
@@ -19,6 +20,11 @@ data class GenericProcess (
 )
 
 fun createTimerProcessFrom(genericProcess: GenericProcess): TimerProcess {
+    val catId: Long = if (null == genericProcess.categoryId) {
+        CategoryListDefinitions.CATEGORY_UID_NONE
+    } else {
+        genericProcess.categoryId!!
+    }
     val result = TimerProcess(
         name = genericProcess.name,
         info = genericProcess.info,
@@ -28,7 +34,7 @@ fun createTimerProcessFrom(genericProcess: GenericProcess): TimerProcess {
         hasAutoChain = genericProcess.hasAutoChain,
         gotoUuid = genericProcess.gotoUuid,
         gotoName = genericProcess.gotoName,
-        categoryId = genericProcess.categoryId,
+        categoryId = catId,
         uid = 0
     )
     return result

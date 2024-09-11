@@ -4,11 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
-import com.ramcosta.composedestinations.generated.destinations.HomeDestination
 import com.ramcosta.composedestinations.generated.destinations.ImportFromNearbyDeviceDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessListDestination
 import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
@@ -30,12 +28,6 @@ val navigationItemAccount = NavigationItems(
 )
 
 val navigationItems = listOf(
-    NavigationItems(
-        title = "Home",
-        description = "Home",
-        icon = Icons.Default.Home,
-        destination = HomeDestination
-    ),
     NavigationItems(
         title = "Manage Processes",
         description = "Manage Processes",

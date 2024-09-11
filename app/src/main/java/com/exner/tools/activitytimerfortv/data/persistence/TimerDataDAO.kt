@@ -13,6 +13,9 @@ interface TimerDataDAO {
     @Query("SELECT * FROM timerprocess ORDER BY name ASC")
     fun observeProcessesAlphabeticallyOrdered(): Flow<List<TimerProcess>>
 
+    @Query("SELECT * FROM timerprocess ORDER BY name ASC")
+    suspend fun getAllProcesses(): List<TimerProcess>
+
     @Query("SELECT * FROM timerprocess WHERE uuid=:uuid")
     suspend fun getTimerProcessByUuid(uuid: String): TimerProcess?
 
@@ -27,6 +30,11 @@ interface TimerDataDAO {
 
     @Query("SELECT * FROM timerprocesscategory WHERE uid=:id")
     suspend fun getCategoryById(id: Long): TimerProcessCategory?
+
+    @Query("SELECT tp.* FROM timerprocess tp, timerprocesscategory tc " +
+            "WHERE tc.name = :categoryName " +
+            "AND tp.category_id = tc.uid")
+    suspend fun getProcessesByCategory(categoryName: String): List<TimerProcess>
 
     @Query("DELETE FROM timerprocesscategory WHERE uid IN (:listOfIds)")
     suspend fun deleteCategoriesByIdsFromList(listOfIds: List<Long>)

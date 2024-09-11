@@ -18,7 +18,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
@@ -54,7 +53,7 @@ fun ProcessDetails(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp, 12.dp)
+            .padding(32.dp, 48.dp)
     ) {
         // buttons
         Row {

@@ -31,7 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.ClassicCard
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
@@ -39,7 +38,6 @@ import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 import com.exner.tools.activitytimerfortv.ui.BodyText
 import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
 import com.exner.tools.activitytimerfortv.ui.HeaderText
-import com.exner.tools.activitytimerfortv.ui.tools.ActivityTimerNavigationDrawerContent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -65,12 +63,6 @@ fun CategoryList(
         mutableStateOf<TimerProcessCategory?>(null)
     }
 
-    NavigationDrawer(drawerContent = {
-        ActivityTimerNavigationDrawerContent(
-            navigator = navigator,
-            defaultSelectedIndex = 3, // this should not be a constant!
-        )
-    }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -167,4 +159,3 @@ fun CategoryList(
             }
         }
     }
-}

@@ -8,6 +8,7 @@ import com.exner.tools.activitytimerfortv.data.persistence.TimerDataDAO
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRoomDatabase
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
+import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,9 +59,14 @@ object AppComponent {
         private suspend fun populateDatabaseWithSampleProcesses() {
             // Add sample words.
             val secondUuid = UUID.randomUUID().toString()
+            val noCategory = TimerProcessCategory(
+                name = "None",
+                uid = CategoryListDefinitions.CATEGORY_UID_NONE
+            )
+            provider.get().insertCategory(noCategory)
             val breathingCategory = TimerProcessCategory(
                 name = "Breathing",
-                uid = 0L
+                uid = 1L
             )
             provider.get().insertCategory(breathingCategory)
             var meditationTimerProcess =
@@ -91,10 +97,6 @@ object AppComponent {
                     uid = 0L,
                 )
             provider.get().insert(meditationTimerProcess)
-            val tabathaCategory = TimerProcessCategory(
-                name = "Tabatha",
-                uid = 0L
-            )
             meditationTimerProcess =
                 TimerProcess(
                     "Test Process 3",
@@ -105,7 +107,7 @@ object AppComponent {
                     false,
                     null,
                     null,
-                    categoryId = tabathaCategory.uid,
+                    categoryId = noCategory.uid,
                     uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
@@ -120,7 +122,7 @@ object AppComponent {
                     hasAutoChain = true,
                     gotoUuid = fourthUuid,
                     gotoName = "Test Process 4",
-                    categoryId = tabathaCategory.uid,
+                    categoryId = noCategory.uid,
                     uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
@@ -134,7 +136,7 @@ object AppComponent {
                     false,
                     null,
                     null,
-                    categoryId = tabathaCategory.uid,
+                    categoryId = noCategory.uid,
                     uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
