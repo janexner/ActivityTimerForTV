@@ -1,6 +1,5 @@
 package com.exner.tools.activitytimerfortv.ui.tools
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -39,7 +38,7 @@ fun ProcessCard(
     ) {
         val backgroundColour = MaterialTheme.colorScheme.background
         val backgroundUri = process.backgroundUri
-            ?: (backgroundUriFallback ?: Uri.parse("https://fototimer.net/assets/activitytimer/bg-breathing.png"))
+            ?: (backgroundUriFallback ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png")
 
 
         Box {
