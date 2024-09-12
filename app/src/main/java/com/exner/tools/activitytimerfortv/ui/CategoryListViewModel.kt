@@ -19,7 +19,7 @@ class CategoryListViewModel @Inject constructor(
 
     fun createNewCategory(newCategoryName: String) {
         viewModelScope.launch {
-            val newCategory = TimerProcessCategory(newCategoryName, 0)
+            val newCategory = TimerProcessCategory(newCategoryName, null,0)
             repository.insertCategory(newCategory)
         }
     }

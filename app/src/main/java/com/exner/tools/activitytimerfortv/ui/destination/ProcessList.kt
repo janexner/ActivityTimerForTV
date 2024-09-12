@@ -71,7 +71,7 @@ fun ProcessList(
 
                 Box {
                     AsyncImage(
-                        model = "https://fototimer.net/assets/activitytimer/bg-breathing.png",
+                        model = featuredProcess.backgroundUri ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png",
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
@@ -120,6 +120,7 @@ fun ProcessList(
                 items(category.processList) { process ->
                     ProcessCard(
                         process = process,
+                        backgroundUriFallback = category.backgroundUri,
                         onClick = { navController.navigate(ProcessDetailsDestination(process.uuid)) }
                     )
                 }

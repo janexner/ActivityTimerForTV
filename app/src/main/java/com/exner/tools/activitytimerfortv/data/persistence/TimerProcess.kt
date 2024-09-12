@@ -19,5 +19,7 @@ data class TimerProcess(
 
     @ColumnInfo(name = "category_id") val categoryId : Long = -1L,
 
+    @ColumnInfo(name = "background_uri") val backgroundUri : String?,
+
     @PrimaryKey(autoGenerate = true) val uid : Long = 0
 )

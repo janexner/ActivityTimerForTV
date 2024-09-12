@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class TimerProcessCategory(
     @ColumnInfo(name = "name") var name : String,
+    @ColumnInfo(name = "background_uri") var backgroundUri : String?,
+
     @PrimaryKey(autoGenerate = true) val uid: Long = 0
 )

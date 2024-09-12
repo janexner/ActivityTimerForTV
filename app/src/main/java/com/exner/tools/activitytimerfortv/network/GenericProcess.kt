@@ -16,14 +16,16 @@ data class GenericProcess (
     var gotoUuid: String?,
     var gotoName: String?,
 
+    var backgroundUri: String?,
+
     var uuid: String
 )
 
 fun createTimerProcessFrom(genericProcess: GenericProcess): TimerProcess {
-    val catId: Long = if (null == genericProcess.categoryId) {
-        CategoryListDefinitions.CATEGORY_UID_NONE
-    } else {
+    val catId: Long = if (genericProcess.categoryId != null) {
         genericProcess.categoryId!!
+    } else {
+        CategoryListDefinitions.CATEGORY_UID_NONE
     }
     val result = TimerProcess(
         name = genericProcess.name,
@@ -35,6 +37,7 @@ fun createTimerProcessFrom(genericProcess: GenericProcess): TimerProcess {
         gotoUuid = genericProcess.gotoUuid,
         gotoName = genericProcess.gotoName,
         categoryId = catId,
+        backgroundUri = genericProcess.backgroundUri,
         uid = 0
     )
     return result

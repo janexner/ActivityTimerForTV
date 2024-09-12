@@ -28,6 +28,7 @@ class ProcessListViewModel @Inject constructor(
             tempList.forEach { item ->
                 val category = Category(
                     name = item.name,
+                    backgroundUri = item.backgroundUri,
                     processList = repository.getMovieListByCategory(item.name)
                 )
                 list = list + listOf(category)

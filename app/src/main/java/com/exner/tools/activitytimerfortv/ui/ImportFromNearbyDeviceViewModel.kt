@@ -304,6 +304,7 @@ fun Payload.toFakeProcess(): TimerProcess {
         gotoUuid = positionArray[6],
         gotoName = positionArray[7],
         categoryId = if (positionArray[8] == "null") 0 else positionArray[8].toLong(),
-        uid = positionArray[9].toLong()
+        backgroundUri = if (positionArray[9] == "null") null else positionArray[8],
+        uid = positionArray[10].toLong()
     )
 }

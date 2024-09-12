@@ -61,11 +61,13 @@ object AppComponent {
             val secondUuid = UUID.randomUUID().toString()
             val noCategory = TimerProcessCategory(
                 name = "None",
+                backgroundUri = "https://fototimer.net/assets/activitytimer/bg_none.png",
                 uid = CategoryListDefinitions.CATEGORY_UID_NONE
             )
             provider.get().insertCategory(noCategory)
             val breathingCategory = TimerProcessCategory(
                 name = "Breathing",
+                backgroundUri = "https://fototimer.net/assets/activitytimer/bg_breathing.png",
                 uid = 1L
             )
             provider.get().insertCategory(breathingCategory)
@@ -80,6 +82,7 @@ object AppComponent {
                     gotoUuid = secondUuid,
                     gotoName = "Basic 1 - Mindful Breathing",
                     categoryId = breathingCategory.uid,
+                    backgroundUri = null,
                     uid = 0L,
                 )
             provider.get().insert(meditationTimerProcess)
@@ -94,6 +97,7 @@ object AppComponent {
                     gotoUuid = null,
                     gotoName = null,
                     categoryId = breathingCategory.uid,
+                    backgroundUri = null,
                     uid = 0L,
                 )
             provider.get().insert(meditationTimerProcess)
@@ -108,6 +112,7 @@ object AppComponent {
                     null,
                     null,
                     categoryId = noCategory.uid,
+                    backgroundUri = null,
                     uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
@@ -123,6 +128,7 @@ object AppComponent {
                     gotoUuid = fourthUuid,
                     gotoName = "Test Process 4",
                     categoryId = noCategory.uid,
+                    backgroundUri = "https://fototimer.net/assets/activitytimer/bg-test.png",
                     uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
@@ -137,6 +143,7 @@ object AppComponent {
                     null,
                     null,
                     categoryId = noCategory.uid,
+                    backgroundUri = null,
                     uid = 0L
                 )
             provider.get().insert(meditationTimerProcess)
