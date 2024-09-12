@@ -7,19 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.LocalContentColor
@@ -162,30 +155,6 @@ fun TimerDisplay(
             InfoText(infoText = info)
         }
     }
-}
-
-@Composable
-fun TextFieldForTimes(
-    value: Int,
-    label: @Composable (() -> Unit)?,
-    onValueChange: (Int) -> Unit,
-    placeholder: @Composable (() -> Unit)? = null,
-) {
-    var text by remember(value) { mutableStateOf(value.toString()) }
-    TextField(
-        value = text,
-        label = label,
-        modifier = Modifier.fillMaxWidth(),
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        onValueChange = { raw ->
-            text = raw
-            val parsed = text.toIntOrNull() ?: 0
-            onValueChange(parsed)
-        },
-        placeholder = placeholder,
-        textStyle = MaterialTheme.typography.bodyLarge
-    )
 }
 
 @Composable

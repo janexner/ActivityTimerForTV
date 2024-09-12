@@ -5,11 +5,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
@@ -42,6 +37,11 @@ import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastFilter
+import androidx.tv.material3.LocalTextStyle
+import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.Surface
+import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.ui.tools.SuggestedFontSizesStatus.Companion.validSuggestedFontSizes
 import kotlin.math.min
 
@@ -401,7 +401,7 @@ enum class SuggestedFontSizesStatus {
 @Composable
 fun PreviewAutoSizeTextWithMaxLinesSetToIntMaxValue() {
     MaterialTheme {
-        Surface(color = MaterialTheme.colorScheme.primary) {
+        Surface(colors = SurfaceDefaults.colors()) {
             AutoSizeText(
                 text = "This is a bunch of text that will be auto sized",
                 modifier = Modifier.fillMaxSize(),
@@ -418,7 +418,7 @@ fun PreviewAutoSizeTextWithMaxLinesSetToIntMaxValue() {
 @Composable
 fun PreviewAutoSizeTextWithMinSizeSetTo14() {
     MaterialTheme {
-        Surface(color = MaterialTheme.colorScheme.secondary) {
+        Surface(colors = SurfaceDefaults.colors()) {
             AutoSizeText(
                 text = "This is a bunch of text that will be auto sized",
                 modifier = Modifier.fillMaxSize(),
@@ -437,7 +437,7 @@ fun PreviewAutoSizeTextWithMinSizeSetTo14() {
 @Composable
 fun PreviewAutoSizeTextWithMaxLinesSetToOne() {
     MaterialTheme {
-        Surface(color = MaterialTheme.colorScheme.tertiary) {
+        Surface(colors = SurfaceDefaults.colors()) {
             AutoSizeText(
                 text = "This is a bunch of text that will be auto sized",
                 modifier = Modifier.fillMaxSize(),
@@ -454,7 +454,7 @@ fun PreviewAutoSizeTextWithMaxLinesSetToOne() {
 @Composable
 fun PreviewAutoSizeTextWithMCharacter() {
     MaterialTheme {
-        Surface(color = MaterialTheme.colorScheme.error) {
+        Surface(colors = SurfaceDefaults.colors()) {
             AutoSizeText(
                 text = "m",
                 modifier = Modifier.fillMaxSize(),
@@ -471,7 +471,7 @@ fun PreviewAutoSizeTextWithMCharacter() {
 @Composable
 fun PreviewAutoSizeTextWithYCharacter() {
     MaterialTheme {
-        Surface(color = MaterialTheme.colorScheme.error) {
+        Surface(colors = SurfaceDefaults.colors()) {
             AutoSizeText(
                 text = "y",
                 modifier = Modifier.fillMaxSize(),

@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -20,7 +18,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Checkbox
 import androidx.tv.material3.ClassicCard
-import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 import com.exner.tools.activitytimerfortv.ui.BodyText
@@ -94,31 +91,31 @@ fun CategoryBulkDelete(
             }
         }
         // Alert Dialog
-        if (openAlertDialog.value) {
-            AlertDialog(
-                icon = {},
-                title = { Text(text = "Delete?") },
-                text = { Text(text = "Delete ${listOfCategoryIdsToDelete.size} categories?") },
-                onDismissRequest = { openAlertDialog.value = false },
-                dismissButton = {
-                    TextButton(onClick = {
-                        openAlertDialog.value = false
-                    }) {
-                        Text(text = "No")
-                    }
-                },
-                confirmButton = {
-                    TextButton(onClick = {
-                        categoryListViewModel.deleteAllCategoriesFromListOfIds(
-                            listOfCategoryIdsToDelete
-                        )
-                        openAlertDialog.value = false
-                        navigator.navigateUp()
-                    }) {
-                        Text(text = "Yes, delete")
-                    }
-                }
-            )
-        }
+//        if (openAlertDialog.value) {
+//            AlertDialog(
+//                icon = {},
+//                title = { Text(text = "Delete?") },
+//                text = { Text(text = "Delete ${listOfCategoryIdsToDelete.size} categories?") },
+//                onDismissRequest = { openAlertDialog.value = false },
+//                dismissButton = {
+//                    TextButton(onClick = {
+//                        openAlertDialog.value = false
+//                    }) {
+//                        Text(text = "No")
+//                    }
+//                },
+//                confirmButton = {
+//                    TextButton(onClick = {
+//                        categoryListViewModel.deleteAllCategoriesFromListOfIds(
+//                            listOfCategoryIdsToDelete
+//                        )
+//                        openAlertDialog.value = false
+//                        navigator.navigateUp()
+//                    }) {
+//                        Text(text = "Yes, delete")
+//                    }
+//                }
+//            )
+//        }
     }
 }

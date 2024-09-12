@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -107,10 +106,10 @@ fun ProcessRun(
                 if (hasLoop != true) {
                     val currentProgress =
                         if (numberOfSteps != null && numberOfSteps != 0) currentStepNumber!!.toFloat() / numberOfSteps!! else 0.0f
-                    LinearProgressIndicator(
-                        progress = { currentProgress },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+//                    LinearProgressIndicator(
+//                        progress = { currentProgress },
+//                        modifier = Modifier.fillMaxWidth(),
+//                    )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 // show the display, depending on where we are right now

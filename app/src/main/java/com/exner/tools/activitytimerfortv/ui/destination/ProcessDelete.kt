@@ -10,17 +10,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.Text
-import androidx.tv.material3.WideButton
 import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.exner.tools.activitytimerfortv.ui.ProcessDeleteViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -47,27 +47,35 @@ fun ProcessDelete(
         modifier = Modifier.padding(24.dp)
     ) {
         Row {
-            WideButton(
+            Button(
                 onClick = {
                     navigator.navigateUp()
                 },
-                title = { Text(text = "Cancel") },
-                icon = { Icon(imageVector = Icons.Filled.Close, contentDescription = "Cancel") }
-            )
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Close, contentDescription = "Cancel",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                Text(text = "Cancel")
+            }
             Spacer(modifier = Modifier.size(8.dp))
-            WideButton(
+            Button(
                 onClick = {
                     processDeleteViewModel.deleteProcess(processUuid)
                     navigator.navigate(ProcessListDestination)
                 },
-                title = { Text(text = "Delete Process") },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete Process"
-                    )
-                }
-            )
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete Process",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                Text(text = "Delete Process")
+            }
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 onClick = {
@@ -77,11 +85,9 @@ fun ProcessDelete(
                 Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings")
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        HorizontalDivider()
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         HeaderText(text = "Delete Process")
-        HorizontalDivider(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "You are about to delete a process,"
         )
