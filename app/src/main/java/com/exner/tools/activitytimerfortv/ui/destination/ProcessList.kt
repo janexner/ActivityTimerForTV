@@ -71,7 +71,7 @@ fun ProcessList(
 
                 Box {
                     AsyncImage(
-                        model = "https://fototimer.net/assets/activitytimer/bg-breathing1.png",
+                        model = "https://fototimer.net/assets/activitytimer/bg-breathing.png",
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),

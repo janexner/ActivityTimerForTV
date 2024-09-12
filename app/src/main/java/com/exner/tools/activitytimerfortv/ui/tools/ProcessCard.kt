@@ -12,13 +12,11 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Card
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
-import com.exner.tools.activitytimerfortv.R
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 
 @Composable
@@ -37,7 +35,7 @@ fun ProcessCard(
 
         Box {
             AsyncImage(
-                model = "https://fototimer.net/assets/activitytimer/bg-breathing1.png",
+                model = "https://fototimer.net/assets/activitytimer/bg-breathing.png",
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
