@@ -115,7 +115,7 @@ class ProcessRunViewModel @Inject constructor(
                                         latestActionList[latestActionList.lastIndex]
                                     if (lastAction is ProcessGotoAction) { // it should be!
                                         // remove the action list, it is not mutable
-                                        result.removeLast() // remove the action list, bcs we need a new one
+                                        result.removeAt(result.lastIndex) // remove the action list, bcs we need a new one
                                         val newActionsList = mutableListOf<ProcessStepAction>()
                                         latestActionList.forEach { processStepAction ->
                                             if (processStepAction !is ProcessGotoAction) {

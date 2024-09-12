@@ -21,7 +21,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,11 +30,11 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
-import com.exner.tools.activitytimerfortv.R
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.AboutDestination
 import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
 import com.ramcosta.composedestinations.generated.destinations.ImportFromNearbyDeviceDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
@@ -96,7 +95,13 @@ fun ProcessList(
                                 style = MaterialTheme.typography.displaySmall
                             )
                             Spacer(modifier = Modifier.height(28.dp))
-                            Button(onClick = { navController.navigate(ProcessDetailsDestination(featuredProcess.uuid)) }
+                            Button(onClick = {
+                                navController.navigate(
+                                    ProcessDetailsDestination(
+                                        featuredProcess.uuid
+                                    )
+                                )
+                            }
                             ) {
                                 Text(text = "Show details")
                             }
@@ -106,7 +111,7 @@ fun ProcessList(
             }
         }
         items(categoryList) { category ->
-            Text(text = category.name)
+            Text(text = "Category: " + category.name)
             Spacer(modifier.size(16.dp))
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -128,18 +133,23 @@ fun ProcessList(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 item {
-                    Button(onClick = {navController.navigate(ImportFromNearbyDeviceDestination)}) {
+                    Button(onClick = { navController.navigate(ImportFromNearbyDeviceDestination) }) {
                         Text(text = "Import processes from nearby device")
                     }
                 }
                 item {
-                    Button(onClick = {navController.navigate(CategoryListDestination)}) {
+                    Button(onClick = { navController.navigate(CategoryListDestination) }) {
                         Text(text = "Manage categories")
                     }
                 }
                 item {
-                    Button(onClick = {navController.navigate(SettingsDestination)}) {
+                    Button(onClick = { navController.navigate(SettingsDestination) }) {
                         Text(text = "Settings")
+                    }
+                }
+                item {
+                    Button(onClick = { navController.navigate(AboutDestination) }) {
+                        Text(text = "About Activity Timer for TV")
                     }
                 }
             }

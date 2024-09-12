@@ -111,10 +111,6 @@ fun ProcessRun(
                         progress = { currentProgress },
                         modifier = Modifier.fillMaxWidth(),
                     )
-                } else {
-                    LinearProgressIndicator(
-                        modifier = Modifier.fillMaxWidth()
-                    )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 // show the display, depending on where we are right now

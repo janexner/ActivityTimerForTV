@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
@@ -34,7 +33,6 @@ import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.TimerDisplay
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.ImportFromNearbyDeviceDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessDeleteDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessRunDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -114,24 +112,6 @@ fun ProcessDetails(
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                         Text(text = "Edit Process")
                     }
-
-                    // temp
-                    Spacer(modifier = Modifier.size(16.dp))
-                    OutlinedButton(
-                        onClick = {
-                            navigator.navigate(ImportFromNearbyDeviceDestination)
-                        },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Call,
-                            contentDescription = "Import from Nearby Device",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Receive Processes")
-                    }
-                    // temp end
                     Spacer(modifier = Modifier.weight(0.5f))
                     OutlinedButton(
                         onClick = {
