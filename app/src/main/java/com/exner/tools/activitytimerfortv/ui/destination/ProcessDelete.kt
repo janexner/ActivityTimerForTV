@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -19,14 +18,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
-import androidx.tv.material3.IconButton
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.exner.tools.activitytimerfortv.ui.ProcessDeleteViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.ProcessListDestination
-import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
@@ -75,14 +72,6 @@ fun ProcessDelete(
                 )
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text(text = "Delete Process")
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                onClick = {
-                    navigator.navigate(SettingsDestination)
-                },
-            ) {
-                Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings")
             }
         }
         Spacer(modifier = Modifier.height(32.dp))
