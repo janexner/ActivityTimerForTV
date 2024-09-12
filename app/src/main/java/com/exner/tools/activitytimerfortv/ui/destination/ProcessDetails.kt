@@ -1,5 +1,6 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,14 +18,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
-import androidx.tv.material3.WideButton
+import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.TimerDisplay
 import com.ramcosta.composedestinations.annotation.Destination
@@ -55,100 +60,118 @@ fun ProcessDetails(
 
     processDetailsViewModel.getProcess(processUuid)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp, 48.dp)
-    ) {
-        // buttons
-        Row {
-            Button(
-                onClick = {
-                    navigator.navigate(
-                        ProcessRunDestination(processUuid = processUuid)
-                    )
-                },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.PlayArrow,
-                    contentDescription = "Start Process",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Start Process")
-            }
-            Spacer(modifier = Modifier.size(16.dp))
-            OutlinedButton(
-                onClick = {
-//                        navigator.navigate(ProcessEditDestination(processUuid = processUuid))
-                },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = "Edit Process",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Edit Process")
-            }
+    val bgUrl = "https://fototimer.net/assets/activitytimer/bg-breathing.png"
 
-            // temp
-            Spacer(modifier = Modifier.size(16.dp))
-            OutlinedButton(
-                onClick = {
-                    navigator.navigate(ImportFromNearbyDeviceDestination)
-                },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Call,
-                    contentDescription = "Import from Nearby Device",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Receive Processes")
-            }
-            // temp end
-            Spacer(modifier = Modifier.weight(0.5f))
-            OutlinedButton(
-                onClick = {
-                    navigator.navigate(ProcessDeleteDestination(processUuid = processUuid))
-                },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Delete Process"
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Delete Process")
-            }
-        }
-        // spacer
-        Spacer(modifier = Modifier.weight(0.1f))
-        // content
+    Box(modifier = Modifier.fillMaxSize()) {
+        AsyncImage(
+            model = bgUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
         Box(
-            modifier = Modifier.fillMaxHeight(0.9f)
-        ) {
-            if (null !== processTime && null !== intervalTime) {
-                TimerDisplay(
-                    processTime = processTime!!.toDuration(DurationUnit.SECONDS),
-                    intervalTime = intervalTime!!.toDuration(DurationUnit.SECONDS),
-                    info = info,
-                    forceWithHours = true
+            modifier = Modifier.background(
+                Brush.linearGradient(
+                    listOf(MaterialTheme.colorScheme.background, Color.Transparent)
                 )
-            }
-        }
-        // spacer
-        Spacer(modifier = Modifier.size(16.dp))
-        // more process information
-        Row {
-            val tempName: String = name ?: ""
-            Text(text = "Process: '$tempName'")
-            if (hasAutoChain == true) {
-                Text(text = ", when complete, will lead into '$gotoName'")
+            ).fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(32.dp, 48.dp)
+            ) {
+                // buttons
+                Row {
+                    Button(
+                        onClick = {
+                            navigator.navigate(
+                                ProcessRunDestination(processUuid = processUuid)
+                            )
+                        },
+                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PlayArrow,
+                            contentDescription = "Start Process",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Start Process")
+                    }
+                    Spacer(modifier = Modifier.size(16.dp))
+                    OutlinedButton(
+                        onClick = {
+//                        navigator.navigate(ProcessEditDestination(processUuid = processUuid))
+                        },
+                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "Edit Process",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Edit Process")
+                    }
+
+                    // temp
+                    Spacer(modifier = Modifier.size(16.dp))
+                    OutlinedButton(
+                        onClick = {
+                            navigator.navigate(ImportFromNearbyDeviceDestination)
+                        },
+                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Call,
+                            contentDescription = "Import from Nearby Device",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Receive Processes")
+                    }
+                    // temp end
+                    Spacer(modifier = Modifier.weight(0.5f))
+                    OutlinedButton(
+                        onClick = {
+                            navigator.navigate(ProcessDeleteDestination(processUuid = processUuid))
+                        },
+                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Delete Process"
+                        )
+                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Delete Process")
+                    }
+                }
+                // spacer
+                Spacer(modifier = Modifier.weight(0.1f))
+                // content
+                Box(
+                    modifier = Modifier.fillMaxHeight(0.9f)
+                ) {
+                    if (null !== processTime && null !== intervalTime) {
+                        TimerDisplay(
+                            processTime = processTime!!.toDuration(DurationUnit.SECONDS),
+                            intervalTime = intervalTime!!.toDuration(DurationUnit.SECONDS),
+                            info = info,
+                            forceWithHours = true
+                        )
+                    }
+                }
+                // spacer
+                Spacer(modifier = Modifier.size(16.dp))
+                // more process information
+                Row {
+                    val tempName: String = name ?: ""
+                    Text(text = "Process: '$tempName'")
+                    if (hasAutoChain == true) {
+                        Text(text = ", when complete, will lead into '$gotoName'")
+                    }
+                }
             }
         }
     }

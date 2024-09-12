@@ -36,7 +36,10 @@ import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
+import com.ramcosta.composedestinations.generated.destinations.ImportFromNearbyDeviceDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
+import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -65,13 +68,12 @@ fun ProcessList(
                     .height(376.dp),
             ) { indexOfCarouselItem ->
                 val featuredProcess = featuredProcessesList[indexOfCarouselItem]
-                val backgroundColor = MaterialTheme.colorScheme.background
+                val backgroundColour = MaterialTheme.colorScheme.background
 
                 Box {
                     AsyncImage(
                         model = "https://fototimer.net/assets/activitytimer/bg-breathing1.png",
                         contentDescription = null,
-                        placeholder = painterResource(R.drawable.placeholder),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
                     )
@@ -81,7 +83,7 @@ fun ProcessList(
                             .fillMaxSize()
                             .drawBehind {
                                 val brush = Brush.horizontalGradient(
-                                    listOf(backgroundColor, Color.Transparent)
+                                    listOf(backgroundColour, Color.Transparent)
                                 )
                                 drawRect(brush)
                             }
@@ -115,6 +117,30 @@ fun ProcessList(
                         process = process,
                         onClick = { navController.navigate(ProcessDetailsDestination(process.uuid)) }
                     )
+                }
+            }
+        }
+        // other stuff
+        item {
+            Text(text = "Actions")
+            Spacer(modifier.size(16.dp))
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                item {
+                    Button(onClick = {navController.navigate(ImportFromNearbyDeviceDestination)}) {
+                        Text(text = "Import processes from nearby device")
+                    }
+                }
+                item {
+                    Button(onClick = {navController.navigate(CategoryListDestination)}) {
+                        Text(text = "Manage categories")
+                    }
+                }
+                item {
+                    Button(onClick = {navController.navigate(SettingsDestination)}) {
+                        Text(text = "Settings")
+                    }
                 }
             }
         }
