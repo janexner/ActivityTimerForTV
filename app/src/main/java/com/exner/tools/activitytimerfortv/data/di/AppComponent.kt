@@ -61,13 +61,13 @@ object AppComponent {
             val secondUuid = UUID.randomUUID().toString()
             val noCategory = TimerProcessCategory(
                 name = "None",
-                backgroundUri = "https://fototimer.net/assets/activitytimer/bg_none.png",
+                backgroundUri = "https://fototimer.net/assets/activitytimer/bg-none.png",
                 uid = CategoryListDefinitions.CATEGORY_UID_NONE
             )
             provider.get().insertCategory(noCategory)
             val breathingCategory = TimerProcessCategory(
                 name = "Breathing",
-                backgroundUri = "https://fototimer.net/assets/activitytimer/bg_breathing.png",
+                backgroundUri = "https://fototimer.net/assets/activitytimer/bg-breathing.png",
                 uid = 1L
             )
             provider.get().insertCategory(breathingCategory)

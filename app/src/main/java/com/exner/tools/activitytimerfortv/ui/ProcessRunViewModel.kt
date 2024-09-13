@@ -50,6 +50,9 @@ class ProcessRunViewModel @Inject constructor(
     private val _showStages: MutableLiveData<Boolean> = MutableLiveData(false)
     val showStages: LiveData<Boolean> = _showStages
 
+    private val _backgroundUri: MutableLiveData<String?> = MutableLiveData(null)
+    val backgroundUri: LiveData<String?> = _backgroundUri
+
     private var job: Job? = null
 
     private var isRunning: Boolean = false
@@ -76,6 +79,14 @@ class ProcessRunViewModel @Inject constructor(
                     processIdList.add(currentID)
                     val process = repository.loadProcessByUuid(currentID)
                     if (process != null) {
+                        // sort out the background image
+                        var backgroundUri = "https://fototimer.net/assets/activitytimer/bg-default.png"
+                        val category = repository.getCategoryById(process.categoryId)
+                        if (category != null) {
+                            backgroundUri = category.backgroundUri ?: backgroundUri
+                        }
+                        _backgroundUri.value = process.backgroundUri ?: backgroundUri
+                        // now assemble steps and such
                         val partialResult =
                             getProcessStepListForOneProcess(
                                 process = process,

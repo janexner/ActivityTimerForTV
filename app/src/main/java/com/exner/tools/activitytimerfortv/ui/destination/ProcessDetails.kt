@@ -55,14 +55,13 @@ fun ProcessDetails(
     val hasAutoChain by processDetailsViewModel.hasAutoChain.observeAsState()
     val gotoId by processDetailsViewModel.gotoUuid.observeAsState()
     val gotoName by processDetailsViewModel.gotoName.observeAsState()
+    val backgroundUri by processDetailsViewModel.backgroundUri.observeAsState()
 
     processDetailsViewModel.getProcess(processUuid)
 
-    val bgUrl = "https://fototimer.net/assets/activitytimer/bg-breathing.png"
-
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
-            model = bgUrl,
+            model = backgroundUri,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

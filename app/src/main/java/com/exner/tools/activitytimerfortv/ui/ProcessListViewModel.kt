@@ -10,12 +10,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class ProcessListViewModel @Inject constructor(
-    repository: TimerDataRepository
-): ViewModel() {
+    val repository: TimerDataRepository
+) : ViewModel() {
 
     val featuredProcessList: StateFlow<List<TimerProcess>> = flow {
         emit(repository.getFeaturedProcessList())
@@ -36,4 +37,21 @@ class ProcessListViewModel @Inject constructor(
             emit(list)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
+
+    fun getBackgroundUriForProcessOrCategory(process: TimerProcess): String {
+        var result = "https://fototimer.net/assets/activitytimer/bg-default.png"
+
+        // overwrite if a category background if there is one
+        runBlocking {
+            val category = repository.getCategoryById(process.categoryId)
+            if (category != null) {
+                result = category.backgroundUri ?: result
+            }
+        }
+
+        // overwrite with a process background if there is one
+        result = process.backgroundUri ?: result
+
+        return result
+    }
 }

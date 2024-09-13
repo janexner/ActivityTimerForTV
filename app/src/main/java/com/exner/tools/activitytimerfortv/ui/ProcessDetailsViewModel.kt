@@ -40,6 +40,12 @@ class ProcessDetailsViewModel @Inject constructor(
     private val _gotoName: MutableLiveData<String?> = MutableLiveData(null)
     val gotoName: LiveData<String?> = _gotoName
 
+    private val _categoryName: MutableLiveData<String?> = MutableLiveData(null)
+    val categoryName: LiveData<String?> = _categoryName
+
+    private val _backgroundUri: MutableLiveData<String?> = MutableLiveData(null)
+    val backgroundUri: LiveData<String?> = _backgroundUri
+
     private val _nextProcessesName: MutableLiveData<String> = MutableLiveData("")
     val nextProcessesName: LiveData<String> = _nextProcessesName
 
@@ -48,6 +54,13 @@ class ProcessDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             val process = repository.loadProcessByUuid(processUuid)
             if (process != null) {
+                val category = repository.getCategoryById(process.categoryId)
+                var backgroundUri = "https://fototimer.net/assets/activitytimer/bg-default.png"
+                if (category != null) {
+                    backgroundUri = category.backgroundUri ?: backgroundUri
+                }
+                backgroundUri = process.backgroundUri ?: backgroundUri
+
                 _name.value = process.name
                 _info.value = process.info
                 _processTime.value = process.processTime
@@ -64,6 +77,10 @@ class ProcessDetailsViewModel @Inject constructor(
                         }
                     }
                 }
+                if (category != null) {
+                    _categoryName.value = category.name
+                }
+                _backgroundUri.value = backgroundUri
             }
         }
     }

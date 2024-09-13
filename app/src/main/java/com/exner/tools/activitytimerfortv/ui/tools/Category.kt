@@ -7,3 +7,4 @@ data class Category(
     val backgroundUri: String?,
     val processList: List<TimerProcess>
 )
+

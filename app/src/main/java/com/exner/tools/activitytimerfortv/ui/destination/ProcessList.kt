@@ -71,7 +71,7 @@ fun ProcessList(
 
                 Box {
                     AsyncImage(
-                        model = featuredProcess.backgroundUri ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png",
+                        model = processListViewModel.getBackgroundUriForProcessOrCategory(featuredProcess),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),

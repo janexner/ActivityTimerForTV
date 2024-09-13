@@ -52,6 +52,8 @@ fun ProcessRun(
     val hasLoop by processRunViewModel.hasLoop.observeAsState()
     val hasHours by processRunViewModel.hasHours.observeAsState()
     val showStages by processRunViewModel.showStages.observeAsState()
+    val backgroundUri by processRunViewModel.backgroundUri.observeAsState()
+
 
     processRunViewModel.initialiseRun(
         processUuid = processUuid,
@@ -61,11 +63,9 @@ fun ProcessRun(
         navigator.navigateUp()
     }
 
-    val bgUrl = "https://fototimer.net/assets/activitytimer/bg-breathing.png"
-
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
-            model = bgUrl,
+            model = backgroundUri,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
