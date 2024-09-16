@@ -101,7 +101,7 @@ fun ImportFromNearbyDevice(
                         enabled = permissionsNeeded.allPermissionsGranted,
                         onClick = {
                             importFromNearbyDeviceViewModel.transitionToNewState(
-                                ProcessStateConstants.ADVERTISING
+                                ProcessStateConstants.START_ADVERTISING
                             )
                         },
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding

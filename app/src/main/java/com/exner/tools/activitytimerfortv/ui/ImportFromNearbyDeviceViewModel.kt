@@ -64,6 +64,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
     private lateinit var connectionsClient: ConnectionsClient
 
     fun provideConnectionsClient(connectionsClient: ConnectionsClient) {
+        Log.d("INDVM", "ConnectionsClient provided: $connectionsClient")
         this.connectionsClient = connectionsClient
     }
 
@@ -188,7 +189,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 val advertisingOptions: AdvertisingOptions =
                     AdvertisingOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT)
                         .build()
-                Log.d("STARTADV", "Starting to advertise... $endpointId")
+                Log.d("INDVM", "Starting to advertise... $endpointId")
                 _processStateFlow.value = ProcessState(newState, "OK")
                 connectionsClient.startAdvertising(
                     userName,
@@ -198,7 +199,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 ).addOnSuccessListener {
                     Log.d("STARTADV", "Advertising started")
                     _processStateFlow.value = ProcessState(newState, "Advertising")
-                    Log.d("ADVSTARTED", "Now advertising...")
+                    Log.d("ADVSTARTED", "Advertising started and state set")
                 }.addOnFailureListener { e: Exception? ->
                     Log.d("STARTADV", "Start of adv failed $e")
                     val errorMessage = "Error starting advertising" + if (e != null) {
@@ -219,14 +220,14 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
             }
 
             ProcessStateConstants.ADVERTISING -> {
-                Log.d("ADVSTARTED", "Now advertising...")
+                Log.d("INDVM", "Now advertising...")
                 _processStateFlow.value = ProcessState(newState, "Advertising")
             }
 
             ProcessStateConstants.ERROR -> {
                 connectionsClient.stopAllEndpoints()
                 connectionsClient.stopAdvertising()
-                Log.d("ADVSTARTED", "Error: ${_processStateFlow.value.message}")
+                Log.d("INDVM", "Error: ${_processStateFlow.value.message}")
             }
 
             ProcessStateConstants.DISCOVERED -> {
@@ -248,14 +249,14 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
 
             ProcessStateConstants.AUTHENTICATION_REQUESTED -> {
                 _processStateFlow.value = ProcessState(newState, "Auth requested")
-                Log.d("SNDVM", "Authentication requested...")
+                Log.d("INDVM", "Authentication requested...")
             }
             ProcessStateConstants.AUTHENTICATION_OK -> {
-                Log.d("SNDVM", "Now accepting the connection...")
+                Log.d("INDVM", "Now accepting the connection...")
                 connectionsClient.acceptConnection(connectionInfo.value.endpointId, payloadCallback)
             }
             ProcessStateConstants.AUTHENTICATION_DENIED -> {
-                Log.d("SNDVM", "Connection denied!")
+                Log.d("INDVM", "Connection denied!")
                 _processStateFlow.value = ProcessState(ProcessStateConstants.DISCOVERED, "Connection denied")
             }
 
