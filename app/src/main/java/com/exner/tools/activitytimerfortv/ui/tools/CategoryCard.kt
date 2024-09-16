@@ -2,8 +2,10 @@ package com.exner.tools.activitytimerfortv.ui.tools
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,22 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Card
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
-import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
-import com.exner.tools.activitytimerfortv.ui.theme.ActivityTimerForTVTheme
+import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
+import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 
 @Composable
-fun ProcessCard(
+fun CategoryCard(
     modifier: Modifier = Modifier,
-    process: TimerProcess,
+    category: TimerProcessCategory,
+    usage: TimerCategoryIdNameCount?,
     backgroundUriFallback: String?,
     onClick: () -> Unit
 ) {
@@ -37,9 +37,15 @@ fun ProcessCard(
             .aspectRatio(16f / 9f),
     ) {
         val backgroundColour = MaterialTheme.colorScheme.background
-        val backgroundUri = process.backgroundUri
+        val backgroundUri = category.backgroundUri
             ?: (backgroundUriFallback ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png")
 
+        var usageText = "Unused"
+        if (null != usage) {
+            if (usage.usageCount > 0) {
+                usageText = "Used in ${usage.usageCount} processes"
+            }
+        }
 
         Box {
             AsyncImage(
@@ -60,38 +66,11 @@ fun ProcessCard(
                     }
             ) {
                 Column() {
-                    Text(text = process.name)
+                    Text(text = category.name)
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(text = usageText)
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProcessCardPreview() {
-    ActivityTimerForTVTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            shape = RectangleShape
-        ) {
-            ProcessCard(
-                process = TimerProcess(
-                    name = "Test Process",
-                    info = "A process for testing and previewing, and nothing else.",
-                    uuid = "blablabla",
-                    processTime = 30,
-                    intervalTime = 5,
-                    hasAutoChain = true,
-                    gotoUuid = "blablabla",
-                    gotoName = "Test Process",
-                    categoryId = 1L,
-                    backgroundUri = "https://fototimer.net/assets/activitytimer/bg-breathing.png",
-                    uid = 0L
-                ),
-                backgroundUriFallback = "https://fototimer.net/assets/activitytimer/bg-breathing.png",
-                onClick = {}
-            )
         }
     }
 }

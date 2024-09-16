@@ -1,6 +1,5 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,15 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.material3.ClassicCard
-import androidx.tv.material3.Surface
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
-import com.exner.tools.activitytimerfortv.ui.BodyText
 import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
-import com.exner.tools.activitytimerfortv.ui.HeaderText
+import com.exner.tools.activitytimerfortv.ui.tools.CategoryCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.CategoryDetailsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
@@ -54,38 +51,24 @@ fun CategoryList(
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 250.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(16.dp),
                 modifier = Modifier
                     .fillMaxSize()
             ) {
                 items(count = categories.size) { index ->
                     val category = categories[index]
-                    Surface(
-                        modifier = Modifier
-                            .clickable {
-                                openDialogCategory.value = category
-                                openDialog.value = true
-                            },
-                    ) {
-                        var supText = "Unused"
-                        val usage = categoryUsage.firstOrNull {
-                            it.uid == category.uid
-                        }
-                        if (usage != null) {
-                            if (usage.usageCount > 0) {
-                                supText = "Used in ${usage.usageCount} process(es)"
-                            }
-                        }
-                        ClassicCard(
-                            onClick = {},
-                            title = { HeaderText(text = category.name) },
-                            subtitle = { BodyText(text = supText) },
-                            description = {},
-                            image = {}
-                        )
+                    val usage = categoryUsage.firstOrNull {
+                        it.uid == category.uid
                     }
+                    CategoryCard(
+                        modifier = Modifier,
+                        category = category,
+                        usage = usage,
+                        backgroundUriFallback = "https://fototimer.net/assets/activitytimer/bg-default.png",
+                        onClick = { navigator.navigate(CategoryDetailsDestination(category.uid)) }
+                    )
                 }
             }
             // dialog for making a new category
