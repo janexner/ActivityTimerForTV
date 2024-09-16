@@ -269,7 +269,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
 
     fun payloadReceived(endpointId: String, payload: Payload) {
         if (payload.type == Payload.Type.BYTES) {
-            val process = payload.toFakeProcess()
+            val process = payload.toTimerProcess()
             Log.d("INBVM", "Payload received from $endpointId: ${process.name} / $process")
             _receivedProcesses.add(process)
             transitionToNewState(ProcessStateConstants.RECEIVING, process.uuid)
@@ -280,7 +280,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
 
     fun decodePayloadToString(payload: Payload) : String {
         if (payload.type == Payload.Type.BYTES) {
-            val process = payload.toFakeProcess()
+            val process = payload.toTimerProcess()
             Log.d("INBVMPD", "Payload received: ${process.name} / $process")
             return process.name
         } else {
@@ -290,7 +290,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
     }
 }
 
-fun Payload.toFakeProcess(): TimerProcess {
+fun Payload.toTimerProcess(): TimerProcess {
     val positionStr = String(asBytes()!!, UTF_8)
     Log.d("INDVMPL2FP", "Received $positionStr")
     val positionArray = positionStr.split("|")

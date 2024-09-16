@@ -1,5 +1,6 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,11 +17,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -28,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Checkbox
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
@@ -35,6 +39,7 @@ import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
+import com.exner.tools.activitytimerfortv.ui.tools.StandardDialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.nearby.Nearby
@@ -276,6 +281,9 @@ fun ProcessToImportRow(process: TimerProcess) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalTvMaterial3Api::class
+)
 @Composable
 fun ProcessStateAuthenticationRequestedScreen(
     openAuthenticationDialog: Boolean,
@@ -283,23 +291,23 @@ fun ProcessStateAuthenticationRequestedScreen(
     confirmCallback: () -> Unit,
     dismissCallback: () -> Unit
 ) {
-//    if (openAuthenticationDialog) {
-//        AlertDialog(
-//            modifier = Modifier.background(color = Color.DarkGray),
-//            title = { Text(text = "Accept connection to " + info.connectionInfo.endpointName) },
-//            text = { Text(text = "Confirm the code matches on both devices: " + info.connectionInfo.authenticationDigits) },
-//            icon = { Icon(imageVector = Icons.Default.Warning, contentDescription = "Alert") },
-//            onDismissRequest = { dismissCallback() },
-//            confirmButton = {
-//                TextButton(onClick = { confirmCallback() }) {
-//                    Text(text = "Accept")
-//                }
-//            },
-//            dismissButton = {
-//                TextButton(onClick = { dismissCallback() }) {
-//                    Text(text = "Decline")
-//                }
-//            }
-//        )
-//    }
+    if (openAuthenticationDialog) {
+        StandardDialog(
+            showDialog = openAuthenticationDialog,
+            title = { Text(text = "Accept connection to " + info.connectionInfo.endpointName) },
+            text = { Text(text = "Confirm the code matches on both devices: " + info.connectionInfo.authenticationDigits) },
+            icon = { Icon(imageVector = Icons.Default.Warning, contentDescription = "Alert") },
+            onDismissRequest = { dismissCallback() },
+            confirmButton = {
+                Button(onClick = { confirmCallback() }) {
+                    Text(text = "Accept")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { dismissCallback() }) {
+                    Text(text = "Decline")
+                }
+            }
+        )
+    }
 }
