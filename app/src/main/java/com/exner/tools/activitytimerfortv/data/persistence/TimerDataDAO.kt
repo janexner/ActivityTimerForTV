@@ -25,6 +25,9 @@ interface TimerDataDAO {
     @Query("SELECT * FROM timercategoryidnamecount")
     fun observeCategoryUsageCount(): Flow<List<TimerCategoryIdNameCount>>
 
+    @Query("SELECT * FROM timercategoryidnamecount WHERE uid=:id")
+    suspend fun getCategoryUsageCountForId(id: Long): TimerCategoryIdNameCount?
+
     @Query("SELECT uuid FROM timerprocess WHERE goto_uuid=:uuid ORDER BY name ASC")
     suspend fun getUuidsOfDependantProcesses(uuid: String): List<String>
 

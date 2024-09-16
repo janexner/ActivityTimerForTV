@@ -30,7 +30,7 @@ class ProcessListViewModel @Inject constructor(
                 val category = Category(
                     name = item.name,
                     backgroundUri = item.backgroundUri,
-                    processList = repository.getMovieListByCategory(item.name)
+                    processList = repository.getProcessListByCategory(item.name)
                 )
                 list = list + listOf(category)
             }

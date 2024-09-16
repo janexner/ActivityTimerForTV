@@ -30,7 +30,6 @@ import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @Destination<RootGraph>
@@ -38,11 +37,12 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun CategoryDetails(
     categoryUid: Long,
     categoryDetailsViewModel: CategoryDetailsViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+//    navigator: DestinationsNavigator
 ) {
 
     val name by categoryDetailsViewModel.name.observeAsState()
     val backgroundUri by categoryDetailsViewModel.backgroundUri.observeAsState()
+    val usage by categoryDetailsViewModel.usage.observeAsState()
 
     categoryDetailsViewModel.getCategory(categoryUid)
 
@@ -100,9 +100,15 @@ fun CategoryDetails(
                 Spacer(modifier = Modifier.weight(0.1f))
                 // content
                 // more process information
-                Row {
+                Column {
                     val tempName: String = name ?: ""
-                    Text(text = "Process: '$tempName'")
+                    Text(text = "Category: '$tempName'")
+                    var usageString = "Unused"
+                    if (usage != null) {
+                        usageString = "Used in ${usage!!.usageCount} processes"
+                    }
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(text = usageString)
                 }
             }
         }

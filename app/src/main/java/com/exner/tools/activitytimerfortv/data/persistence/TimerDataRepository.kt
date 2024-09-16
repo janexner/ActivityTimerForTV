@@ -42,8 +42,13 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
-    suspend fun getMovieListByCategory(categoryName: String): List<TimerProcess> {
+    suspend fun getProcessListByCategory(categoryName: String): List<TimerProcess> {
         return timerDataDAO.getProcessesByCategory(categoryName)
+    }
+
+    @WorkerThread
+    suspend fun getCategoryUsageById(id: Long): TimerCategoryIdNameCount? {
+        return timerDataDAO.getCategoryUsageCountForId(id)
     }
 
     @WorkerThread
