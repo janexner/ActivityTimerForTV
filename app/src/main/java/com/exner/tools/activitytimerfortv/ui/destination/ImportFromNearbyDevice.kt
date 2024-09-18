@@ -162,7 +162,19 @@ fun ImportFromNearbyDevice(
             importFromNearbyDeviceViewModel.transitionToNewState(ProcessStateConstants.PERMISSIONS_GRANTED)
         }
 
-        // TEMP / TODO
+        // display received processes
+        if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                item { Text(text = "Processes received") }
+                items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
+                    Box(modifier = Modifier.padding(PaddingValues(8.dp))) {
+                        ProcessToImportRow(process = process)
+                    }
+                }
+            }
+            // spacer
+            Spacer(modifier = Modifier.weight(0.1f))
+        }
 
         // UI, depending on state
         when (processState.currentState) {
@@ -219,10 +231,8 @@ fun ImportFromNearbyDevice(
             ProcessStateConstants.RECEIVING -> {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     item { Text(text = "We are receiving data!") }
-                    items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
-                        Box(modifier = Modifier.padding(PaddingValues(8.dp))) {
-                            ProcessToImportRow(process = process)
-                        }
+                    if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
+                        item { Text(text = "Received ${importFromNearbyDeviceViewModel.receivedProcesses.size} process(es) so far...") }
                     }
                 }
             }
@@ -272,12 +282,20 @@ fun ImportFromNearbyDevice(
 @Composable
 fun ProcessToImportRow(process: TimerProcess) {
     Row {
-        Text(text = process.name)
-//        Spacer(modifier = Modifier.fillMaxWidth(0.5f))
         Checkbox(
             checked = false,
             onCheckedChange = {}
         )
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(text = process.name)
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(text = "${process.processTime}/${process.intervalTime}")
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(text = process.info)
+        if (process.hasAutoChain) {
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(text = "-> ${process.gotoName}")
+        }
     }
 }
 
