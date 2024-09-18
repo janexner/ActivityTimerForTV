@@ -1,5 +1,5 @@
 [versions]
-agp = "8.6.0"
+agp = "8.6.1"
 kotlin = "2.0.10"
 appcompat = "1.7.0"
 composeBom = "2024.09.01"
@@ -17,6 +17,7 @@ squareupRetrofit = "2.11.0"
 playServicesNearby = "19.3.0"
 accompanistPermissions = "0.36.0"
 coil-compose = "2.7.0"
+material3Android = "1.3.0"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -41,6 +42,7 @@ squareup-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "c
 play-services-nearby = { group = "com.google.android.gms", name = "play-services-nearby", version.ref = "playServicesNearby" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

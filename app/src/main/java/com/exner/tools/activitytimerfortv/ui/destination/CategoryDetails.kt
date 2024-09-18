@@ -28,8 +28,11 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
+import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.CategoryEditDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @Destination<RootGraph>
@@ -37,7 +40,7 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 fun CategoryDetails(
     categoryUid: Long,
     categoryDetailsViewModel: CategoryDetailsViewModel = hiltViewModel(),
-//    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator
 ) {
 
     val name by categoryDetailsViewModel.name.observeAsState()
@@ -54,11 +57,13 @@ fun CategoryDetails(
             modifier = Modifier.fillMaxSize()
         )
         Box(
-            modifier = Modifier.background(
-                Brush.linearGradient(
-                    listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+            modifier = Modifier
+                .background(
+                    Brush.linearGradient(
+                        listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+                    )
                 )
-            ).fillMaxSize()
+                .fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
@@ -67,33 +72,35 @@ fun CategoryDetails(
             ) {
                 // buttons
                 Row {
-                    Button(
-                        onClick = {
-//                        navigator.navigate(CategoryEditDestination(categoryUid = categoryUid))
-                        },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = "Edit Category",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Edit Category")
-                    }
-                    Spacer(modifier = Modifier.weight(0.5f))
-                    OutlinedButton(
-                        onClick = {
+                    if (categoryUid != CategoryListDefinitions.CATEGORY_UID_NONE) {
+                        Button(
+                            onClick = {
+                                navigator.navigate(CategoryEditDestination(categoryUid = categoryUid))
+                            },
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = "Edit Category",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(text = "Edit Category")
+                        }
+                        Spacer(modifier = Modifier.weight(0.5f))
+                        OutlinedButton(
+                            onClick = {
 //                            navigator.navigate(CategoryDeleteDestination(categoryUid = categoryUid))
-                        },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = "Delete Category"
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Delete Category")
+                            },
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete Category"
+                            )
+                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(text = "Delete Category")
+                        }
                     }
                 }
                 // spacer
@@ -109,6 +116,8 @@ fun CategoryDetails(
                     }
                     Spacer(modifier = Modifier.size(16.dp))
                     Text(text = usageString)
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(text = "Background image URL: $backgroundUri")
                 }
             }
         }

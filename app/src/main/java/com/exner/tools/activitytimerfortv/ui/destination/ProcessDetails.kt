@@ -151,6 +151,8 @@ fun ProcessDetails(
                         Text(text = ", when complete, will lead into '$gotoName'")
                     }
                 }
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(text = "Background image URL: $backgroundUri")
             }
         }
     }
