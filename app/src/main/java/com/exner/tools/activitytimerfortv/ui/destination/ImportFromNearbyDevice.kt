@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
@@ -191,7 +190,11 @@ fun ImportFromNearbyDevice(
                         ProcessCard(
                             process = process,
                             backgroundUriFallback = null,
-                            onClick = { importFromNearbyDeviceViewModel.importProcessIntoLocalDatabase(process) }
+                            onClick = {
+                                importFromNearbyDeviceViewModel.importProcessIntoLocalDatabase(
+                                    process
+                                )
+                            }
                         )
                     }
                 }
@@ -323,7 +326,8 @@ fun ProcessToImportRow(process: TimerProcess) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
     ExperimentalTvMaterial3Api::class
 )
 @Composable

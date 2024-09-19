@@ -56,6 +56,7 @@ fun ProcessList(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         contentPadding = PaddingValues(horizontal = 58.dp, vertical = 36.dp)
     ) {
+        // featured processes
         item {
             val featuredProcessesList by
             processListViewModel.featuredProcessList.collectAsStateWithLifecycle()
@@ -64,14 +65,16 @@ fun ProcessList(
                 itemCount = featuredProcessesList.size,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(376.dp),
+                    .height(245.dp),
             ) { indexOfCarouselItem ->
                 val featuredProcess = featuredProcessesList[indexOfCarouselItem]
                 val backgroundColour = MaterialTheme.colorScheme.background
 
                 Box {
                     AsyncImage(
-                        model = processListViewModel.getBackgroundUriForProcessOrCategory(featuredProcess),
+                        model = processListViewModel.getBackgroundUriForProcessOrCategory(
+                            featuredProcess
+                        ),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
@@ -128,8 +131,6 @@ fun ProcessList(
         }
         // other stuff
         item {
-            Text(text = "Actions")
-            Spacer(modifier.size(16.dp))
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
