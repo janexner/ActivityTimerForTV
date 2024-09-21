@@ -133,11 +133,6 @@ fun ProcessList(
         }
         // other stuff
         item {
-            Text(
-                text = "Actions",
-                style = MaterialTheme.typography.titleMedium
-            )
-            DefaultSpacer()
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),

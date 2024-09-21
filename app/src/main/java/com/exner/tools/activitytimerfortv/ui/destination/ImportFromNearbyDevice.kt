@@ -2,7 +2,6 @@ package com.exner.tools.activitytimerfortv.ui.destination
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,6 +38,7 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.network.Permissions
+import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
@@ -74,7 +74,7 @@ fun ImportFromNearbyDevice(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp, 12.dp)
+            .padding(horizontal = 48.dp, vertical = 24.dp)
     ) {
         // buttons
         Row {
@@ -182,21 +182,20 @@ fun ImportFromNearbyDevice(
             Spacer(modifier = Modifier.size(16.dp))
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 250.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
-                    Box(modifier = Modifier.padding(PaddingValues(8.dp))) {
-                        ProcessCard(
-                            process = process,
-                            backgroundUriFallback = null,
-                            onClick = {
-                                importFromNearbyDeviceViewModel.importProcessIntoLocalDatabase(
-                                    process
-                                )
-                            }
-                        )
-                    }
+                    ProcessCard(
+                        process = process,
+                        backgroundUriFallback = null,
+                        onClick = {
+                            importFromNearbyDeviceViewModel.importProcessIntoLocalDatabase(
+                                process
+                            )
+                        }
+                    )
                 }
             }
             // spacer
@@ -313,11 +312,11 @@ fun ProcessToImportRow(process: TimerProcess) {
             checked = false,
             onCheckedChange = {}
         )
-        Spacer(modifier = Modifier.size(16.dp))
+        DefaultSpacer()
         Text(text = process.name)
-        Spacer(modifier = Modifier.size(16.dp))
+        DefaultSpacer()
         Text(text = "${process.processTime}/${process.intervalTime}")
-        Spacer(modifier = Modifier.size(16.dp))
+        DefaultSpacer()
         Text(text = process.info)
         if (process.hasAutoChain) {
             Spacer(modifier = Modifier.size(16.dp))
