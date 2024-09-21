@@ -1,6 +1,7 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -70,7 +71,7 @@ fun ImportFromNearbyDevice(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp, 12.dp)
+            .padding(horizontal = 48.dp, vertical = 24.dp)
     ) {
         // buttons
         Row {
@@ -164,10 +165,21 @@ fun ImportFromNearbyDevice(
 
         // display received processes
         if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
                 item { Text(text = "Processes received") }
                 items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
-                    Box(modifier = Modifier.padding(PaddingValues(8.dp))) {
+                    Box(
+                        modifier = Modifier.padding(
+                            PaddingValues(
+                                horizontal = 16.dp,
+                                vertical = 8.dp
+                            )
+                        )
+                    ) {
                         ProcessToImportRow(process = process)
                     }
                 }
@@ -299,7 +311,8 @@ fun ProcessToImportRow(process: TimerProcess) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
     ExperimentalTvMaterial3Api::class
 )
 @Composable

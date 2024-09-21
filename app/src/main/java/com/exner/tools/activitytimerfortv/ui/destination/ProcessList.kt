@@ -4,12 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,6 +28,7 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.ramcosta.composedestinations.annotation.Destination
@@ -54,7 +53,7 @@ fun ProcessList(
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(32.dp),
-        contentPadding = PaddingValues(horizontal = 58.dp, vertical = 36.dp)
+        contentPadding = PaddingValues(horizontal = 48.dp, vertical = 24.dp)
     ) {
         item {
             val featuredProcessesList by
@@ -71,7 +70,9 @@ fun ProcessList(
 
                 Box {
                     AsyncImage(
-                        model = processListViewModel.getBackgroundUriForProcessOrCategory(featuredProcess),
+                        model = processListViewModel.getBackgroundUriForProcessOrCategory(
+                            featuredProcess
+                        ),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
@@ -94,7 +95,7 @@ fun ProcessList(
                                 text = featuredProcess.name,
                                 style = MaterialTheme.typography.displaySmall
                             )
-                            Spacer(modifier = Modifier.height(28.dp))
+                            DefaultSpacer()
                             Button(onClick = {
                                 navController.navigate(
                                     ProcessDetailsDestination(
@@ -111,10 +112,14 @@ fun ProcessList(
             }
         }
         items(categoryList) { category ->
-            Text(text = "Category: " + category.name)
-            Spacer(modifier.size(16.dp))
+            Text(
+                text = "Category: " + category.name,
+                style = MaterialTheme.typography.titleMedium
+            )
+            DefaultSpacer()
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 modifier = Modifier.height(120.dp)
             ) {
                 items(category.processList) { process ->
@@ -128,10 +133,14 @@ fun ProcessList(
         }
         // other stuff
         item {
-            Text(text = "Actions")
-            Spacer(modifier.size(16.dp))
+            Text(
+                text = "Actions",
+                style = MaterialTheme.typography.titleMedium
+            )
+            DefaultSpacer()
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
             ) {
                 item {
                     Button(onClick = { navController.navigate(ImportFromNearbyDeviceDestination) }) {

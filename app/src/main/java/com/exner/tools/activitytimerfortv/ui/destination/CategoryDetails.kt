@@ -28,6 +28,7 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
+import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -68,7 +69,7 @@ fun CategoryDetails(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(32.dp, 48.dp)
+                    .padding(horizontal = 48.dp, vertical = 24.dp)
             ) {
                 // buttons
                 Row {
@@ -104,7 +105,7 @@ fun CategoryDetails(
                     }
                 }
                 // spacer
-                Spacer(modifier = Modifier.weight(0.1f))
+                DefaultSpacer()
                 // content
                 // more process information
                 Column {
@@ -114,9 +115,9 @@ fun CategoryDetails(
                     if (usage != null) {
                         usageString = "Used in ${usage!!.usageCount} processes"
                     }
-                    Spacer(modifier = Modifier.size(16.dp))
+                    DefaultSpacer()
                     Text(text = usageString)
-                    Spacer(modifier = Modifier.size(16.dp))
+                    DefaultSpacer()
                     Text(text = "Background image URL: $backgroundUri")
                 }
             }

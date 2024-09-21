@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
+import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -34,69 +33,73 @@ fun Settings(
     val noSounds by settingsViewModel.noSounds.collectAsStateWithLifecycle()
     val importAndUploadRestOfChainAutomatically by settingsViewModel.importAndUploadRestOfChainAutomatically.collectAsStateWithLifecycle()
 
-        // show vertically
-        Column(
+    // show vertically
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 48.dp, vertical = 24.dp)
+            .fillMaxSize()
+    ) {
+        HeaderText(text = "Settings")
+        Row(
             modifier = Modifier
                 .padding(24.dp)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            Text(
-                text = "Settings",
-                style = MaterialTheme.typography.displayMedium,
-                modifier = Modifier.padding(8.dp)
-            )
-            Row(
-                modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
+                .fillMaxWidth()
+                .clickable {
                     settingsViewModel.updateCountBackwards(!countBackwards)
                 }
-            ) {
-                Text(
-                    text = "Count backwards (down to 0)",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Switch(
-                    checked = countBackwards,
-                    onCheckedChange = {
-                        settingsViewModel.updateCountBackwards(it)
-                    }
-                )
-            }
-            Row(
-                modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
+        ) {
+            Text(
+                text = "Count backwards (down to 0)",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = countBackwards,
+                onCheckedChange = {
+                    settingsViewModel.updateCountBackwards(it)
+                }
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(24.dp)
+                .fillMaxWidth()
+                .clickable {
                     settingsViewModel.updateNoSounds(!noSounds)
                 }
-            ) {
-                Text(
-                    text = "No Sound (count silently)",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Switch(
-                    checked = noSounds,
-                    onCheckedChange = {
-                        settingsViewModel.updateNoSounds(it)
-                    }
-                )
-            }
-            Row(
-                modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
+        ) {
+            Text(
+                text = "No Sound (count silently)",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = noSounds,
+                onCheckedChange = {
+                    settingsViewModel.updateNoSounds(it)
+                }
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(24.dp)
+                .fillMaxWidth()
+                .clickable {
                     settingsViewModel.updateImportAndUploadRestOfChainAutomatically(!importAndUploadRestOfChainAutomatically)
                 }
-            ) {
-                Text(
-                    text = "When selecting a process for import or upload, automatically select rest of chain, too",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Switch(
-                    checked = importAndUploadRestOfChainAutomatically,
-                    onCheckedChange = {
-                        settingsViewModel.updateImportAndUploadRestOfChainAutomatically(it)
-                    }
-                )
-            }
+        ) {
+            Text(
+                text = "When selecting a process for import or upload, automatically select rest of chain, too",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = importAndUploadRestOfChainAutomatically,
+                onCheckedChange = {
+                    settingsViewModel.updateImportAndUploadRestOfChainAutomatically(it)
+                }
+            )
         }
     }
+}
 

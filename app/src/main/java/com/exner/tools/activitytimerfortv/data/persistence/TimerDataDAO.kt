@@ -45,6 +45,9 @@ interface TimerDataDAO {
     @Insert
     suspend fun insert(process: TimerProcess)
 
+    @Update
+    suspend fun updateProcess(process: TimerProcess)
+
     @Delete
     suspend fun delete(process: TimerProcess)
 

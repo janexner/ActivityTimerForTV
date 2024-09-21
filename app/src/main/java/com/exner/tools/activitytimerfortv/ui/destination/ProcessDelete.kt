@@ -3,7 +3,6 @@ package com.exner.tools.activitytimerfortv.ui.destination
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -19,6 +18,7 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
+import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.HeaderText
 import com.exner.tools.activitytimerfortv.ui.ProcessDeleteViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -41,7 +41,7 @@ fun ProcessDelete(
     processDeleteViewModel.checkProcess(processUuid)
 
     Column(
-        modifier = Modifier.padding(24.dp)
+        modifier = Modifier.padding(horizontal = 48.dp, vertical = 24.dp)
     ) {
         Row {
             Button(
@@ -57,7 +57,7 @@ fun ProcessDelete(
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                 Text(text = "Cancel")
             }
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.weight(0.5f))
             Button(
                 onClick = {
                     processDeleteViewModel.deleteProcess(processUuid)
@@ -74,9 +74,9 @@ fun ProcessDelete(
                 Text(text = "Delete Process")
             }
         }
-        Spacer(modifier = Modifier.height(32.dp))
+        DefaultSpacer()
         HeaderText(text = "Delete Process")
-        Spacer(modifier = Modifier.height(16.dp))
+        DefaultSpacer()
         Text(
             text = "You are about to delete a process,"
         )
@@ -84,15 +84,15 @@ fun ProcessDelete(
         // double-check in case there are chains that contain this
         if (processIsTarget == true) {
             if (dependantProcesses != null && dependantProcesses!!.dependentProcessIdsAndNames.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
+                DefaultSpacer()
                 Text(text = "Other processes link to this one!")
-                Spacer(modifier = Modifier.height(8.dp))
+                DefaultSpacer()
                 if (dependantProcesses!!.dependentProcessIdsAndNames.isNotEmpty()) {
                     dependantProcesses!!.dependentProcessIdsAndNames.forEach {
                         Text(text = it.name)
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                DefaultSpacer()
                 Text(text = "If you delete this process, those others will no longer be able to link to it, meaning they will stop when they try to.")
             }
         }

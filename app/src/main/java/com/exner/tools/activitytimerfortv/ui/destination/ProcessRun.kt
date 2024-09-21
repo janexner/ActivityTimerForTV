@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -30,6 +29,7 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.BigTimerText
+import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.InfoText
 import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
@@ -53,7 +53,6 @@ fun ProcessRun(
     val hasHours by processRunViewModel.hasHours.observeAsState()
     val showStages by processRunViewModel.showStages.observeAsState()
     val backgroundUri by processRunViewModel.backgroundUri.observeAsState()
-
 
     processRunViewModel.initialiseRun(
         processUuid = processUuid,
@@ -79,39 +78,11 @@ fun ProcessRun(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(24.dp)
+                    .padding(horizontal = 48.dp, vertical = 24.dp)
                     .fillMaxWidth()
             ) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    Button(
-                        onClick = {
-                            processRunViewModel.cancel()
-                            navigator.navigateUp()
-                        },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = "Cancel",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Cancel")
-                    }
-
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                // first, a nice process indicator (if possible)
-                if (hasLoop != true) {
-                    val currentProgress =
-                        if (numberOfSteps != null && numberOfSteps != 0) currentStepNumber!!.toFloat() / numberOfSteps!! else 0.0f
-//                    LinearProgressIndicator(
-//                        progress = { currentProgress },
-//                        modifier = Modifier.fillMaxWidth(),
-//                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
+                TopButtons(processRunViewModel, navigator)
+                DefaultSpacer()
                 // show the display, depending on where we are right now
                 when (displayAction) {
                     is ProcessDisplayStepAction -> {
@@ -134,7 +105,7 @@ fun ProcessRun(
                                     .align(Alignment.End)
                             )
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
+                        DefaultSpacer()
                         InfoText(infoText = pdAction.processInfo)
                     }
 
@@ -143,6 +114,30 @@ fun ProcessRun(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun TopButtons(
+    processRunViewModel: ProcessRunViewModel,
+    navigator: DestinationsNavigator
+) {
+    Row {
+        Button(
+            onClick = {
+                processRunViewModel.cancel()
+                navigator.navigateUp()
+            },
+            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "Cancel",
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+            Text(text = "Cancel")
         }
     }
 }

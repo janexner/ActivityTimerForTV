@@ -62,6 +62,11 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
+    suspend fun updateProcess(timerProcess: TimerProcess) {
+        timerDataDAO.updateProcess(timerProcess)
+    }
+
+    @WorkerThread
     suspend fun insertCategory(category: TimerProcessCategory) {
         timerDataDAO.insertCategory(category)
     }

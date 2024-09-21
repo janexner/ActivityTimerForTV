@@ -28,6 +28,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryEditViewModel
+import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -65,7 +66,7 @@ fun CategoryEdit(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(32.dp, 48.dp)
+                    .padding(horizontal = 48.dp, vertical = 24.dp)
             ) {
                 // buttons
                 Row {
@@ -101,9 +102,9 @@ fun CategoryEdit(
                     if (usage != null) {
                         usageString = "Used in ${usage!!.usageCount} processes"
                     }
-                    Spacer(modifier = Modifier.size(16.dp))
+                    DefaultSpacer()
                     Text(text = usageString)
-                    Spacer(modifier = Modifier.size(16.dp))
+                    DefaultSpacer()
 
                     OutlinedTextField(
                         value = backgroundUri ?: "",

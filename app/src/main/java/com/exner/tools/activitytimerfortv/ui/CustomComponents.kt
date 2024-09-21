@@ -1,12 +1,10 @@
 package com.exner.tools.activitytimerfortv.ui
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +18,6 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import java.util.Locale
-import kotlin.math.roundToInt
 import kotlin.time.Duration
 
 @Composable
@@ -121,47 +118,10 @@ fun InfoText(
 }
 
 @Composable
-fun TimerDisplay(
-    processTime: Duration,
-    intervalTime: Duration,
-    info: String?,
-    forceWithHours: Boolean = false
-) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        BigTimerText(
-            duration = processTime,
-            withHours = forceWithHours,
-            modifier = Modifier
-                .fillMaxWidth(0.66f)
-                .align(Alignment.End)
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.66f)
-                .align(Alignment.End)
-        ) {
-            AutoSizeText(
-                text = durationToAnnotatedString(
-                    duration = intervalTime,
-                    withHours = forceWithHours,
-                    postText = " | ${(processTime / intervalTime).roundToInt().toString()} round(s)"
-                ),
-                maxLines = 1,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-        }
-        if (null != info) {
-            Spacer(modifier = Modifier.height(16.dp))
-            InfoText(infoText = info)
-        }
-    }
-}
-
-@Composable
 fun HeaderText(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.headlineSmall,
+        style = MaterialTheme.typography.displaySmall,
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp),
@@ -175,4 +135,9 @@ fun BodyText(text: String, modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.bodyMedium,
         modifier = modifier,
     )
+}
+
+@Composable
+fun DefaultSpacer() {
+    Spacer(modifier = Modifier.size(16.dp))
 }
