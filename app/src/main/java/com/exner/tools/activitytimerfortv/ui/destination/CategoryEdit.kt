@@ -57,11 +57,13 @@ fun CategoryEdit(
             modifier = Modifier.fillMaxSize()
         )
         Box(
-            modifier = Modifier.background(
-                Brush.linearGradient(
-                    listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+            modifier = Modifier
+                .background(
+                    Brush.linearGradient(
+                        listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+                    )
                 )
-            ).fillMaxSize()
+                .fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
@@ -78,7 +80,7 @@ fun CategoryEdit(
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Done,
+                            imageVector = Icons.Default.Done,
                             contentDescription = "Done",
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
@@ -96,7 +98,7 @@ fun CategoryEdit(
                         onValueChange = { categoryEditViewModel.setName(it) },
                         label = { Text(text = "Category name") },
                         singleLine = true,
-                        textStyle = TextStyle(color = MaterialTheme.colorScheme.primary ),
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.primary),
                     )
                     var usageString = "Unused"
                     if (usage != null) {
@@ -111,7 +113,7 @@ fun CategoryEdit(
                         onValueChange = { categoryEditViewModel.setBackgroundUri(it) },
                         label = { Text(text = "Background URI") },
                         singleLine = true,
-                        textStyle = TextStyle(color = MaterialTheme.colorScheme.primary ),
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.primary),
                     )
                 }
             }

@@ -79,7 +79,6 @@ class Permissions(
                 allNecessaryPermissionsAsListOfStrings.add(individualPermission.name)
                 val checkResult =
                     ContextCompat.checkSelfPermission(context, individualPermission.name)
-                Log.d("PERMISSIONS", "Permission ${individualPermission.name} is $checkResult")
                 if (checkResult == PackageManager.PERMISSION_DENIED) {
                     missingPermissions.add(individualPermission)
                 } else if (checkResult == PackageManager.PERMISSION_GRANTED) {

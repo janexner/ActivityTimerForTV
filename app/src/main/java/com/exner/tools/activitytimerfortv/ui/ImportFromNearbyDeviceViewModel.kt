@@ -3,7 +3,10 @@ package com.exner.tools.activitytimerfortv.ui
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
+import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.google.android.gms.nearby.connection.AdvertisingOptions
 import com.google.android.gms.nearby.connection.ConnectionInfo
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback
@@ -17,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.text.Charsets.UTF_8
 
@@ -54,6 +58,7 @@ data class EndpointConnectionInformation(
 
 @HiltViewModel
 class ImportFromNearbyDeviceViewModel @Inject constructor(
+    val repository: TimerDataRepository
 ) : ViewModel() {
     private val _processStateFlow = MutableStateFlow(ProcessState())
     val processStateFlow: StateFlow<ProcessState> = _processStateFlow.asStateFlow()
@@ -64,7 +69,6 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
     private lateinit var connectionsClient: ConnectionsClient
 
     fun provideConnectionsClient(connectionsClient: ConnectionsClient) {
-        Log.d("INDVM", "ConnectionsClient provided: $connectionsClient")
         this.connectionsClient = connectionsClient
     }
 
@@ -277,6 +281,22 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
         } else {
             Log.d("INBVM", "Payload received from $endpointId but wrong type: $payload")
         }
+    }
+
+    fun importProcessIntoLocalDatabase(process: TimerProcess) {
+        Log.d("INDVMSV", "Saving process ${process.name} to database...")
+        // add it to the database
+        viewModelScope.launch {
+            val checkProcess = repository.loadProcessByUuid(process.uuid)
+            if (checkProcess != null) {
+                Log.d("INDVMSV", "Process ${process.uuid} exists, overwriting...")
+                // has to be updated TODO
+            } else {
+                repository.insert(process.copy(uid = 0, categoryId = CategoryListDefinitions.CATEGORY_UID_NONE))
+            }
+        }
+        // remove it from the list of received processes
+        _receivedProcesses.remove(process)
     }
 
     fun decodePayloadToString(payload: Payload) : String {

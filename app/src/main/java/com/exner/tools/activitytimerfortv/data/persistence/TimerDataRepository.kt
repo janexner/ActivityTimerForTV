@@ -33,7 +33,7 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
 
     @WorkerThread
     suspend fun getFeaturedProcessList(): List<TimerProcess> {
-        return timerDataDAO.getAllProcesses().shuffled()
+        return timerDataDAO.getAllProcesses().shuffled().take(5)
     }
 
     @WorkerThread

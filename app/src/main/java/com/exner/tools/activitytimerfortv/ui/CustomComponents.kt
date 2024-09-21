@@ -12,6 +12,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
@@ -93,26 +95,10 @@ fun InfoText(
 ) {
     val annotatedInfoText = AnnotatedString(infoText)
     Row(modifier = modifier) {
-        AutoSizeText(
+        Text(
             text = annotatedInfoText,
-            alignment = Alignment.BottomStart,
+            style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.onSurface,
-            lineSpacingRatio = 1.75f,
-        )
-    }
-}
-
-@Composable
-fun InfoText(
-    infoText: AnnotatedString,
-    modifier: Modifier = Modifier
-) {
-    Row(modifier = modifier) {
-        AutoSizeText(
-            text = infoText,
-            alignment = Alignment.BottomStart,
-            color = MaterialTheme.colorScheme.onSurface,
-            lineSpacingRatio = 1.75f,
         )
     }
 }

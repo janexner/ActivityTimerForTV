@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
@@ -40,6 +42,7 @@ import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
+import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.exner.tools.activitytimerfortv.ui.tools.StandardDialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -71,7 +74,7 @@ fun ImportFromNearbyDevice(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 48.dp, vertical = 24.dp)
+            .padding(24.dp, 12.dp)
     ) {
         // buttons
         Row {
@@ -98,38 +101,44 @@ fun ImportFromNearbyDevice(
                 ProcessStateConstants.PERMISSIONS_GRANTED,
                 ProcessStateConstants.CANCELLED,
                 ProcessStateConstants.DONE -> {
-                    Button(
-                        enabled = permissionsNeeded.allPermissionsGranted,
-                        onClick = {
-                            importFromNearbyDeviceViewModel.transitionToNewState(
-                                ProcessStateConstants.START_ADVERTISING
+                    if (importFromNearbyDeviceViewModel.receivedProcesses.isEmpty()) {
+                        Button(
+                            enabled = permissionsNeeded.allPermissionsGranted,
+                            onClick = {
+                                importFromNearbyDeviceViewModel.transitionToNewState(
+                                    ProcessStateConstants.START_ADVERTISING
+                                )
+                            },
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Call,
+                                contentDescription = "Start advertising",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
-                        },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Call,
-                            contentDescription = "Start advertising",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Start advertising")
+                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(text = "Start advertising")
+                        }
                     }
                 }
 
-                ProcessStateConstants.RECEIVING -> {
-                    Button(
-                        enabled = true,
-                        onClick = { /*TODO*/ },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Add selected",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Add selected")
+                ProcessStateConstants.RECEIVING,
+                ProcessStateConstants.CANCELLED,
+                ProcessStateConstants.DONE -> {
+                    if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
+                        Button(
+                            enabled = true,
+                            onClick = { /*TODO*/ },
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add selected",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(text = "Add selected")
+                        }
                     }
                 }
 
@@ -139,10 +148,14 @@ fun ImportFromNearbyDevice(
             Button(
                 enabled = true,
                 onClick = {
-                    importFromNearbyDeviceViewModel.transitionToNewState(
-                        ProcessStateConstants.CANCELLED,
-                        "Cancelled by user"
-                    )
+                    if (processState.currentState == ProcessStateConstants.CANCELLED) {
+                        navigator.navigateUp()
+                    } else {
+                        importFromNearbyDeviceViewModel.transitionToNewState(
+                            ProcessStateConstants.CANCELLED,
+                            "Cancelled by user"
+                        )
+                    }
                 },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding
             ) {
@@ -165,22 +178,24 @@ fun ImportFromNearbyDevice(
 
         // display received processes
         if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            Text(text = "Processes received. Select process to import it.")
+            Spacer(modifier = Modifier.size(16.dp))
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 250.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                item { Text(text = "Processes received") }
                 items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
-                    Box(
-                        modifier = Modifier.padding(
-                            PaddingValues(
-                                horizontal = 16.dp,
-                                vertical = 8.dp
-                            )
+                    Box(modifier = Modifier.padding(PaddingValues(8.dp))) {
+                        ProcessCard(
+                            process = process,
+                            backgroundUriFallback = null,
+                            onClick = {
+                                importFromNearbyDeviceViewModel.importProcessIntoLocalDatabase(
+                                    process
+                                )
+                            }
                         )
-                    ) {
-                        ProcessToImportRow(process = process)
                     }
                 }
             }
