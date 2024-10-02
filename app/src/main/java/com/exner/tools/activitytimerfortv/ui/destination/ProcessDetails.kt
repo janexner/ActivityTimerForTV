@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,15 +33,16 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import com.exner.tools.activitytimerfortv.data.persistence.TimerDataIdAndName
 import com.exner.tools.activitytimerfortv.ui.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.InfoText
 import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.durationToAnnotatedString
 import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
+import com.exner.tools.activitytimerfortv.ui.tools.ProcessDeleteRequestedScreen
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.ProcessDeleteDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessEditDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessRunDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -47,6 +50,11 @@ import kotlin.math.roundToInt
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
+data class ProcessDeleteChainWarning(
+    val title: String,
+    val processNames: List<TimerDataIdAndName>,
+    val explanation: String,
+)
 
 @Destination<RootGraph>
 @Composable
@@ -64,7 +72,13 @@ fun ProcessDetails(
     val gotoName by processDetailsViewModel.gotoName.observeAsState()
     val backgroundUri by processDetailsViewModel.backgroundUri.observeAsState()
 
+    val processIsTarget by processDetailsViewModel.processIsTarget.observeAsState()
+    val dependantProcesses by processDetailsViewModel.processChainingDependencies.observeAsState()
+
+    val openDeletionDialog = remember { mutableStateOf(false) }
+
     processDetailsViewModel.getProcess(processUuid)
+    processDetailsViewModel.checkProcess(processUuid)
 
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
@@ -87,7 +101,13 @@ fun ProcessDetails(
                     .fillMaxSize()
                     .padding(horizontal = 48.dp, vertical = 24.dp)
             ) {
-                TopButtons(navigator, processUuid)
+                TopButtons(
+                    navigator = navigator,
+                    processUuid = processUuid,
+                    showDeleteDialogCallback = {
+                        openDeletionDialog.value = true
+                    },
+                )
                 DefaultSpacer()
                 Content(
                     processTime,
@@ -97,6 +117,30 @@ fun ProcessDetails(
                     hasAutoChain,
                     gotoName,
                     backgroundUri
+                )
+                DefaultSpacer()
+                var processChainWarning: ProcessDeleteChainWarning? = null
+                if (processIsTarget == true) {
+                    if (dependantProcesses != null && dependantProcesses!!.dependentProcessIdsAndNames.isNotEmpty()) {
+                        processChainWarning = ProcessDeleteChainWarning(
+                            title = "Other processes link to this one!",
+                            processNames = dependantProcesses!!.dependentProcessIdsAndNames,
+                            explanation = "If you delete this process, those others will no longer be able to link to it, meaning they will stop when they try to."
+                        )
+                    }
+                }
+                ProcessDeleteRequestedScreen(
+                    openDeleteDialog = openDeletionDialog.value,
+                    processName = name!!,
+                    processChainWarning = processChainWarning,
+                    confirmCallback = {
+                        openDeletionDialog.value = false
+                        processDetailsViewModel.deleteProcess(processUuid)
+                        navigator.navigateUp()
+                    },
+                    dismissCallback = {
+                        openDeletionDialog.value = false
+                    }
                 )
             }
         }
@@ -166,7 +210,8 @@ private fun Content(
 @Composable
 private fun TopButtons(
     navigator: DestinationsNavigator,
-    processUuid: String
+    processUuid: String,
+    showDeleteDialogCallback: () -> Unit
 ) {
     Row {
         Button(
@@ -203,7 +248,7 @@ private fun TopButtons(
         Spacer(modifier = Modifier.weight(0.5f))
         OutlinedButton(
             onClick = {
-                navigator.navigate(ProcessDeleteDestination(processUuid = processUuid))
+                showDeleteDialogCallback()
             },
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
         ) {

@@ -119,13 +119,29 @@ fun ImportFromNearbyDevice(
                             Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                             Text(text = "Start advertising")
                         }
-                    }
-                }
-
-                ProcessStateConstants.RECEIVING,
-                ProcessStateConstants.CANCELLED,
-                ProcessStateConstants.DONE -> {
-                    if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
+                        /***
+                         * DEBUG - button that simulates having received processes
+                         */
+                        Button(
+                            enabled = true,
+                            onClick = {
+                                importFromNearbyDeviceViewModel.dbgGenerateReceivedProcessesList()
+                                importFromNearbyDeviceViewModel.transitionToNewState(ProcessStateConstants.DONE)
+                            },
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Warning,
+                                contentDescription = "Simulate receiving processes",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(text = "DBG SM RCV")
+                        }
+                        /***
+                         * end of DEBUG
+                         */
+                    } else {
                         Button(
                             enabled = true,
                             onClick = { /*TODO*/ },
@@ -140,6 +156,10 @@ fun ImportFromNearbyDevice(
                             Text(text = "Add selected")
                         }
                     }
+                }
+
+                ProcessStateConstants.RECEIVING, -> {
+                    // TODO
                 }
 
                 else -> {}

@@ -80,8 +80,8 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
             Log.d("SNDVMPTU", "Payload received ${payload.id}")
             if (payload.type == Payload.Type.BYTES) {
                 payloadReceived(endpointId, payload)
-                val receivedProcessNAme = decodePayloadToString(payload)
-                Log.d("INDVMPC", "Process received: $receivedProcessNAme")
+                val receivedProcessName = decodePayloadToString(payload)
+                Log.d("INDVMPC", "Process received: $receivedProcessName")
                 // TODO add it to the database
             }
         }
@@ -268,7 +268,13 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 _processStateFlow.value = ProcessState(ProcessStateConstants.RECEIVING, message)
             }
 
-            ProcessStateConstants.DONE -> TODO()
+            ProcessStateConstants.DONE -> {
+                Log.d("INDVM", "Done")
+                // just in case...
+                connectionsClient.stopAllEndpoints()
+                connectionsClient.stopAdvertising()
+                _processStateFlow.value = ProcessState(ProcessStateConstants.DONE, "Done")
+            }
         }
     }
 
@@ -308,6 +314,51 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
             Log.d("INBVMPD", "Payload received but wrong type: $payload")
         }
         return "N/A"
+    }
+
+    fun dbgGenerateReceivedProcessesList() {
+        val p1 = TimerProcess(
+            name = "Process 1",
+            info = "The 1st process",
+            uuid = "processUuid1",
+            processTime = 30,
+            intervalTime = 10,
+            hasAutoChain = false,
+            gotoUuid = null,
+            gotoName = null,
+            categoryId = CategoryListDefinitions.CATEGORY_UID_NONE,
+            backgroundUri = null,
+            uid = 1L
+        )
+        _receivedProcesses.add(p1)
+        val p2 = TimerProcess(
+            name = "Process 2",
+            info = "The 2nd process, leads into the 3rd",
+            uuid = "processUuid2",
+            processTime = 90,
+            intervalTime = 15,
+            hasAutoChain = true,
+            gotoUuid = "processUuid3",
+            gotoName = "Process 3",
+            categoryId = CategoryListDefinitions.CATEGORY_UID_NONE,
+            backgroundUri = null,
+            uid = 2L
+        )
+        _receivedProcesses.add(p2)
+        val p3 = TimerProcess(
+            name = "Process 3",
+            info = "The 3rd process",
+            uuid = "processUuid3",
+            processTime = 90,
+            intervalTime = 15,
+            hasAutoChain = false,
+            gotoUuid = null,
+            gotoName = null,
+            categoryId = CategoryListDefinitions.CATEGORY_UID_NONE,
+            backgroundUri = null,
+            uid = 3L
+        )
+        _receivedProcesses.add(p3)
     }
 }
 

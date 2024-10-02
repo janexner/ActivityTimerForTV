@@ -84,6 +84,8 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.material3.android)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter)
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
