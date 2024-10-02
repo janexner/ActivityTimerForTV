@@ -28,7 +28,7 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.ramcosta.composedestinations.annotation.Destination

@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
-import com.exner.tools.activitytimerfortv.ui.HeaderText
+import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph

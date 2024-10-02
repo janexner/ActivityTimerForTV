@@ -39,8 +39,8 @@ import androidx.tv.material3.Surface
 import androidx.tv.material3.Tab
 import androidx.tv.material3.TabRow
 import androidx.tv.material3.Text
-import com.exner.tools.activitytimerfortv.ui.BodyText
-import com.exner.tools.activitytimerfortv.ui.HeaderText
+import com.exner.tools.activitytimerfortv.ui.tools.BodyText
+import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
 import com.exner.tools.activitytimerfortv.ui.RemoteProcessManagementViewModel
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
 import com.ramcosta.composedestinations.annotation.Destination

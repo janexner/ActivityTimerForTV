@@ -28,10 +28,10 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
-import com.exner.tools.activitytimerfortv.ui.BigTimerText
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.InfoText
-import com.exner.tools.activitytimerfortv.ui.MediumTimerAndIntervalText
+import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.InfoText
+import com.exner.tools.activitytimerfortv.ui.tools.MediumTimerAndIntervalText
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph

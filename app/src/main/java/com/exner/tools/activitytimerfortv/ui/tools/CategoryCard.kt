@@ -19,7 +19,6 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 
 @Composable
 fun CategoryCard(

@@ -20,9 +20,9 @@ import androidx.tv.material3.Checkbox
 import androidx.tv.material3.ClassicCard
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
-import com.exner.tools.activitytimerfortv.ui.BodyText
+import com.exner.tools.activitytimerfortv.ui.tools.BodyText
 import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
-import com.exner.tools.activitytimerfortv.ui.HeaderText
+import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

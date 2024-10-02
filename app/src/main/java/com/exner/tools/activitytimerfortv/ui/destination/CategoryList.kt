@@ -28,7 +28,7 @@ import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
 import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryCard
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryCreationScreen
 import com.ramcosta.composedestinations.annotation.Destination

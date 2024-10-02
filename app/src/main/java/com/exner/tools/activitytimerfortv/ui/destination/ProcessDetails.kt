@@ -34,11 +34,11 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataIdAndName
-import com.exner.tools.activitytimerfortv.ui.BigTimerText
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.InfoText
+import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.InfoText
 import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
-import com.exner.tools.activitytimerfortv.ui.durationToAnnotatedString
+import com.exner.tools.activitytimerfortv.ui.tools.durationToAnnotatedString
 import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessDeleteRequestedScreen
 import com.ramcosta.composedestinations.annotation.Destination

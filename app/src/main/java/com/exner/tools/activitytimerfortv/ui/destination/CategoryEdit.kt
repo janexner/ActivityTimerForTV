@@ -28,7 +28,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryEditViewModel
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

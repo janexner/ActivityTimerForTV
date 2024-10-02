@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.BuildConfig
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 

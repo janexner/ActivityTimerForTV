@@ -30,7 +30,7 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryDeleteRequestedScreen
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.ramcosta.composedestinations.annotation.Destination
