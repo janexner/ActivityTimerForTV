@@ -194,7 +194,7 @@ private fun Content(
         }
     }
     // spacer
-    Spacer(modifier = Modifier.size(16.dp))
+    DefaultSpacer()
     // more process information
     Row {
         val tempName: String = name ?: ""
@@ -203,7 +203,7 @@ private fun Content(
             Text(text = ", when complete, will lead into '$gotoName'")
         }
     }
-    Spacer(modifier = Modifier.size(16.dp))
+    DefaultSpacer()
     Text(text = "Background image URL: $backgroundUri")
 }
 
@@ -230,7 +230,7 @@ private fun TopButtons(
             Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
             Text(text = "Start Process")
         }
-        Spacer(modifier = Modifier.size(16.dp))
+        DefaultSpacer()
         OutlinedButton(
             onClick = {
                 navigator.navigate(ProcessEditDestination(processUuid = processUuid))

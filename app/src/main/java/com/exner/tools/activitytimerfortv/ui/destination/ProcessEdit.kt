@@ -96,7 +96,7 @@ private fun Content(
         // TODO
     }
     // spacer
-    Spacer(modifier = Modifier.size(16.dp))
+    DefaultSpacer()
     // more process information
     Row {
         val tempName: String = name ?: ""
