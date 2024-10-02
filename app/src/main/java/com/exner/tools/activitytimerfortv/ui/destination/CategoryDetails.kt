@@ -30,9 +30,9 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
-import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryDeleteRequestedScreen
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.CategoryEditDestination
@@ -86,7 +86,7 @@ fun CategoryDetails(
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Edit,
+                                imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit Category",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
@@ -101,7 +101,7 @@ fun CategoryDetails(
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Delete,
+                                imageVector = Icons.Default.Delete,
                                 contentDescription = "Delete Category"
                             )
                             Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))

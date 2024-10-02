@@ -38,6 +38,7 @@ import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.exner.tools.activitytimerfortv.ui.tools.StandardDialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -85,7 +86,7 @@ fun ImportFromNearbyDevice(
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.CheckCircle,
+                            imageVector = Icons.Default.CheckCircle,
                             contentDescription = "Request permissions",
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
@@ -108,7 +109,7 @@ fun ImportFromNearbyDevice(
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Call,
+                                imageVector = Icons.Default.Call,
                                 contentDescription = "Start advertising",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
@@ -129,7 +130,7 @@ fun ImportFromNearbyDevice(
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Warning,
+                                imageVector = Icons.Default.Warning,
                                 contentDescription = "Simulate receiving processes",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
@@ -178,8 +179,8 @@ fun ImportFromNearbyDevice(
 
         // display received processes
         if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
-            Text(text = "Processes received. Select process to import it.")
-            Spacer(modifier = Modifier.size(16.dp))
+            Text(text = "Processes received. Select a process to import it.")
+            DefaultSpacer()
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 250.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),

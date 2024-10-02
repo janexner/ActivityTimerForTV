@@ -34,13 +34,13 @@ import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataIdAndName
+import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
+import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.InfoText
-import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
-import com.exner.tools.activitytimerfortv.ui.tools.durationToAnnotatedString
-import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessDeleteRequestedScreen
+import com.exner.tools.activitytimerfortv.ui.tools.durationToAnnotatedString
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.ProcessEditDestination
@@ -223,7 +223,7 @@ private fun TopButtons(
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
         ) {
             Icon(
-                imageVector = Icons.Filled.PlayArrow,
+                imageVector = Icons.Default.PlayArrow,
                 contentDescription = "Start Process",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
@@ -238,7 +238,7 @@ private fun TopButtons(
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
         ) {
             Icon(
-                imageVector = Icons.Filled.Edit,
+                imageVector = Icons.Default.Edit,
                 contentDescription = "Edit Process",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
@@ -253,7 +253,7 @@ private fun TopButtons(
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
         ) {
             Icon(
-                imageVector = Icons.Filled.Delete,
+                imageVector = Icons.Default.Delete,
                 contentDescription = "Delete Process"
             )
             Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))

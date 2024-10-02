@@ -28,8 +28,8 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
-import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.ProcessEditViewModel
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -120,7 +120,7 @@ private fun TopButtons(navigator: DestinationsNavigator) {
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
         ) {
             Icon(
-                imageVector = Icons.Filled.Done,
+                imageVector = Icons.Default.Done,
                 contentDescription = "Save",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
@@ -135,7 +135,7 @@ private fun TopButtons(navigator: DestinationsNavigator) {
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
         ) {
             Icon(
-                imageVector = Icons.Filled.Clear,
+                imageVector = Icons.Default.Clear,
                 contentDescription = "Cancel"
             )
             Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))

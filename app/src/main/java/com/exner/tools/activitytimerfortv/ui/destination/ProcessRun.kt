@@ -28,11 +28,11 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
+import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.InfoText
 import com.exner.tools.activitytimerfortv.ui.tools.MediumTimerAndIntervalText
-import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -132,7 +132,7 @@ private fun TopButtons(
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
         ) {
             Icon(
-                imageVector = Icons.Filled.Close,
+                imageVector = Icons.Default.Close,
                 contentDescription = "Cancel",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
