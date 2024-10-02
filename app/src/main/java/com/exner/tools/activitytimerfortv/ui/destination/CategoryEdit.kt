@@ -29,6 +29,7 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryEditViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -84,7 +85,7 @@ fun CategoryEdit(
                             contentDescription = "Done",
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        IconSpacer()
                         Text(text = "Done")
                     }
                 }

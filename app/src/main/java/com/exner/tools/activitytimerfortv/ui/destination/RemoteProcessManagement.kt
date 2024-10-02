@@ -43,6 +43,7 @@ import com.exner.tools.activitytimerfortv.ui.RemoteProcessManagementViewModel
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.BodyText
 import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
+import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
@@ -100,7 +101,7 @@ fun RemoteProcessManagement(
                         contentDescription = "Import Processes",
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
-                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                    IconSpacer()
                     Text(text = "Import Processes")
                 }
             }
@@ -114,7 +115,7 @@ fun RemoteProcessManagement(
                     imageVector = Icons.Default.Close, contentDescription = "Cancel",
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                IconSpacer()
                 Text(text = "Cancel")
             }
         }

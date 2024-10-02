@@ -12,6 +12,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -122,4 +123,9 @@ fun BodyText(text: String, modifier: Modifier = Modifier) {
 @Composable
 fun DefaultSpacer() {
     Spacer(modifier = Modifier.size(16.dp))
+}
+
+@Composable
+fun IconSpacer() {
+    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
 }

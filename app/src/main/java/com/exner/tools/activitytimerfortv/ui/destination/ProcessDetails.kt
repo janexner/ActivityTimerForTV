@@ -38,6 +38,7 @@ import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.InfoText
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessDeleteRequestedScreen
 import com.exner.tools.activitytimerfortv.ui.tools.durationToAnnotatedString
@@ -227,7 +228,7 @@ private fun TopButtons(
                 contentDescription = "Start Process",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
-            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+            IconSpacer()
             Text(text = "Start Process")
         }
         DefaultSpacer()
@@ -242,7 +243,7 @@ private fun TopButtons(
                 contentDescription = "Edit Process",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
-            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+            IconSpacer()
             Text(text = "Edit Process")
         }
         Spacer(modifier = Modifier.weight(0.5f))
@@ -256,7 +257,7 @@ private fun TopButtons(
                 imageVector = Icons.Default.Delete,
                 contentDescription = "Delete Process"
             )
-            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+            IconSpacer()
             Text(text = "Delete Process")
         }
     }

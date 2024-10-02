@@ -33,6 +33,7 @@ import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryDeleteRequestedScreen
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.CategoryEditDestination
@@ -90,7 +91,7 @@ fun CategoryDetails(
                                 contentDescription = "Edit Category",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
-                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            IconSpacer()
                             Text(text = "Edit Category")
                         }
                         Spacer(modifier = Modifier.weight(0.5f))
@@ -104,7 +105,7 @@ fun CategoryDetails(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "Delete Category"
                             )
-                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            IconSpacer()
                             Text(text = "Delete Category")
                         }
                     }

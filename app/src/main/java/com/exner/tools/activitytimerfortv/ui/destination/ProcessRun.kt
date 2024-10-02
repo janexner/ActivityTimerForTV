@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +30,7 @@ import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.InfoText
 import com.exner.tools.activitytimerfortv.ui.tools.MediumTimerAndIntervalText
 import com.ramcosta.composedestinations.annotation.Destination
@@ -136,7 +136,7 @@ private fun TopButtons(
                 contentDescription = "Cancel",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
-            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+            IconSpacer()
             Text(text = "Cancel")
         }
     }

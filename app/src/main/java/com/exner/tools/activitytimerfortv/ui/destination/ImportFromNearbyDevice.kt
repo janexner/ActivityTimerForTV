@@ -39,6 +39,7 @@ import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.exner.tools.activitytimerfortv.ui.tools.StandardDialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -90,7 +91,7 @@ fun ImportFromNearbyDevice(
                             contentDescription = "Request permissions",
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        IconSpacer()
                         Text(text = "Request permissions")
                     }
                 }
@@ -113,7 +114,7 @@ fun ImportFromNearbyDevice(
                                 contentDescription = "Start advertising",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
-                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            IconSpacer()
                             Text(text = "Start advertising")
                         }
                         /***
@@ -134,7 +135,7 @@ fun ImportFromNearbyDevice(
                                 contentDescription = "Simulate receiving processes",
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
-                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            IconSpacer()
                             Text(text = "DBG SM RCV")
                         }
                         /***
@@ -165,7 +166,7 @@ fun ImportFromNearbyDevice(
                     contentDescription = "Cancel",
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                IconSpacer()
                 Text(text = "Cancel")
             }
         }

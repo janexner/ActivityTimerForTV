@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,6 +30,7 @@ import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryCard
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryCreationScreen
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.CategoryDetailsDestination
@@ -70,7 +70,7 @@ fun CategoryList(
                     contentDescription = "Add a Category",
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                IconSpacer()
                 Text(text = "Add a Category")
             }
         }
