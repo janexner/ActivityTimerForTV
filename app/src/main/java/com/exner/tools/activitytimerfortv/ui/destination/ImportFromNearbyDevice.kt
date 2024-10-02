@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
@@ -32,13 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Checkbox
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
-import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.network.Permissions
-import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
@@ -126,7 +122,9 @@ fun ImportFromNearbyDevice(
                             enabled = true,
                             onClick = {
                                 importFromNearbyDeviceViewModel.dbgGenerateReceivedProcessesList()
-                                importFromNearbyDeviceViewModel.transitionToNewState(ProcessStateConstants.DONE)
+                                importFromNearbyDeviceViewModel.transitionToNewState(
+                                    ProcessStateConstants.DONE
+                                )
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
@@ -141,25 +139,7 @@ fun ImportFromNearbyDevice(
                         /***
                          * end of DEBUG
                          */
-                    } else {
-                        Button(
-                            enabled = true,
-                            onClick = { /*TODO*/ },
-                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Add selected",
-                                modifier = Modifier.size(ButtonDefaults.IconSize)
-                            )
-                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                            Text(text = "Add selected")
-                        }
                     }
-                }
-
-                ProcessStateConstants.RECEIVING, -> {
-                    // TODO
                 }
 
                 else -> {}
@@ -232,7 +212,7 @@ fun ImportFromNearbyDevice(
 
             ProcessStateConstants.PERMISSIONS_GRANTED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "All permissions OK, ready to advertise.")
+                    Text(text = "All permissions OK, ready to advertise our presence.")
                 }
             }
 
@@ -250,7 +230,7 @@ fun ImportFromNearbyDevice(
 
             ProcessStateConstants.ADVERTISING -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "Waiting for devices...")
+                    Text(text = "Waiting for devices to connect...")
                 }
             }
 
@@ -272,7 +252,11 @@ fun ImportFromNearbyDevice(
                 }
             }
 
-            ProcessStateConstants.CONNECTION_FAILED -> TODO()
+            ProcessStateConstants.CONNECTION_FAILED -> {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(text = "Connection has failed!")
+                }
+            }
 
             ProcessStateConstants.RECEIVING -> {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -325,26 +309,6 @@ fun ImportFromNearbyDevice(
     }
 }
 
-@Composable
-fun ProcessToImportRow(process: TimerProcess) {
-    Row {
-        Checkbox(
-            checked = false,
-            onCheckedChange = {}
-        )
-        DefaultSpacer()
-        Text(text = process.name)
-        DefaultSpacer()
-        Text(text = "${process.processTime}/${process.intervalTime}")
-        DefaultSpacer()
-        Text(text = process.info)
-        if (process.hasAutoChain) {
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(text = "-> ${process.gotoName}")
-        }
-    }
-}
-
 @OptIn(
     ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
     ExperimentalTvMaterial3Api::class
@@ -356,23 +320,21 @@ fun ProcessStateAuthenticationRequestedScreen(
     confirmCallback: () -> Unit,
     dismissCallback: () -> Unit
 ) {
-    if (openAuthenticationDialog) {
-        StandardDialog(
-            showDialog = openAuthenticationDialog,
-            title = { Text(text = "Accept connection to " + info.connectionInfo.endpointName) },
-            text = { Text(text = "Confirm the code matches on both devices: " + info.connectionInfo.authenticationDigits) },
-            icon = { Icon(imageVector = Icons.Default.Warning, contentDescription = "Alert") },
-            onDismissRequest = { dismissCallback() },
-            confirmButton = {
-                Button(onClick = { confirmCallback() }) {
-                    Text(text = "Accept")
-                }
-            },
-            dismissButton = {
-                Button(onClick = { dismissCallback() }) {
-                    Text(text = "Decline")
-                }
+    StandardDialog(
+        showDialog = openAuthenticationDialog,
+        title = { Text(text = "Accept connection to " + info.connectionInfo.endpointName) },
+        text = { Text(text = "Confirm the code matches on both devices: " + info.connectionInfo.authenticationDigits) },
+        icon = { Icon(imageVector = Icons.Default.Warning, contentDescription = "Alert") },
+        onDismissRequest = { dismissCallback() },
+        confirmButton = {
+            Button(onClick = { confirmCallback() }) {
+                Text(text = "Accept")
             }
-        )
-    }
+        },
+        dismissButton = {
+            Button(onClick = { dismissCallback() }) {
+                Text(text = "Decline")
+            }
+        }
+    )
 }

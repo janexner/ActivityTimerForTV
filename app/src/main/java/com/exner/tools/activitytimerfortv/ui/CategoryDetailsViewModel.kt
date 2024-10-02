@@ -44,4 +44,13 @@ class CategoryDetailsViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteCategory(categoryUid: Long) {
+        viewModelScope.launch {
+            val category = repository.getCategoryById(categoryUid)
+            if (category != null) {
+                repository.deleteCategory(category)
+            }
+        }
+    }
 }

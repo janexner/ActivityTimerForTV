@@ -77,6 +77,11 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
+    suspend fun deleteCategory(category: TimerProcessCategory) {
+        timerDataDAO.deleteCategory(category)
+    }
+
+    @WorkerThread
     suspend fun deleteCategoriesByIdsFromList(listOfIds: List<Long>) {
         if (listOfIds.isNotEmpty()) {
             timerDataDAO.deleteCategoriesByIdsFromList(listOfIds)

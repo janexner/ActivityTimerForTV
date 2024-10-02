@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -29,6 +31,7 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.DefaultSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.CategoryDeleteRequestedScreen
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -47,6 +50,8 @@ fun CategoryDetails(
     val name by categoryDetailsViewModel.name.observeAsState()
     val backgroundUri by categoryDetailsViewModel.backgroundUri.observeAsState()
     val usage by categoryDetailsViewModel.usage.observeAsState()
+
+    val openDeletionDialog = remember { mutableStateOf(false) }
 
     categoryDetailsViewModel.getCategory(categoryUid)
 
@@ -91,7 +96,7 @@ fun CategoryDetails(
                         Spacer(modifier = Modifier.weight(0.5f))
                         OutlinedButton(
                             onClick = {
-//                            navigator.navigate(CategoryDeleteDestination(categoryUid = categoryUid))
+                                openDeletionDialog.value = true
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                         ) {
@@ -120,6 +125,20 @@ fun CategoryDetails(
                     DefaultSpacer()
                     Text(text = "Background image URL: $backgroundUri")
                 }
+                // delete dialog, when it is needed
+                CategoryDeleteRequestedScreen(
+                    openDeleteDialog = openDeletionDialog.value,
+                    categoryName = name ?: "",
+                    categoryUsage = usage,
+                    dismissCallback = {
+                        openDeletionDialog.value = false
+                    },
+                    confirmCallback = {
+                        openDeletionDialog.value = false
+                        categoryDetailsViewModel.deleteCategory(categoryUid)
+                        navigator.navigateUp()
+                    }
+                )
             }
         }
     }
