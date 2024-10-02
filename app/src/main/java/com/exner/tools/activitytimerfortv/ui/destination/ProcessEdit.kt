@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
@@ -21,16 +20,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.ProcessEditViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
+import com.exner.tools.activitytimerfortv.ui.tools.StandardOutlinedButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -64,11 +60,13 @@ fun ProcessEdit(
             modifier = Modifier.fillMaxSize()
         )
         Box(
-            modifier = Modifier.background(
-                Brush.linearGradient(
-                    listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+            modifier = Modifier
+                .background(
+                    Brush.linearGradient(
+                        listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+                    )
                 )
-            ).fillMaxSize()
+                .fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
@@ -114,34 +112,20 @@ private fun Content(
 private fun TopButtons(navigator: DestinationsNavigator) {
     // buttons
     Row {
-        Button(
+        StandardButton(
             onClick = {
 //                        navigator.navigate(ProcessEditDestination(processUuid = processUuid))
             },
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-        ) {
-            Icon(
-                imageVector = Icons.Default.Done,
-                contentDescription = "Save",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            IconSpacer()
-            Text(text = "Save")
-        }
+            imageVector = Icons.Default.Done,
+            text = "Save"
+        )
         Spacer(modifier = Modifier.weight(0.5f))
-        OutlinedButton(
+        StandardOutlinedButton(
             onClick = {
                 navigator.navigateUp()
             },
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-        ) {
-            Icon(
-                imageVector = Icons.Default.Clear,
-                contentDescription = "Cancel",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            IconSpacer()
-            Text(text = "Cancel")
-        }
+            imageVector = Icons.Default.Clear,
+            text = "Cancel"
+        )
     }
 }

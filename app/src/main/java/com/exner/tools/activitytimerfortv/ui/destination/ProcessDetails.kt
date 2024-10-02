@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -26,11 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataIdAndName
@@ -38,9 +33,10 @@ import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.InfoText
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessDeleteRequestedScreen
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
+import com.exner.tools.activitytimerfortv.ui.tools.StandardOutlinedButton
 import com.exner.tools.activitytimerfortv.ui.tools.durationToAnnotatedString
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -215,50 +211,30 @@ private fun TopButtons(
     showDeleteDialogCallback: () -> Unit
 ) {
     Row {
-        Button(
+        StandardButton(
             onClick = {
                 navigator.navigate(
                     ProcessRunDestination(processUuid = processUuid)
                 )
             },
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-        ) {
-            Icon(
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = "Start Process",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            IconSpacer()
-            Text(text = "Start Process")
-        }
+            imageVector = Icons.Default.PlayArrow,
+            text = "Start Process"
+        )
         DefaultSpacer()
-        OutlinedButton(
+        StandardOutlinedButton(
             onClick = {
                 navigator.navigate(ProcessEditDestination(processUuid = processUuid))
             },
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-        ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "Edit Process",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            IconSpacer()
-            Text(text = "Edit Process")
-        }
+            imageVector = Icons.Default.Edit,
+            text = "Edit Process"
+        )
         Spacer(modifier = Modifier.weight(0.5f))
-        OutlinedButton(
+        StandardOutlinedButton(
             onClick = {
                 showDeleteDialogCallback()
             },
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-        ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete Process"
-            )
-            IconSpacer()
-            Text(text = "Delete Process")
-        }
+            imageVector = Icons.Default.Delete,
+            text = "Delete Process"
+        )
     }
 }
