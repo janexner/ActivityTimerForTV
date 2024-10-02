@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
+import androidx.tv.material3.Icon
 import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import java.util.Locale
 import kotlin.time.Duration
@@ -128,4 +132,46 @@ fun DefaultSpacer() {
 @Composable
 fun IconSpacer() {
     Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+}
+
+@Composable
+fun StandardButton(
+    onClick: () -> Unit,
+    imageVector: ImageVector,
+    text: String
+) {
+    Button(
+        enabled = true,
+        onClick = onClick,
+        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+    ) {
+        Icon(
+            imageVector = imageVector,
+            contentDescription = text,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
+        )
+        IconSpacer()
+        Text(text = text)
+    }
+}
+
+@Composable
+fun StandardOutlinedButton(
+    onClick: () -> Unit,
+    imageVector: ImageVector,
+    text: String
+) {
+    OutlinedButton(
+        enabled = true,
+        onClick = onClick,
+        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+    ) {
+        Icon(
+            imageVector = imageVector,
+            contentDescription = text,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
+        )
+        IconSpacer()
+        Text(text = text)
+    }
 }

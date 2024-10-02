@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.OutlinedTextField
@@ -21,15 +20,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryEditViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -73,21 +69,14 @@ fun CategoryEdit(
             ) {
                 // buttons
                 Row {
-                    Button(
+                    StandardButton(
                         onClick = {
                             // TODO save edits
                             navigator.navigateUp()
                         },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Done,
-                            contentDescription = "Done",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        IconSpacer()
-                        Text(text = "Done")
-                    }
+                        imageVector = Icons.Default.Done,
+                        text = "Done"
+                    )
                 }
                 // spacer
                 Spacer(modifier = Modifier.weight(0.1f))

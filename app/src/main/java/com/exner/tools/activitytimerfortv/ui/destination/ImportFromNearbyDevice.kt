@@ -41,6 +41,7 @@ import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
 import com.exner.tools.activitytimerfortv.ui.tools.StandardDialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -79,21 +80,13 @@ fun ImportFromNearbyDevice(
             when (processState.currentState) {
                 ProcessStateConstants.AWAITING_PERMISSIONS,
                 ProcessStateConstants.PERMISSIONS_DENIED -> {
-                    Button(
-                        enabled = !permissionsNeeded.allPermissionsGranted,
+                    StandardButton(
                         onClick = {
                             permissionsNeeded.launchMultiplePermissionRequest()
                         },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = "Request permissions",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        IconSpacer()
-                        Text(text = "Request permissions")
-                    }
+                        imageVector = Icons.Default.CheckCircle,
+                        text = "Request permissions"
+                    )
                 }
 
                 ProcessStateConstants.PERMISSIONS_GRANTED,
@@ -120,24 +113,16 @@ fun ImportFromNearbyDevice(
                         /***
                          * DEBUG - button that simulates having received processes
                          */
-                        Button(
-                            enabled = true,
+                        StandardButton(
                             onClick = {
                                 importFromNearbyDeviceViewModel.dbgGenerateReceivedProcessesList()
                                 importFromNearbyDeviceViewModel.transitionToNewState(
                                     ProcessStateConstants.DONE
                                 )
                             },
-                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Warning,
-                                contentDescription = "Simulate receiving processes",
-                                modifier = Modifier.size(ButtonDefaults.IconSize)
-                            )
-                            IconSpacer()
-                            Text(text = "DBG SM RCV")
-                        }
+                            imageVector = Icons.Default.Warning,
+                            text = "DBG SM RCV"
+                        )
                         /***
                          * end of DEBUG
                          */
@@ -147,8 +132,7 @@ fun ImportFromNearbyDevice(
                 else -> {}
             }
             Spacer(modifier = Modifier.weight(0.5f))
-            Button(
-                enabled = true,
+            StandardButton(
                 onClick = {
                     if (processState.currentState == ProcessStateConstants.CANCELLED) {
                         navigator.navigateUp()
@@ -159,16 +143,9 @@ fun ImportFromNearbyDevice(
                         )
                     }
                 },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "Cancel",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                IconSpacer()
-                Text(text = "Cancel")
-            }
+                imageVector = Icons.Default.Clear,
+                text = "Cancel"
+            )
         }
         // spacer
         Spacer(modifier = Modifier.weight(0.1f))

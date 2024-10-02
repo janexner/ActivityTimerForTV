@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
@@ -20,19 +19,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.steps.ProcessDisplayStepAction
 import com.exner.tools.activitytimerfortv.ui.ProcessRunViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.InfoText
 import com.exner.tools.activitytimerfortv.ui.tools.MediumTimerAndIntervalText
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -70,11 +65,13 @@ fun ProcessRun(
             modifier = Modifier.fillMaxSize()
         )
         Box(
-            modifier = Modifier.background(
-                Brush.linearGradient(
-                    listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+            modifier = Modifier
+                .background(
+                    Brush.linearGradient(
+                        listOf(MaterialTheme.colorScheme.background, Color.Transparent)
+                    )
                 )
-            ).fillMaxSize()
+                .fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
@@ -124,20 +121,13 @@ private fun TopButtons(
     navigator: DestinationsNavigator
 ) {
     Row {
-        Button(
+        StandardButton(
             onClick = {
                 processRunViewModel.cancel()
                 navigator.navigateUp()
             },
-            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Cancel",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            IconSpacer()
-            Text(text = "Cancel")
-        }
+            imageVector = Icons.Default.Close,
+            text = "Cancel"
+        )
     }
 }

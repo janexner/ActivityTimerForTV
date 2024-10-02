@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -30,11 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Checkbox
 import androidx.tv.material3.Icon
 import androidx.tv.material3.ListItem
-import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Tab
 import androidx.tv.material3.TabRow
@@ -43,7 +40,8 @@ import com.exner.tools.activitytimerfortv.ui.RemoteProcessManagementViewModel
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.BodyText
 import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
-import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
+import com.exner.tools.activitytimerfortv.ui.tools.StandardOutlinedButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
@@ -90,34 +88,21 @@ fun RemoteProcessManagement(
     ) {
         Row {
             if (tabIndex == 0 && listOfProcessUuidsToImport.size > 0) {
-                Button(
+                StandardButton(
                     onClick = {
                         openAlertDialog.value = true
                     },
-                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Import Processes",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                    IconSpacer()
-                    Text(text = "Import Processes")
-                }
+                    imageVector = Icons.Default.Add,
+                    text = "Import Processes"
+                )
             }
-            OutlinedButton(
+            StandardOutlinedButton(
                 onClick = {
                     navigator.navigateUp()
                 },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Close, contentDescription = "Cancel",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                IconSpacer()
-                Text(text = "Cancel")
-            }
+                imageVector = Icons.Default.Close,
+                text = "Cancel"
+            )
         }
         Spacer(modifier = Modifier.weight(1f))
         Button(

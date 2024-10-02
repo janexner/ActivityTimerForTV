@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -22,18 +21,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.OutlinedButton
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.ui.CategoryDetailsViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryDeleteRequestedScreen
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
+import com.exner.tools.activitytimerfortv.ui.tools.StandardOutlinedButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.CategoryEditDestination
@@ -80,34 +76,21 @@ fun CategoryDetails(
                 // buttons
                 Row {
                     if (categoryUid != CategoryListDefinitions.CATEGORY_UID_NONE) {
-                        Button(
+                        StandardButton(
                             onClick = {
                                 navigator.navigate(CategoryEditDestination(categoryUid = categoryUid))
                             },
-                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit Category",
-                                modifier = Modifier.size(ButtonDefaults.IconSize)
-                            )
-                            IconSpacer()
-                            Text(text = "Edit Category")
-                        }
+                            imageVector = Icons.Default.Edit,
+                            text = "Edit Category"
+                        )
                         Spacer(modifier = Modifier.weight(0.5f))
-                        OutlinedButton(
+                        StandardOutlinedButton(
                             onClick = {
                                 openDeletionDialog.value = true
                             },
-                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete Category"
-                            )
-                            IconSpacer()
-                            Text(text = "Delete Category")
-                        }
+                            imageVector = Icons.Default.Delete,
+                            text = "Delete Category"
+                        )
                     }
                 }
                 // spacer

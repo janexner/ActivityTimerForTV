@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
@@ -19,9 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
@@ -30,7 +26,7 @@ import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryCard
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryCreationScreen
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
-import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
+import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.CategoryDetailsDestination
@@ -58,21 +54,13 @@ fun CategoryList(
             .padding(horizontal = 48.dp, vertical = 24.dp)
     ) {
         Row {
-            Button(
-                enabled = true,
+            StandardButton(
                 onClick = {
                     openCreateDialog.value = true
                 },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add a Category",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                IconSpacer()
-                Text(text = "Add a Category")
-            }
+                imageVector = Icons.Default.Add,
+                text = "Add a Category"
+            )
         }
         DefaultSpacer()
         Text(text = "Categories", style = MaterialTheme.typography.displaySmall)
