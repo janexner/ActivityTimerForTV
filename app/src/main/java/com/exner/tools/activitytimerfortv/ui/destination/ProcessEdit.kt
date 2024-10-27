@@ -36,9 +36,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun ProcessEdit(
     processUuid: String,
-    processEditViewModel: ProcessEditViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    val processEditViewModel = hiltViewModel<ProcessEditViewModel, ProcessEditViewModel.ProcessEditViewModelFactory> { factory ->
+        factory.create(processUuid)
+    }
 
     val name by processEditViewModel.name.observeAsState()
     val info by processEditViewModel.info.observeAsState()
@@ -49,8 +51,6 @@ fun ProcessEdit(
     val gotoName by processEditViewModel.gotoName.observeAsState()
     val backgroundUri by processEditViewModel.backgroundUri.observeAsState()
     val categoryId by processEditViewModel.categoryId.observeAsState()
-
-    processEditViewModel.getProcess(processUuid)
 
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(

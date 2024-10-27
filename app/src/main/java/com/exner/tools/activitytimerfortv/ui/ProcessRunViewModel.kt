@@ -15,6 +15,9 @@ import com.exner.tools.activitytimerfortv.steps.ProcessStartAction
 import com.exner.tools.activitytimerfortv.steps.ProcessStepAction
 import com.exner.tools.activitytimerfortv.steps.STEP_LENGTH_IN_MILLISECONDS
 import com.exner.tools.activitytimerfortv.steps.getProcessStepListForOneProcess
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -24,10 +27,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class ProcessRunViewModel @Inject constructor(
+@OptIn(DelicateCoroutinesApi::class)
+@HiltViewModel(assistedFactory = ProcessRunViewModel.ProcessRunViewModelFactory::class)
+class ProcessRunViewModel @AssistedInject constructor(
+    @Assisted val uuid: String,
+    @Assisted val doneEventHandler: () -> Unit,
     private val repository: TimerDataRepository,
     private val userPreferencesRepository: UserPreferencesManager
 ) : ViewModel() {
@@ -57,12 +62,7 @@ class ProcessRunViewModel @Inject constructor(
 
     private var isRunning: Boolean = false
 
-    private var doneEventHandler: () -> Unit = {}
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun initialiseRun(
-        processUuid: String,
-    ) {
+    init {
         val result = mutableListOf<List<ProcessStepAction>>()
 
         if (!isRunning) {
@@ -72,7 +72,7 @@ class ProcessRunViewModel @Inject constructor(
             viewModelScope.launch {
                 // loop detection
                 val processIdList = mutableListOf<String>()
-                var currentID: String? = processUuid
+                var currentID: String? = uuid
                 var noLoopDetectedSoFar = true
 
                 while (currentID != null && noLoopDetectedSoFar) {
@@ -197,11 +197,12 @@ class ProcessRunViewModel @Inject constructor(
         }
     }
 
-    fun setDoneEventHandler(handler: () -> Unit) {
-        doneEventHandler = handler
-    }
-
     fun cancel() {
         job?.cancel()
+    }
+
+    @AssistedFactory
+    interface ProcessRunViewModelFactory {
+        fun create(uuid: String, doneEventHandler: () -> Unit): ProcessRunViewModel
     }
 }

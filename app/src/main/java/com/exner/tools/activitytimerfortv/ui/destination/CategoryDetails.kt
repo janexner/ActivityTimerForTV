@@ -40,17 +40,17 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun CategoryDetails(
     categoryUid: Long,
-    categoryDetailsViewModel: CategoryDetailsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    val categoryDetailsViewModel = hiltViewModel<CategoryDetailsViewModel, CategoryDetailsViewModel.CategoryDetailsViewModelFactory> { factory ->
+        factory.create(categoryUid)
+    }
 
     val name by categoryDetailsViewModel.name.observeAsState()
     val backgroundUri by categoryDetailsViewModel.backgroundUri.observeAsState()
     val usage by categoryDetailsViewModel.usage.observeAsState()
 
     val openDeletionDialog = remember { mutableStateOf(false) }
-
-    categoryDetailsViewModel.getCategory(categoryUid)
 
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(

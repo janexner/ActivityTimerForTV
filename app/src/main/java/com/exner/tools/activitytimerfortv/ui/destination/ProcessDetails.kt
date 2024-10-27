@@ -57,9 +57,11 @@ data class ProcessDeleteChainWarning(
 @Composable
 fun ProcessDetails(
     processUuid: String,
-    processDetailsViewModel: ProcessDetailsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    val processDetailsViewModel = hiltViewModel<ProcessDetailsViewModel, ProcessDetailsViewModel.ProcessDetailsViewModelFactory> { factory ->
+        factory.create(processUuid)
+    }
 
     val name by processDetailsViewModel.name.observeAsState()
     val info by processDetailsViewModel.info.observeAsState()
@@ -73,9 +75,6 @@ fun ProcessDetails(
     val dependantProcesses by processDetailsViewModel.processChainingDependencies.observeAsState()
 
     val openDeletionDialog = remember { mutableStateOf(false) }
-
-    processDetailsViewModel.getProcess(processUuid)
-    processDetailsViewModel.checkProcess(processUuid)
 
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
