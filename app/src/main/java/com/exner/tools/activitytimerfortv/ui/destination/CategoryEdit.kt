@@ -35,15 +35,15 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun CategoryEdit(
     categoryUid: Long,
-    categoryEditViewModel: CategoryEditViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    val categoryEditViewModel = hiltViewModel<CategoryEditViewModel, CategoryEditViewModel.CategoryEditViewModelFactory> { factory ->
+        factory.create(categoryUid)
+    }
 
     val name by categoryEditViewModel.name.observeAsState()
     val backgroundUri by categoryEditViewModel.backgroundUri.observeAsState()
     val usage by categoryEditViewModel.usage.observeAsState()
-
-    categoryEditViewModel.getCategory(categoryUid)
 
     // remember values for the editable fields
     Box(modifier = Modifier.fillMaxSize()) {

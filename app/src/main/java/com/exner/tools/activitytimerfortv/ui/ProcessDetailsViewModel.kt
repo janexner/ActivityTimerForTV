@@ -7,12 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.exner.tools.activitytimerfortv.data.persistence.TimerChainingDependencies
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataIdAndName
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class ProcessDetailsViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ProcessDetailsViewModel.ProcessDetailsViewModelFactory::class)
+class ProcessDetailsViewModel @AssistedInject constructor(
+    @Assisted val uuid: String,
     private val repository: TimerDataRepository
 ): ViewModel() {
 
@@ -24,9 +28,6 @@ class ProcessDetailsViewModel @Inject constructor(
 
     private val _info: MutableLiveData<String> = MutableLiveData("Name")
     val info: LiveData<String> = _info
-
-    private val _uuid: MutableLiveData<String> = MutableLiveData("")
-    val uuid: LiveData<String> = _uuid
 
     private val _processTime: MutableLiveData<Int> = MutableLiveData(30)
     val processTime: LiveData<Int> = _processTime
@@ -57,10 +58,9 @@ class ProcessDetailsViewModel @Inject constructor(
     private val _processChainingDependencies: MutableLiveData<TimerChainingDependencies> = MutableLiveData(null)
     val processChainingDependencies: LiveData<TimerChainingDependencies> = _processChainingDependencies
 
-    fun getProcess(processUuid: String) {
-        _uuid.value = processUuid
+    init {
         viewModelScope.launch {
-            val process = repository.loadProcessByUuid(processUuid)
+            val process = repository.loadProcessByUuid(uuid)
             if (process != null) {
                 val category = repository.getCategoryById(process.categoryId)
                 var backgroundUri = "https://fototimer.net/assets/activitytimer/bg-default.png"
@@ -89,30 +89,19 @@ class ProcessDetailsViewModel @Inject constructor(
                     _categoryName.value = category.name
                 }
                 _backgroundUri.value = backgroundUri
-            }
-        }
-    }
-
-    fun checkProcess(processUuid: String?) {
-        if (processUuid != null) {
-            viewModelScope.launch {
-                val process = repository.loadProcessByUuid(processUuid)
-                if (process != null) {
-                    _name.value = process.name
-                    val newDependentProcessUuids = repository.getUuidsOfDependentProcesses(process)
-                    val newDependentProcesses = mutableListOf<TimerDataIdAndName>()
-                    newDependentProcessUuids.forEach {
-                        val tmpProcess = repository.loadProcessByUuid(it)
-                        if (tmpProcess != null) {
-                            newDependentProcesses.add(TimerDataIdAndName(it, tmpProcess.name))
-                        }
+                val newDependentProcessUuids = repository.getUuidsOfDependentProcesses(process)
+                val newDependentProcesses = mutableListOf<TimerDataIdAndName>()
+                newDependentProcessUuids.forEach {
+                    val tmpProcess = repository.loadProcessByUuid(it)
+                    if (tmpProcess != null) {
+                        newDependentProcesses.add(TimerDataIdAndName(it, tmpProcess.name))
                     }
-                    val chainingDependencies = TimerChainingDependencies(
-                        newDependentProcesses
-                    )
-                    _processChainingDependencies.value = chainingDependencies
-                    _processIsTarget.value = true
                 }
+                val chainingDependencies = TimerChainingDependencies(
+                    newDependentProcesses
+                )
+                _processChainingDependencies.value = chainingDependencies
+                _processIsTarget.value = true
             }
         }
     }
@@ -124,5 +113,10 @@ class ProcessDetailsViewModel @Inject constructor(
                 repository.delete(ftp)
             }
         }
+    }
+
+    @AssistedFactory
+    interface ProcessDetailsViewModelFactory {
+        fun create(uuid: String): ProcessDetailsViewModel
     }
 }

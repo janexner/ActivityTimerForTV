@@ -7,12 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class ProcessEditViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ProcessEditViewModel.ProcessEditViewModelFactory::class)
+class ProcessEditViewModel @AssistedInject constructor(
+    @Assisted val uuid: String?,
     private val repository: TimerDataRepository
 ) : ViewModel() {
 
@@ -24,9 +28,6 @@ class ProcessEditViewModel @Inject constructor(
 
     private val _info: MutableLiveData<String> = MutableLiveData("Name")
     val info: LiveData<String> = _info
-
-    private val _uuid: MutableLiveData<String> = MutableLiveData("")
-    val uuid: LiveData<String> = _uuid
 
     private val _processTime: MutableLiveData<Int> = MutableLiveData(30)
     val processTime: LiveData<Int> = _processTime
@@ -54,48 +55,49 @@ class ProcessEditViewModel @Inject constructor(
     private val _nextProcessesName: MutableLiveData<String> = MutableLiveData("")
     val nextProcessesName: LiveData<String> = _nextProcessesName
 
-    fun getProcess(processUuid: String) {
-        _uuid.value = processUuid
+    init {
         viewModelScope.launch {
-            val process = repository.loadProcessByUuid(processUuid)
-            if (process != null) {
-                val category = repository.getCategoryById(process.categoryId)
-                var backgroundUri = "https://fototimer.net/assets/activitytimer/bg-default.png"
-                if (category != null) {
-                    backgroundUri = category.backgroundUri ?: backgroundUri
-                }
-                backgroundUri = process.backgroundUri ?: backgroundUri
+            if (uuid != null) {
+                val process = repository.loadProcessByUuid(uuid)
+                if (process != null) {
+                    val category = repository.getCategoryById(process.categoryId)
+                    var backgroundUri = "https://fototimer.net/assets/activitytimer/bg-default.png"
+                    if (category != null) {
+                        backgroundUri = category.backgroundUri ?: backgroundUri
+                    }
+                    backgroundUri = process.backgroundUri ?: backgroundUri
 
-                _name.value = process.name
-                _info.value = process.info
-                _processTime.value = process.processTime
-                _intervalTime.value = process.intervalTime
-                _hasAutoChain.value = process.hasAutoChain
-                _gotoUuid.value = process.gotoUuid
-                _gotoName.value = process.gotoName
-                if (process.gotoUuid != null && process.gotoUuid != "") {
-                    val nextProcess = repository.loadProcessByUuid(process.gotoUuid)
-                    if (nextProcess != null) {
-                        if (_gotoName.value != nextProcess.name) {
-                            // this is weird!
-                            _gotoName.value = nextProcess.name
+                    _name.value = process.name
+                    _info.value = process.info
+                    _processTime.value = process.processTime
+                    _intervalTime.value = process.intervalTime
+                    _hasAutoChain.value = process.hasAutoChain
+                    _gotoUuid.value = process.gotoUuid
+                    _gotoName.value = process.gotoName
+                    if (process.gotoUuid != null && process.gotoUuid != "") {
+                        val nextProcess = repository.loadProcessByUuid(process.gotoUuid)
+                        if (nextProcess != null) {
+                            if (_gotoName.value != nextProcess.name) {
+                                // this is weird!
+                                _gotoName.value = nextProcess.name
+                            }
                         }
                     }
+                    if (category != null) {
+                        _categoryName.value = category.name
+                    }
+                    _backgroundUri.value = backgroundUri
                 }
-                if (category != null) {
-                    _categoryName.value = category.name
-                }
-                _backgroundUri.value = backgroundUri
             }
         }
     }
 
     fun updateProcess() {
-        if (name.value != null && info.value != null && uuid.value != null && processTime.value != null && intervalTime.value != null && hasAutoChain.value != null && categoryId.value != null && uid.value != null) {
+        if (name.value != null && info.value != null && uuid != null && processTime.value != null && intervalTime.value != null && hasAutoChain.value != null && categoryId.value != null && uid.value != null) {
             val updatedProcess = TimerProcess(
                 name = name.value!!,
                 info = info.value!!,
-                uuid = uuid.value!!,
+                uuid = uuid,
                 processTime = processTime.value!!,
                 intervalTime = intervalTime.value!!,
                 hasAutoChain = hasAutoChain.value!!,
@@ -109,5 +111,10 @@ class ProcessEditViewModel @Inject constructor(
                 repository.updateProcess(updatedProcess)
             }
         }
+    }
+
+    @AssistedFactory
+    interface ProcessEditViewModelFactory {
+        fun create(uuid: String): ProcessEditViewModel
     }
 }
