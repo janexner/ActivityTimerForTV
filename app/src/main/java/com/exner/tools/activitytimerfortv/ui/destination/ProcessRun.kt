@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -45,9 +46,6 @@ fun ProcessRun(
         }
 
     val displayAction by processRunViewModel.displayAction.observeAsState()
-    val numberOfSteps by processRunViewModel.numberOfSteps.observeAsState()
-    val currentStepNumber by processRunViewModel.currentStepNumber.observeAsState()
-    val hasLoop by processRunViewModel.hasLoop.observeAsState()
     val hasHours by processRunViewModel.hasHours.observeAsState()
     val showStages by processRunViewModel.showStages.observeAsState()
     val backgroundUri by processRunViewModel.backgroundUri.observeAsState()
@@ -84,7 +82,7 @@ fun ProcessRun(
                             duration = pdAction.currentIntervalTime.seconds,
                             withHours = hasHours == true,
                             modifier = Modifier
-                                .fillMaxWidth(0.5f)
+                                .fillMaxWidth(0.66f)
                                 .align(Alignment.End)
                         )
                         if (showStages == true) {
@@ -93,11 +91,11 @@ fun ProcessRun(
                                 withHours = hasHours == true,
                                 intervalText = "${pdAction.currentRound} of ${pdAction.totalRounds}",
                                 modifier = Modifier
-                                    .fillMaxWidth(0.5f)
+                                    .fillMaxWidth(0.66f)
                                     .align(Alignment.End)
                             )
                         }
-                        DefaultSpacer()
+                        Spacer(Modifier.weight(0.1f))
                         InfoText(infoText = pdAction.processInfo)
                     }
 

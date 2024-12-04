@@ -44,7 +44,7 @@ enum class ProcessStateConstants {
 }
 
 const val endpointId = "com.exner.tools.ActivityTimer"
-const val userName = "anonymous"
+const val userName = "Activity Timer for TV"
 
 data class ProcessState(
     val currentState: ProcessStateConstants = ProcessStateConstants.AWAITING_PERMISSIONS,
