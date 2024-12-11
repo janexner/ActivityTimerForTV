@@ -26,7 +26,7 @@ class UserPreferencesManager @Inject constructor(
         return userDataStorePreferences.data.catch {
             emit(emptyPreferences())
         }.map { preferences ->
-            preferences[KEY_COUNT_BACKWARDS] ?: false
+            preferences[KEY_COUNT_BACKWARDS] == true
         }
     }
 
@@ -40,7 +40,7 @@ class UserPreferencesManager @Inject constructor(
         return userDataStorePreferences.data.catch {
             emit(emptyPreferences())
         }.map { preferences ->
-            preferences[KEY_NO_SOUNDS] ?: false
+            preferences[KEY_NO_SOUNDS] == true
         }
     }
 
@@ -54,7 +54,7 @@ class UserPreferencesManager @Inject constructor(
         return userDataStorePreferences.data.catch {
             emit(emptyPreferences())
         }.map { preferences ->
-            preferences[KEY_IMPORT_AND_UPLOAD_REST_OF_CHAIN_AUTOMATICALLY] ?: false
+            preferences[KEY_IMPORT_AND_UPLOAD_REST_OF_CHAIN_AUTOMATICALLY] == true
         }
     }
 
@@ -64,9 +64,24 @@ class UserPreferencesManager @Inject constructor(
         }
     }
 
+    fun createNewUuidOnImport(): Flow<Boolean> {
+        return userDataStorePreferences.data.catch {
+            emit(emptyPreferences())
+        }.map { preferences ->
+            preferences[KEY_CREATE_NEW_UUID_ON_IMPORT] != false
+        }
+    }
+
+    suspend fun setCreateNewUuidOnImport(createNewUuid: Boolean) {
+        userDataStorePreferences.edit { preferences ->
+            preferences[KEY_CREATE_NEW_UUID_ON_IMPORT] = createNewUuid
+        }
+    }
+
     private companion object {
         val KEY_COUNT_BACKWARDS = booleanPreferencesKey(name = "count_backwards")
         val KEY_NO_SOUNDS = booleanPreferencesKey(name = "no_sounds")
         val KEY_IMPORT_AND_UPLOAD_REST_OF_CHAIN_AUTOMATICALLY = booleanPreferencesKey(name = "import_and_upload_rest_of_chain_automatically")
+        val KEY_CREATE_NEW_UUID_ON_IMPORT = booleanPreferencesKey(name = "create_new_uuid_on_import")
     }
 }
