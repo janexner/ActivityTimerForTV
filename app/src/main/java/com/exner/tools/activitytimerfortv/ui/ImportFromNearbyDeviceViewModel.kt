@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import kotlin.text.Charsets.UTF_8
 
@@ -93,12 +94,15 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 PayloadTransferUpdate.Status.CANCELED -> {
                     Log.d("INDPLCLBTU", "Transfer cancelled")
                 }
+
                 PayloadTransferUpdate.Status.FAILURE -> {
                     Log.d("INDPLCLBTU", "Transfer failed")
                 }
+
                 PayloadTransferUpdate.Status.IN_PROGRESS -> {
                     Log.d("INDPLCLBTU", "Transfer in progress")
                 }
+
                 PayloadTransferUpdate.Status.SUCCESS -> {
                     Log.d("INDPLCLBTU", "Transfer successful")
                 }
@@ -122,7 +126,8 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 authenticationDigits = connectionInfo.authenticationDigits
             )
             // now move to auth requested
-            _processStateFlow.value = ProcessState(ProcessStateConstants.AUTHENTICATION_REQUESTED,
+            _processStateFlow.value = ProcessState(
+                ProcessStateConstants.AUTHENTICATION_REQUESTED,
                 connectionInfo.endpointName
             )
         }
@@ -257,13 +262,16 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 _processStateFlow.value = ProcessState(newState, "Auth requested")
                 Log.d("INDVM", "Authentication requested...")
             }
+
             ProcessStateConstants.AUTHENTICATION_OK -> {
                 Log.d("INDVM", "Now accepting the connection...")
                 connectionsClient.acceptConnection(connectionInfo.value.endpointId, payloadCallback)
             }
+
             ProcessStateConstants.AUTHENTICATION_DENIED -> {
                 Log.d("INDVM", "Connection denied!")
-                _processStateFlow.value = ProcessState(ProcessStateConstants.DISCOVERED, "Connection denied")
+                _processStateFlow.value =
+                    ProcessState(ProcessStateConstants.DISCOVERED, "Connection denied")
             }
 
             ProcessStateConstants.RECEIVING -> {
@@ -291,23 +299,49 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
         }
     }
 
+    fun doesProcessExistInLocalDatabase(process: TimerProcess): Boolean = runBlocking {
+        return@runBlocking (null != this@ImportFromNearbyDeviceViewModel.repository.loadProcessByUuid(
+            process.uuid
+        ))
+    }
+
     fun importProcessIntoLocalDatabase(process: TimerProcess) {
         Log.d("INDVMSV", "Saving process ${process.name} to database...")
         // add it to the database
         viewModelScope.launch {
             val checkProcess = repository.loadProcessByUuid(process.uuid)
             if (checkProcess != null) {
-                Log.d("INDVMSV", "Process ${process.uuid} exists, overwriting...")
-                // has to be updated TODO
+                Log.e("INDVMSV", "Process ${process.uuid} exists, not overwriting!")
             } else {
-                repository.insert(process.copy(uid = 0, categoryId = CategoryListDefinitions.CATEGORY_UID_NONE))
+                repository.insert(
+                    process.copy(
+                        uid = 0,
+                        categoryId = CategoryListDefinitions.CATEGORY_UID_NONE
+                    )
+                )
+                // remove it from the list of received processes
+                _receivedProcesses.remove(process)
             }
         }
-        // remove it from the list of received processes
-        _receivedProcesses.remove(process)
     }
 
-    fun decodePayloadToString(payload: Payload) : String {
+    fun updateProcessInLocalDatabase(process: TimerProcess) {
+        Log.d("INDVMSV", "Saving process ${process.name} to database...")
+        // add it to the database
+        viewModelScope.launch {
+            val checkProcess = repository.loadProcessByUuid(process.uuid)
+            if (checkProcess != null) {
+                Log.d("INDVMSV", "Process ${process.uuid} exists, updating...")
+                repository.updateProcess(process)
+                // remove it from the list of received processes
+                _receivedProcesses.remove(process)
+            } else {
+                Log.e("INDVMSV", "Process ${process.uuid} doesn't exist, cannot update!")
+            }
+        }
+    }
+
+    fun decodePayloadToString(payload: Payload): String {
         if (payload.type == Payload.Type.BYTES) {
             val process = payload.toTimerProcess()
             Log.d("INBVMPD", "Payload received: ${process.name} / $process")
