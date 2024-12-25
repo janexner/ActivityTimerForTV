@@ -70,6 +70,7 @@ fun ImportFromNearbyDevice(
 
     val openAuthenticationDialog = remember { mutableStateOf(false) }
     val connectionInfo by importFromNearbyDeviceViewModel.connectionInfo.collectAsState()
+    val createNewUuidOnImportDefault by importFromNearbyDeviceViewModel
 
     Column(
         modifier = Modifier

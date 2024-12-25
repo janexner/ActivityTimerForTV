@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcess
+import com.exner.tools.activitytimerfortv.data.preferences.UserPreferencesManager
 import com.exner.tools.activitytimerfortv.ui.tools.CategoryListDefinitions
 import com.google.android.gms.nearby.connection.AdvertisingOptions
 import com.google.android.gms.nearby.connection.ConnectionInfo
@@ -60,7 +61,8 @@ data class EndpointConnectionInformation(
 
 @HiltViewModel
 class ImportFromNearbyDeviceViewModel @Inject constructor(
-    val repository: TimerDataRepository
+    val repository: TimerDataRepository,
+    val userPreferencesRepository: UserPreferencesManager
 ) : ViewModel() {
     private val _processStateFlow = MutableStateFlow(ProcessState())
     val processStateFlow: StateFlow<ProcessState> = _processStateFlow.asStateFlow()
