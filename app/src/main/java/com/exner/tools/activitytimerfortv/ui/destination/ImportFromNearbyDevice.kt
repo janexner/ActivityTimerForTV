@@ -70,7 +70,7 @@ fun ImportFromNearbyDevice(
 
     val openAuthenticationDialog = remember { mutableStateOf(false) }
     val connectionInfo by importFromNearbyDeviceViewModel.connectionInfo.collectAsState()
-    val createNewUuidOnImportDefault by importFromNearbyDeviceViewModel
+//    val createNewUuidOnImportDefault by importFromNearbyDeviceViewModel // TODO
 
     Column(
         modifier = Modifier
@@ -167,7 +167,7 @@ fun ImportFromNearbyDevice(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
+                items(items = importFromNearbyDeviceViewModel.receivedProcesses, key = {it.uuid}) { process ->
                     val existingProcess = importFromNearbyDeviceViewModel.doesProcessExistInLocalDatabase(process)
                     Log.d("IFND", "Listing imported process ${process.name}")
                     if (existingProcess) {

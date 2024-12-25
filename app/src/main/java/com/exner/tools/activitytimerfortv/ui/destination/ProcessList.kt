@@ -113,7 +113,7 @@ fun ProcessList(
                 }
             }
         }
-        items(categoryList) { category ->
+        items(items = categoryList, key = {it.name}) { category ->
             Text(
                 text = "Category: " + category.name,
                 style = MaterialTheme.typography.titleMedium
@@ -124,7 +124,7 @@ fun ProcessList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 modifier = Modifier.height(120.dp)
             ) {
-                items(category.processList) { process ->
+                items(items = category.processList, key = {it.uuid}) { process ->
                     ProcessCard(
                         process = process,
                         backgroundUriFallback = category.backgroundUri,

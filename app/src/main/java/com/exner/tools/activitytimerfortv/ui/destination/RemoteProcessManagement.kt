@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -142,8 +143,7 @@ fun RemoteProcessManagement(
                 state = listStateRemote,
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(remoteProcesses.size) { index ->
-                    val genericProcess = remoteProcesses[index]
+                items(items = remoteProcesses, key = {it.uuid}) { genericProcess ->
                     Surface {
                         ListItem(
                             selected = false,
