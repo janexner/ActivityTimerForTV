@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -71,8 +72,7 @@ fun CategoryList(
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(count = categories.size) { index ->
-                val category = categories[index]
+            items(items = categories, key = {it.uid}) { category ->
                 val usage = categoryUsage.firstOrNull {
                     it.uid == category.uid
                 }

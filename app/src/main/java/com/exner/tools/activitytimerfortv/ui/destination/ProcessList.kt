@@ -28,8 +28,8 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
-import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.ProcessListViewModel
+import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -39,6 +39,8 @@ import com.ramcosta.composedestinations.generated.destinations.ImportFromNearbyD
 import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
 import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
+//TODO remember selected focus after navigation
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Destination<RootGraph>(start = true)
@@ -111,7 +113,7 @@ fun ProcessList(
                 }
             }
         }
-        items(categoryList) { category ->
+        items(items = categoryList, key = {it.name}) { category ->
             Text(
                 text = "Category: " + category.name,
                 style = MaterialTheme.typography.titleMedium
@@ -122,7 +124,7 @@ fun ProcessList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 modifier = Modifier.height(120.dp)
             ) {
-                items(category.processList) { process ->
+                items(items = category.processList, key = {it.uuid}) { process ->
                     ProcessCard(
                         process = process,
                         backgroundUriFallback = category.backgroundUri,

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -20,8 +21,8 @@ import androidx.tv.material3.Checkbox
 import androidx.tv.material3.ClassicCard
 import com.exner.tools.activitytimerfortv.data.persistence.TimerCategoryIdNameCount
 import com.exner.tools.activitytimerfortv.data.persistence.TimerProcessCategory
-import com.exner.tools.activitytimerfortv.ui.tools.BodyText
 import com.exner.tools.activitytimerfortv.ui.CategoryListViewModel
+import com.exner.tools.activitytimerfortv.ui.tools.BodyText
 import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -57,8 +58,7 @@ fun CategoryBulkDelete(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(count = categories.size) { meditationTimerCategory ->
-                val category = categories[meditationTimerCategory]
+            items(items = categories, key = {it.uid}) { category ->
                 var supText = "Unused"
                 val usage = categoryUsage.firstOrNull {
                     it.uid == category.uid

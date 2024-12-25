@@ -1,5 +1,6 @@
 package com.exner.tools.activitytimerfortv.ui.destination
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -69,6 +70,7 @@ fun ImportFromNearbyDevice(
 
     val openAuthenticationDialog = remember { mutableStateOf(false) }
     val connectionInfo by importFromNearbyDeviceViewModel.connectionInfo.collectAsState()
+//    val createNewUuidOnImportDefault by importFromNearbyDeviceViewModel // TODO
 
     Column(
         modifier = Modifier
@@ -165,15 +167,28 @@ fun ImportFromNearbyDevice(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                items(importFromNearbyDeviceViewModel.receivedProcesses) { process ->
+                items(items = importFromNearbyDeviceViewModel.receivedProcesses, key = {it.uuid}) { process ->
+                    val existingProcess = importFromNearbyDeviceViewModel.doesProcessExistInLocalDatabase(process)
+                    Log.d("IFND", "Listing imported process ${process.name}")
+                    if (existingProcess) {
+                        Log.d("IFND", "This process already exists in the DB!")
+                    }
                     ProcessCard(
                         process = process,
                         backgroundUriFallback = null,
                         onClick = {
-                            importFromNearbyDeviceViewModel.importProcessIntoLocalDatabase(
-                                process
-                            )
-                        }
+                            if (existingProcess) {
+                                // TODO make UI with choice: update or copy
+                                importFromNearbyDeviceViewModel.updateProcessInLocalDatabase(
+                                    process
+                                )
+                            } else {
+                                importFromNearbyDeviceViewModel.importProcessIntoLocalDatabase(
+                                    process
+                                )
+                            }
+                        },
+                        isExisting = existingProcess
                     )
                 }
             }

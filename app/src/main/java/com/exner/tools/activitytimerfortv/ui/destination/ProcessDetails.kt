@@ -183,7 +183,7 @@ private fun Content(
                     )
                 }
                 if (null != info) {
-                    DefaultSpacer()
+                    Spacer(Modifier.weight(0.1f))
                     InfoText(infoText = info)
                 }
             }

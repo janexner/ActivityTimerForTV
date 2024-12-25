@@ -16,22 +16,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
-import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
 import com.exner.tools.activitytimerfortv.ui.SettingsViewModel
+import com.exner.tools.activitytimerfortv.ui.tools.HeaderText
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>
 @Composable
 fun Settings(
-    settingsViewModel: SettingsViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
 
     val countBackwards by settingsViewModel.countBackwards.collectAsStateWithLifecycle()
     val noSounds by settingsViewModel.noSounds.collectAsStateWithLifecycle()
     val importAndUploadRestOfChainAutomatically by settingsViewModel.importAndUploadRestOfChainAutomatically.collectAsStateWithLifecycle()
+    val createNewUuidOnImport by settingsViewModel.createNewUuidOnImport.collectAsStateWithLifecycle()
 
     // show vertically
     Column(
@@ -100,6 +99,25 @@ fun Settings(
                 }
             )
         }
+        Row(
+            modifier = Modifier
+                .padding(24.dp)
+                .fillMaxWidth()
+                .clickable {
+                    settingsViewModel.updateCreateNewUuidOnImport(!createNewUuidOnImport)
+                }
+        ){
+            Text(
+                text = "When importing a new process, create a new UUID for it (detach it from the original) by default",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = createNewUuidOnImport,
+                onCheckedChange = {
+                    settingsViewModel.updateCreateNewUuidOnImport(it)
+                }
+            )
+        }
     }
 }
-

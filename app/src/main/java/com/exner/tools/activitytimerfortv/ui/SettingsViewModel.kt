@@ -25,6 +25,11 @@ class SettingsViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(),
         false
     )
+    val createNewUuidOnImport: StateFlow<Boolean> = userPreferencesManager.createNewUuidOnImport().stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        true
+    )
     val importAndUploadRestOfChainAutomatically: StateFlow<Boolean> = userPreferencesManager.importAndUploadRestOfChainAutomatically().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(),
@@ -46,6 +51,12 @@ class SettingsViewModel @Inject constructor(
     fun updateImportAndUploadRestOfChainAutomatically(doThemAll: Boolean) {
         viewModelScope.launch {
             userPreferencesManager.setImportAndUploadRestOfChainAutomatically(doThemAll)
+        }
+    }
+
+    fun updateCreateNewUuidOnImport(createNewUuid: Boolean) {
+        viewModelScope.launch {
+            userPreferencesManager.setCreateNewUuidOnImport(createNewUuid)
         }
     }
 }

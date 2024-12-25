@@ -90,7 +90,7 @@ class ProcessRunViewModel @AssistedInject constructor(
                         val partialResult =
                             getProcessStepListForOneProcess(
                                 process = process,
-                                countBackwards = userPreferencesRepository.countBackwards().firstOrNull() ?: false,
+                                countBackwards = userPreferencesRepository.countBackwards().firstOrNull() == true,
                             )
                         result.addAll(partialResult)
                         // do we need hours in the display?
