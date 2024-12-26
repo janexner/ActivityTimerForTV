@@ -61,7 +61,7 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
         this.connectionsClient = connectionsClient
     }
 
-    val messages = mutableStateListOf<String>("OK")
+    val messages = mutableStateListOf<String>()
 //        private set
 
     private val payloadCallback = object : PayloadCallback() {

@@ -56,7 +56,7 @@ fun ManageProcesses(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Column {
-                Text(text = "Activity Timer")
+                Text(text = "Activity Timer Companion")
                 Image(
                     painter = painterResource(R.drawable.qr_activitytimer_241226),
                     contentDescription = "https://jan-exner.de/software/android/activitytimer"
