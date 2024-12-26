@@ -38,7 +38,7 @@ import androidx.tv.material3.Text
 import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
-import com.exner.tools.activitytimerfortv.ui.ProcessStateConstants
+import com.exner.tools.activitytimerfortv.ui.ImportProcessStateConstants
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
@@ -80,8 +80,8 @@ fun ImportFromNearbyDevice(
         // buttons
         Row {
             when (processState.currentState) {
-                ProcessStateConstants.AWAITING_PERMISSIONS,
-                ProcessStateConstants.PERMISSIONS_DENIED -> {
+                ImportProcessStateConstants.AWAITING_PERMISSIONS,
+                ImportProcessStateConstants.PERMISSIONS_DENIED -> {
                     StandardButton(
                         onClick = {
                             permissionsNeeded.launchMultiplePermissionRequest()
@@ -91,15 +91,15 @@ fun ImportFromNearbyDevice(
                     )
                 }
 
-                ProcessStateConstants.PERMISSIONS_GRANTED,
-                ProcessStateConstants.CANCELLED,
-                ProcessStateConstants.DONE -> {
+                ImportProcessStateConstants.PERMISSIONS_GRANTED,
+                ImportProcessStateConstants.CANCELLED,
+                ImportProcessStateConstants.DONE -> {
                     if (importFromNearbyDeviceViewModel.receivedProcesses.isEmpty()) {
                         Button(
                             enabled = permissionsNeeded.allPermissionsGranted,
                             onClick = {
                                 importFromNearbyDeviceViewModel.transitionToNewState(
-                                    ProcessStateConstants.START_ADVERTISING
+                                    ImportProcessStateConstants.START_ADVERTISING
                                 )
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
@@ -119,7 +119,7 @@ fun ImportFromNearbyDevice(
                             onClick = {
                                 importFromNearbyDeviceViewModel.dbgGenerateReceivedProcessesList()
                                 importFromNearbyDeviceViewModel.transitionToNewState(
-                                    ProcessStateConstants.DONE
+                                    ImportProcessStateConstants.DONE
                                 )
                             },
                             imageVector = Icons.Default.Warning,
@@ -136,11 +136,11 @@ fun ImportFromNearbyDevice(
             Spacer(modifier = Modifier.weight(0.5f))
             StandardButton(
                 onClick = {
-                    if (processState.currentState == ProcessStateConstants.CANCELLED) {
+                    if (processState.currentState == ImportProcessStateConstants.CANCELLED) {
                         navigator.navigateUp()
                     } else {
                         importFromNearbyDeviceViewModel.transitionToNewState(
-                            ProcessStateConstants.CANCELLED,
+                            ImportProcessStateConstants.CANCELLED,
                             "Cancelled by user"
                         )
                     }
@@ -153,8 +153,8 @@ fun ImportFromNearbyDevice(
         Spacer(modifier = Modifier.weight(0.1f))
 
         // some sanity checking for state
-        if (processState.currentState == ProcessStateConstants.AWAITING_PERMISSIONS && permissionsNeeded.allPermissionsGranted) {
-            importFromNearbyDeviceViewModel.transitionToNewState(ProcessStateConstants.PERMISSIONS_GRANTED)
+        if (processState.currentState == ImportProcessStateConstants.AWAITING_PERMISSIONS && permissionsNeeded.allPermissionsGranted) {
+            importFromNearbyDeviceViewModel.transitionToNewState(ImportProcessStateConstants.PERMISSIONS_GRANTED)
         }
 
         // display received processes
@@ -198,61 +198,61 @@ fun ImportFromNearbyDevice(
 
         // UI, depending on state
         when (processState.currentState) {
-            ProcessStateConstants.AWAITING_PERMISSIONS -> {
+            ImportProcessStateConstants.AWAITING_PERMISSIONS -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "If you would like to receive processes from your phone, this app needs permission for Bluetooth, WiFi, and the discovery of nearby devices, which may also need location permissions.")
                 }
             }
 
-            ProcessStateConstants.PERMISSIONS_GRANTED -> {
+            ImportProcessStateConstants.PERMISSIONS_GRANTED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "All permissions OK, ready to advertise our presence.")
                 }
             }
 
-            ProcessStateConstants.START_ADVERTISING -> {
+            ImportProcessStateConstants.START_ADVERTISING -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Starting advertising...")
                 }
             }
 
-            ProcessStateConstants.PERMISSIONS_DENIED -> {
+            ImportProcessStateConstants.PERMISSIONS_DENIED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Without the necessary permissions, importing from nearby devices is not possible.")
                 }
             }
 
-            ProcessStateConstants.ADVERTISING -> {
+            ImportProcessStateConstants.ADVERTISING -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Waiting for devices to connect...")
                 }
             }
 
-            ProcessStateConstants.DISCOVERED -> {
+            ImportProcessStateConstants.DISCOVERED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "We have been discovered!")
                 }
             }
 
-            ProcessStateConstants.CONNECTION_INITIATED -> {
+            ImportProcessStateConstants.CONNECTION_INITIATED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Connection initiated, waiting for partner to confirm...")
                 }
             }
 
-            ProcessStateConstants.CONNECTION_ESTABLISHED -> {
+            ImportProcessStateConstants.CONNECTION_ESTABLISHED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Connection has been established")
                 }
             }
 
-            ProcessStateConstants.CONNECTION_FAILED -> {
+            ImportProcessStateConstants.CONNECTION_FAILED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Connection has failed!")
                 }
             }
 
-            ProcessStateConstants.RECEIVING -> {
+            ImportProcessStateConstants.RECEIVING -> {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     item { Text(text = "We are receiving data!") }
                     if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
@@ -261,7 +261,7 @@ fun ImportFromNearbyDevice(
                 }
             }
 
-            ProcessStateConstants.AUTHENTICATION_REQUESTED -> {
+            ImportProcessStateConstants.AUTHENTICATION_REQUESTED -> {
                 openAuthenticationDialog.value = true
                 ProcessStateAuthenticationRequestedScreen(
                     openAuthenticationDialog = openAuthenticationDialog.value,
@@ -269,32 +269,32 @@ fun ImportFromNearbyDevice(
                     confirmCallback = {
                         openAuthenticationDialog.value = false
                         importFromNearbyDeviceViewModel.transitionToNewState(
-                            ProcessStateConstants.AUTHENTICATION_OK,
+                            ImportProcessStateConstants.AUTHENTICATION_OK,
                             "Accepted"
                         )
                     },
                     dismissCallback = {
                         openAuthenticationDialog.value = false
                         importFromNearbyDeviceViewModel.transitionToNewState(
-                            ProcessStateConstants.AUTHENTICATION_DENIED,
+                            ImportProcessStateConstants.AUTHENTICATION_DENIED,
                             "Denied"
                         )
                     }
                 )
             }
 
-            ProcessStateConstants.AUTHENTICATION_OK -> {}
-            ProcessStateConstants.AUTHENTICATION_DENIED -> {}
+            ImportProcessStateConstants.AUTHENTICATION_OK -> {}
+            ImportProcessStateConstants.AUTHENTICATION_DENIED -> {}
 
-            ProcessStateConstants.ERROR -> {
+            ImportProcessStateConstants.ERROR -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Some error occurred. It may help to move away from this screen and try it all again.")
                     Text(text = processState.message)
                 }
             }
 
-            ProcessStateConstants.DONE,
-            ProcessStateConstants.CANCELLED -> {
+            ImportProcessStateConstants.DONE,
+            ImportProcessStateConstants.CANCELLED -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Done or Cancelled")
                 }

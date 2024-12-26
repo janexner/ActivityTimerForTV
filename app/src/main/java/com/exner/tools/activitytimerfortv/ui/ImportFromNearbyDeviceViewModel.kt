@@ -26,7 +26,7 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import kotlin.text.Charsets.UTF_8
 
-enum class ProcessStateConstants {
+enum class ImportProcessStateConstants {
     AWAITING_PERMISSIONS, // IDLE
     PERMISSIONS_GRANTED,
     PERMISSIONS_DENIED,
@@ -48,8 +48,8 @@ enum class ProcessStateConstants {
 const val endpointId = "com.exner.tools.ActivityTimer"
 const val userName = "Activity Timer for TV"
 
-data class ProcessState(
-    val currentState: ProcessStateConstants = ProcessStateConstants.AWAITING_PERMISSIONS,
+data class ImportProcessState(
+    val currentState: ImportProcessStateConstants = ImportProcessStateConstants.AWAITING_PERMISSIONS,
     val message: String = "Idle"
 )
 
@@ -64,8 +64,8 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
     val repository: TimerDataRepository,
     val userPreferencesRepository: UserPreferencesManager
 ) : ViewModel() {
-    private val _processStateFlow = MutableStateFlow(ProcessState())
-    val processStateFlow: StateFlow<ProcessState> = _processStateFlow.asStateFlow()
+    private val _Import_processStateFlow = MutableStateFlow(ImportProcessState())
+    val processStateFlow: StateFlow<ImportProcessState> = _Import_processStateFlow.asStateFlow()
 
     private val _connectionInfo = MutableStateFlow(EndpointConnectionInformation())
     val connectionInfo: StateFlow<EndpointConnectionInformation> = _connectionInfo
@@ -128,8 +128,8 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 authenticationDigits = connectionInfo.authenticationDigits
             )
             // now move to auth requested
-            _processStateFlow.value = ProcessState(
-                ProcessStateConstants.AUTHENTICATION_REQUESTED,
+            _Import_processStateFlow.value = ImportProcessState(
+                ImportProcessStateConstants.AUTHENTICATION_REQUESTED,
                 connectionInfo.endpointName
             )
         }
@@ -148,22 +148,22 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                 if (null == statusMessage) {
                     statusMessage = "Unknown issue"
                 }
-                _processStateFlow.value = ProcessState(
-                    ProcessStateConstants.CONNECTION_FAILED,
+                _Import_processStateFlow.value = ImportProcessState(
+                    ImportProcessStateConstants.CONNECTION_FAILED,
                     message = statusMessage
                 )
             } else {
                 // this worked!
                 // remember this endpoint! TODO
-                _processStateFlow.value = ProcessState(
-                    ProcessStateConstants.CONNECTION_ESTABLISHED,
+                _Import_processStateFlow.value = ImportProcessState(
+                    ImportProcessStateConstants.CONNECTION_ESTABLISHED,
                     "Connection established: $endpointId"
                 )
             }
         }
 
         override fun onDisconnected(endpointId: String) {
-            _processStateFlow.value = ProcessState(ProcessStateConstants.DONE, "Disconnected")
+            _Import_processStateFlow.value = ImportProcessState(ImportProcessStateConstants.DONE, "Disconnected")
         }
     }
 
@@ -175,35 +175,35 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
     }
 
     fun transitionToNewState(
-        newState: ProcessStateConstants,
+        newState: ImportProcessStateConstants,
         message: String = "OK"
     ) {
         // there is a lot of logic to do here!
         // DO NOT USE RECURSIVELY!
         when (newState) {
-            ProcessStateConstants.PERMISSIONS_GRANTED -> {
-                _processStateFlow.value = ProcessState(newState, "OK")
+            ImportProcessStateConstants.PERMISSIONS_GRANTED -> {
+                _Import_processStateFlow.value = ImportProcessState(newState, "OK")
             }
 
-            ProcessStateConstants.PERMISSIONS_DENIED -> {
-                _processStateFlow.value = ProcessState(newState, "Denied: $message")
+            ImportProcessStateConstants.PERMISSIONS_DENIED -> {
+                _Import_processStateFlow.value = ImportProcessState(newState, "Denied: $message")
             }
 
-            ProcessStateConstants.CANCELLED -> {
+            ImportProcessStateConstants.CANCELLED -> {
                 Log.d("INDVM", "Cancelling...")
                 // just in case...
                 connectionsClient.stopAllEndpoints()
                 connectionsClient.stopAdvertising()
-                _processStateFlow.value = ProcessState(ProcessStateConstants.CANCELLED, "Cancelled")
+                _Import_processStateFlow.value = ImportProcessState(ImportProcessStateConstants.CANCELLED, "Cancelled")
             }
 
-            ProcessStateConstants.START_ADVERTISING -> {
+            ImportProcessStateConstants.START_ADVERTISING -> {
                 // trigger the actual advertising
                 val advertisingOptions: AdvertisingOptions =
                     AdvertisingOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT)
                         .build()
                 Log.d("INDVM", "Starting to advertise... $endpointId")
-                _processStateFlow.value = ProcessState(newState, "OK")
+                _Import_processStateFlow.value = ImportProcessState(newState, "OK")
                 connectionsClient.startAdvertising(
                     userName,
                     endpointId,
@@ -211,7 +211,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                     advertisingOptions
                 ).addOnSuccessListener {
                     Log.d("STARTADV", "Advertising started")
-                    _processStateFlow.value = ProcessState(newState, "Advertising")
+                    _Import_processStateFlow.value = ImportProcessState(newState, "Advertising")
                     Log.d("ADVSTARTED", "Advertising started and state set")
                 }.addOnFailureListener { e: Exception? ->
                     Log.d("STARTADV", "Start of adv failed $e")
@@ -223,69 +223,69 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                     Log.d("STARTADV", errorMessage)
                     connectionsClient.stopAllEndpoints()
                     connectionsClient.stopAdvertising()
-                    _processStateFlow.value = ProcessState(newState, errorMessage)
+                    _Import_processStateFlow.value = ImportProcessState(newState, errorMessage)
                     Log.d("ADVSTARTED", "Error: $errorMessage")
                 }
             }
 
-            ProcessStateConstants.AWAITING_PERMISSIONS -> {
-                _processStateFlow.value = ProcessState(newState, "OK")
+            ImportProcessStateConstants.AWAITING_PERMISSIONS -> {
+                _Import_processStateFlow.value = ImportProcessState(newState, "OK")
             }
 
-            ProcessStateConstants.ADVERTISING -> {
+            ImportProcessStateConstants.ADVERTISING -> {
                 Log.d("INDVM", "Now advertising...")
-                _processStateFlow.value = ProcessState(newState, "Advertising")
+                _Import_processStateFlow.value = ImportProcessState(newState, "Advertising")
             }
 
-            ProcessStateConstants.ERROR -> {
+            ImportProcessStateConstants.ERROR -> {
                 connectionsClient.stopAllEndpoints()
                 connectionsClient.stopAdvertising()
-                Log.d("INDVM", "Error: ${_processStateFlow.value.message}")
+                Log.d("INDVM", "Error: ${_Import_processStateFlow.value.message}")
             }
 
-            ProcessStateConstants.DISCOVERED -> {
+            ImportProcessStateConstants.DISCOVERED -> {
                 connectionsClient.stopAdvertising()
-                _processStateFlow.value = ProcessState(newState, "OK")
+                _Import_processStateFlow.value = ImportProcessState(newState, "OK")
             }
 
-            ProcessStateConstants.CONNECTION_INITIATED -> {
-                _processStateFlow.value = ProcessState(newState, "Connection initiated")
+            ImportProcessStateConstants.CONNECTION_INITIATED -> {
+                _Import_processStateFlow.value = ImportProcessState(newState, "Connection initiated")
             }
 
-            ProcessStateConstants.CONNECTION_ESTABLISHED -> {
-                _processStateFlow.value = ProcessState(newState, "Connection established")
+            ImportProcessStateConstants.CONNECTION_ESTABLISHED -> {
+                _Import_processStateFlow.value = ImportProcessState(newState, "Connection established")
             }
 
-            ProcessStateConstants.CONNECTION_FAILED -> {
-                _processStateFlow.value = ProcessState(newState, "Connection failed")
+            ImportProcessStateConstants.CONNECTION_FAILED -> {
+                _Import_processStateFlow.value = ImportProcessState(newState, "Connection failed")
             }
 
-            ProcessStateConstants.AUTHENTICATION_REQUESTED -> {
-                _processStateFlow.value = ProcessState(newState, "Auth requested")
+            ImportProcessStateConstants.AUTHENTICATION_REQUESTED -> {
+                _Import_processStateFlow.value = ImportProcessState(newState, "Auth requested")
                 Log.d("INDVM", "Authentication requested...")
             }
 
-            ProcessStateConstants.AUTHENTICATION_OK -> {
+            ImportProcessStateConstants.AUTHENTICATION_OK -> {
                 Log.d("INDVM", "Now accepting the connection...")
                 connectionsClient.acceptConnection(connectionInfo.value.endpointId, payloadCallback)
             }
 
-            ProcessStateConstants.AUTHENTICATION_DENIED -> {
+            ImportProcessStateConstants.AUTHENTICATION_DENIED -> {
                 Log.d("INDVM", "Connection denied!")
-                _processStateFlow.value =
-                    ProcessState(ProcessStateConstants.DISCOVERED, "Connection denied")
+                _Import_processStateFlow.value =
+                    ImportProcessState(ImportProcessStateConstants.DISCOVERED, "Connection denied")
             }
 
-            ProcessStateConstants.RECEIVING -> {
-                _processStateFlow.value = ProcessState(ProcessStateConstants.RECEIVING, message)
+            ImportProcessStateConstants.RECEIVING -> {
+                _Import_processStateFlow.value = ImportProcessState(ImportProcessStateConstants.RECEIVING, message)
             }
 
-            ProcessStateConstants.DONE -> {
+            ImportProcessStateConstants.DONE -> {
                 Log.d("INDVM", "Done")
                 // just in case...
                 connectionsClient.stopAllEndpoints()
                 connectionsClient.stopAdvertising()
-                _processStateFlow.value = ProcessState(ProcessStateConstants.DONE, "Done")
+                _Import_processStateFlow.value = ImportProcessState(ImportProcessStateConstants.DONE, "Done")
             }
         }
     }
@@ -295,7 +295,7 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
             val process = payload.toTimerProcess()
             Log.d("INBVM", "Payload received from $endpointId: ${process.name} / $process")
             _receivedProcesses.add(process)
-            transitionToNewState(ProcessStateConstants.RECEIVING, process.uuid)
+            transitionToNewState(ImportProcessStateConstants.RECEIVING, process.uuid)
         } else {
             Log.d("INBVM", "Payload received from $endpointId but wrong type: $payload")
         }

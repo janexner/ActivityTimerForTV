@@ -124,7 +124,7 @@ fun ProcessList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 modifier = Modifier.height(120.dp)
             ) {
-                items(items = category.processList, key = {it.uuid}) { process ->
+                items(items = category.processList, key = {it.uid}) { process ->
                     ProcessCard(
                         process = process,
                         backgroundUriFallback = category.backgroundUri,
