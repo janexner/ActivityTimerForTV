@@ -35,7 +35,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.AboutDestination
 import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
-import com.ramcosta.composedestinations.generated.destinations.ImportFromNearbyDeviceDestination
+import com.ramcosta.composedestinations.generated.destinations.ManageProcessesDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
 import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -140,8 +140,8 @@ fun ProcessList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
             ) {
                 item {
-                    Button(onClick = { navController.navigate(ImportFromNearbyDeviceDestination) }) {
-                        Text(text = "Import processes from nearby device")
+                    Button(onClick = { navController.navigate(ManageProcessesDestination) }) {
+                        Text(text = "Manage processes")
                     }
                 }
                 item {
