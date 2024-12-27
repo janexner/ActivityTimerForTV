@@ -101,6 +101,8 @@ dependencies {
     // retrofit
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.converter.gson)
+    implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
 
     // nearby
     implementation(libs.play.services.nearby)

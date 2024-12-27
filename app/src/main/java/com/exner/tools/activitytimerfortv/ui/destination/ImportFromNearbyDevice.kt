@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
@@ -134,6 +135,26 @@ fun ImportFromNearbyDevice(
                 else -> {}
             }
             Spacer(modifier = Modifier.weight(0.5f))
+            if (processState.currentState == ImportProcessStateConstants.CANCELLED) {
+                StandardButton(
+                    onClick = {
+                        navigator.navigateUp()
+                    },
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    text = "Go back"
+                )
+            } else {
+                StandardButton(
+                    onClick = {
+                        importFromNearbyDeviceViewModel.transitionToNewState(
+                            ImportProcessStateConstants.CANCELLED,
+                            "Cancelled by user"
+                        )
+                    },
+                    imageVector = Icons.Default.Clear,
+                    text = "Cancel"
+                )
+            }
             StandardButton(
                 onClick = {
                     if (processState.currentState == ImportProcessStateConstants.CANCELLED) {
@@ -167,8 +188,11 @@ fun ImportFromNearbyDevice(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                items(items = importFromNearbyDeviceViewModel.receivedProcesses, key = {it.uuid}) { process ->
-                    val existingProcess = importFromNearbyDeviceViewModel.doesProcessExistInLocalDatabase(process)
+                items(
+                    items = importFromNearbyDeviceViewModel.receivedProcesses,
+                    key = { it.uuid }) { process ->
+                    val existingProcess =
+                        importFromNearbyDeviceViewModel.doesProcessExistInLocalDatabase(process)
                     Log.d("IFND", "Listing imported process ${process.name}")
                     if (existingProcess) {
                         Log.d("IFND", "This process already exists in the DB!")

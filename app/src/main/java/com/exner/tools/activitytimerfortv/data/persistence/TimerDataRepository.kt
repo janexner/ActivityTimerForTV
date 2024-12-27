@@ -15,6 +15,15 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     val observeCategoryUsageCount: Flow<List<TimerCategoryIdNameCount>> =
         timerDataDAO.observeCategoryUsageCount()
 
+    @WorkerThread
+    suspend fun getAllProcesses(): List<TimerProcess> {
+        return timerDataDAO.getAllProcesses()
+    }
+
+    @WorkerThread
+    suspend fun getAllCategories(): List<TimerProcessCategory> {
+        return timerDataDAO.getAllCategories()
+    }
 
     @WorkerThread
     suspend fun loadProcessByUuid(uuid: String): TimerProcess? {

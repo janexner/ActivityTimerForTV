@@ -22,6 +22,9 @@ interface TimerDataDAO {
     @Query("SELECT * FROM timerprocesscategory ORDER BY name ASC")
     fun observeCategoriesAlphabeticallyOrdered(): Flow<List<TimerProcessCategory>>
 
+    @Query("SELECT * FROM timerprocesscategory ORDER BY name ASC")
+    suspend fun getAllCategories(): List<TimerProcessCategory>
+
     @Query("SELECT * FROM timercategoryidnamecount")
     fun observeCategoryUsageCount(): Flow<List<TimerCategoryIdNameCount>>
 

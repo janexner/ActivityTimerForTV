@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
@@ -19,6 +20,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -57,6 +60,9 @@ fun Connected(
     val processState by connectedViewModel.processStateFlow.collectAsState()
 
     val listState = rememberLazyListState()
+
+    val openAuthenticationDialog = remember { mutableStateOf(false) }
+    val connectionInfo by connectedViewModel.connectionInfo.collectAsState()
 
     connectedViewModel.provideConnectionsClient(Nearby.getConnectionsClient(context))
 
@@ -111,20 +117,26 @@ fun Connected(
                 else -> {}
             }
             Spacer(modifier = Modifier.weight(0.9f))
-            StandardButton(
-                onClick = {
-                    if (processState.currentState == ConnectedProcessStateConstants.CANCELLED) {
+            if (processState.currentState == ConnectedProcessStateConstants.CANCELLED || processState.currentState == ConnectedProcessStateConstants.DONE || processState.currentState == ConnectedProcessStateConstants.AWAITING_PERMISSIONS) {
+                StandardButton(
+                    onClick = {
                         navigator.navigateUp()
-                    } else {
+                    },
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    text = "Go back"
+                )
+            } else {
+                StandardButton(
+                    onClick = {
                         connectedViewModel.transitionToNewState(
                             ConnectedProcessStateConstants.CANCELLED,
                             "Cancelled by user"
                         )
-                    }
-                },
-                imageVector = Icons.Default.Clear,
-                text = "Cancel"
-            )
+                    },
+                    imageVector = Icons.Default.Clear,
+                    text = "Cancel"
+                )
+            }
         }
         // spacer
         DefaultSpacer()
@@ -153,6 +165,28 @@ fun Connected(
                     Icon(imageVector = Icons.Default.Check, contentDescription = "OK")
                 }
             }
+        }
+
+        if (processState.currentState == ConnectedProcessStateConstants.AUTHENTICATION_REQUESTED) {
+            openAuthenticationDialog.value = true
+            ProcessStateAuthenticationRequestedScreen(
+                openAuthenticationDialog = openAuthenticationDialog.value,
+                info = connectionInfo,
+                confirmCallback = {
+                    openAuthenticationDialog.value = false
+                    connectedViewModel.transitionToNewState(
+                        ConnectedProcessStateConstants.AUTHENTICATION_OK,
+                        "Accepted"
+                    )
+                },
+                dismissCallback = {
+                    openAuthenticationDialog.value = false
+                    connectedViewModel.transitionToNewState(
+                        ConnectedProcessStateConstants.AUTHENTICATION_DENIED,
+                        "Denied"
+                    )
+                }
+            )
         }
     }
 }

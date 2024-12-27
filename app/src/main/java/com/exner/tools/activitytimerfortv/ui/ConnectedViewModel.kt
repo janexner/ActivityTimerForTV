@@ -3,19 +3,27 @@ package com.exner.tools.activitytimerfortv.ui
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.exner.tools.activitytimerfortv.data.AllDataHolder
+import com.exner.tools.activitytimerfortv.data.persistence.TimerDataRepository
 import com.google.android.gms.nearby.connection.AdvertisingOptions
+import com.google.android.gms.nearby.connection.AdvertisingOptions.*
 import com.google.android.gms.nearby.connection.ConnectionInfo
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback
 import com.google.android.gms.nearby.connection.ConnectionResolution
 import com.google.android.gms.nearby.connection.ConnectionsClient
+import com.google.android.gms.nearby.connection.ConnectionsStatusCodes
 import com.google.android.gms.nearby.connection.Payload
 import com.google.android.gms.nearby.connection.PayloadCallback
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate
 import com.google.android.gms.nearby.connection.Strategy
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 enum class ConnectedProcessStateConstants {
@@ -32,13 +40,14 @@ enum class ConnectedProcessStateConstants {
     AUTHENTICATION_REQUESTED,
     AUTHENTICATION_OK,
     AUTHENTICATION_DENIED,
-    RECEIVING,
+    RECEIVING_DATA,
+    SENDING_DATA,
     DONE,
     CANCELLED,
     ERROR
 }
 
-//const val endpointId = "com.exner.tools.ActivityTimer"
+const val endpointIdCompanion = "com.exner.tools.ActivityTimer.Companion"
 //const val userName = "Activity Timer for TV"
 
 data class ConnectedProcessState(
@@ -47,7 +56,9 @@ data class ConnectedProcessState(
 )
 
 @HiltViewModel
-class ConnectedViewModel @Inject constructor() : ViewModel() {
+class ConnectedViewModel @Inject constructor(
+    val repository: TimerDataRepository
+) : ViewModel() {
 
     private val _processStateFlow = MutableStateFlow(ConnectedProcessState())
     val processStateFlow: StateFlow<ConnectedProcessState> = _processStateFlow.asStateFlow()
@@ -62,7 +73,9 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
     }
 
     val messages = mutableStateListOf<String>()
-//        private set
+
+    private val moshi: Moshi = Moshi.Builder().build()
+    val adapter: JsonAdapter<AllDataHolder> = moshi.adapter(AllDataHolder::class.java)
 
     private val payloadCallback = object : PayloadCallback() {
         override fun onPayloadReceived(endpointId: String, payload: Payload) {
@@ -121,35 +134,34 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
 
         override fun onConnectionResult(
             endpointId: String,
-            connectionResolution: ConnectionResolution
+            result: ConnectionResolution
         ) {
             Log.d(
                 "SNDVMCLC",
-                "onConnectionResult $endpointId: $connectionResolution"
+                "onConnectionResult $endpointId: $result"
             )
-            if (!connectionResolution.status.isSuccess) {
-                // failed
-                var statusMessage = connectionResolution.status.statusMessage
-                if (null == statusMessage) {
-                    statusMessage = "Unknown issue"
+            when (result.status.statusCode) {
+                ConnectionsStatusCodes.STATUS_OK -> {
+                    // We're connected! Can now start sending and receiving data.
+//                     postMessage("Connection established.")
+                    transitionToNewState(ConnectedProcessStateConstants.CONNECTION_ESTABLISHED)
                 }
-                _processStateFlow.value = ConnectedProcessState(
-                    ConnectedProcessStateConstants.CONNECTION_FAILED,
-                    message = statusMessage
-                )
-            } else {
-                // this worked!
-                // remember this endpoint! TODO
-                _processStateFlow.value = ConnectedProcessState(
-                    ConnectedProcessStateConstants.CONNECTION_ESTABLISHED,
-                    "Connection established: $endpointId"
-                )
+                ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED -> {
+                    // The connection was rejected by one or both sides.
+                    postMessage("Connection rejected.")
+                    transitionToNewState(ConnectedProcessStateConstants.CONNECTION_FAILED)
+                }
+                ConnectionsStatusCodes.STATUS_ERROR -> {
+                    // The connection broke before it was able to be accepted.
+                    postMessage("Connection failed.")
+                    transitionToNewState(ConnectedProcessStateConstants.CONNECTION_FAILED)
+                }
             }
         }
 
         override fun onDisconnected(endpointId: String) {
-            _processStateFlow.value =
-                ConnectedProcessState(ConnectedProcessStateConstants.DONE, "Disconnected")
+            postMessage("Disconnected")
+            transitionToNewState(ConnectedProcessStateConstants.DONE)
         }
     }
 
@@ -202,13 +214,13 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
                 postMessage("Will advertise TV's presence...")
                 // trigger the actual advertising
                 val advertisingOptions: AdvertisingOptions =
-                    AdvertisingOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT)
+                    Builder().setStrategy(Strategy.P2P_POINT_TO_POINT)
                         .build()
-                Log.d("INDVM", "Starting to advertise... $endpointId")
+                Log.d("INDVM", "Starting to advertise... $endpointIdCompanion")
                 _processStateFlow.value = ConnectedProcessState(newState, "OK")
                 connectionsClient.startAdvertising(
                     userName,
-                    endpointId,
+                    endpointIdCompanion,
                     timerLifecycleCallback,
                     advertisingOptions
                 ).addOnSuccessListener {
@@ -252,13 +264,35 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
             }
 
             ConnectedProcessStateConstants.CONNECTION_INITIATED -> {
+                connectionsClient.stopAdvertising()
                 postMessage("Connection initiated.")
                 _processStateFlow.value = ConnectedProcessState(newState, "Connection initiated")
             }
 
             ConnectedProcessStateConstants.CONNECTION_ESTABLISHED -> {
+                connectionsClient.stopAdvertising()
                 postMessage("Connection established.")
                 _processStateFlow.value = ConnectedProcessState(newState, "Connection established")
+                postMessage("Preparing data to send...")
+                viewModelScope.launch() {
+                    val allProcesses = repository.getAllProcesses()
+                    val allCategories = repository.getAllCategories()
+                    val allData = AllDataHolder(processes = allProcesses, categories = allCategories)
+                    val allDataJson = adapter.toJson(allData)
+
+                    if (allDataJson.length > ConnectionsClient.MAX_BYTES_DATA_SIZE) {
+                        postMessage("Too many processes, cannot send them all!")
+                        _processStateFlow.value = ConnectedProcessState(
+                            ConnectedProcessStateConstants.ERROR, "Too much data to send!")
+                    } else {
+                        val payload = Payload.fromBytes(allDataJson.toByteArray(charset = Charsets.UTF_8))
+                        postMessage("Sending data (${allDataJson.length} bytes)...")
+                        connectionsClient.sendPayload(endpointId, payload)
+                        _processStateFlow.value = ConnectedProcessState(
+                            ConnectedProcessStateConstants.SENDING_DATA, "Sending data (${allDataJson.length} bytes)..."
+                        )
+                    }
+                }
             }
 
             ConnectedProcessStateConstants.CONNECTION_FAILED -> {
@@ -273,6 +307,7 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
             }
 
             ConnectedProcessStateConstants.AUTHENTICATION_OK -> {
+                connectionsClient.stopAdvertising()
                 postMessage("Authentication OK")
                 Log.d("INDVM", "Now accepting the connection...")
                 connectionsClient.acceptConnection(connectionInfo.value.endpointId, payloadCallback)
@@ -288,12 +323,6 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
                     )
             }
 
-            ConnectedProcessStateConstants.RECEIVING -> {
-                // TODO
-                _processStateFlow.value =
-                    ConnectedProcessState(ConnectedProcessStateConstants.RECEIVING, message)
-            }
-
             ConnectedProcessStateConstants.DONE -> {
                 postMessage("Done")
                 Log.d("INDVM", "Done")
@@ -303,6 +332,13 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
                 _processStateFlow.value =
                     ConnectedProcessState(ConnectedProcessStateConstants.DONE, "Done")
             }
+
+            ConnectedProcessStateConstants.RECEIVING_DATA -> {
+                postMessage("Receiving data...")
+            }
+            ConnectedProcessStateConstants.SENDING_DATA -> {
+                postMessage("Sending data...")
+            }
         }
     }
 
@@ -311,7 +347,7 @@ class ConnectedViewModel @Inject constructor() : ViewModel() {
             val process = payload.toTimerProcess()
             Log.d("INBVM", "Payload received from $endpointId: ${process.name} / $process")
 //            _receivedProcesses.add(process)
-            transitionToNewState(ConnectedProcessStateConstants.RECEIVING, process.uuid)
+            transitionToNewState(ConnectedProcessStateConstants.RECEIVING_DATA, process.uuid)
         } else {
             Log.d("INBVM", "Payload received from $endpointId but wrong type: $payload")
         }
