@@ -42,8 +42,8 @@ fun durationToAnnotatedString(
             }
             withStyle(style = myStyle) {
                 append(tmp[0])
+                append(":")
             }
-            append(":")
         }
         myStyle = if ("00" == tmp[1]) {
             SpanStyle(color = LocalContentColor.current.copy(alpha = 0.2f))
@@ -52,8 +52,8 @@ fun durationToAnnotatedString(
         }
         withStyle(style = myStyle) {
             append(tmp[1])
+            append(":")
         }
-        append(":")
         append(tmp[2])
         if (postText !== null) {
             append(postText)

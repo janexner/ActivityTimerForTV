@@ -287,7 +287,7 @@ class ConnectedViewModel @Inject constructor(
                     } else {
                         val payload = Payload.fromBytes(allDataJson.toByteArray(charset = Charsets.UTF_8))
                         postMessage("Sending data (${allDataJson.length} bytes)...")
-                        connectionsClient.sendPayload(endpointId, payload)
+                        connectionsClient.sendPayload(connectionInfo.value.endpointId, payload)
                         _processStateFlow.value = ConnectedProcessState(
                             ConnectedProcessStateConstants.SENDING_DATA, "Sending data (${allDataJson.length} bytes)..."
                         )
