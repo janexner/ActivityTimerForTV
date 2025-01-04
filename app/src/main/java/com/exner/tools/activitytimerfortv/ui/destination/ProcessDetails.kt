@@ -24,13 +24,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.exner.tools.activitytimerfortv.data.persistence.TimerDataIdAndName
 import com.exner.tools.activitytimerfortv.ui.ProcessDetailsViewModel
-import com.exner.tools.activitytimerfortv.ui.tools.AutoSizeText
 import com.exner.tools.activitytimerfortv.ui.tools.BigTimerText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.InfoText
@@ -172,7 +172,7 @@ private fun Content(
                         .fillMaxWidth(0.66f)
                         .align(Alignment.End)
                 ) {
-                    AutoSizeText(
+                    Text(
                         text = durationToAnnotatedString(
                             duration = intervalTime1,
                             withHours = true,
@@ -180,6 +180,7 @@ private fun Content(
                         ),
                         maxLines = 1,
                         color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 60.5.sp
                     )
                 }
                 if (null != info) {

@@ -13,6 +13,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
@@ -65,11 +66,12 @@ fun durationToAnnotatedString(
 
 @Composable
 fun BigTimerText(duration: Duration, withHours: Boolean, modifier: Modifier = Modifier) {
-    AutoSizeText(
+    Text(
         text = durationToAnnotatedString(duration, withHours),
         modifier = modifier,
         maxLines = 1,
         color = MaterialTheme.colorScheme.onSurface,
+        fontSize = if (withHours) 146.5.sp else 227.5.sp
     )
 }
 
@@ -81,10 +83,11 @@ fun MediumTimerAndIntervalText(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        AutoSizeText(
+        Text(
             text = durationToAnnotatedString(duration, withHours, " | Round $intervalText"),
             maxLines = 1,
             color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 60.5.sp
         )
     }
 }
