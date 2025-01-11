@@ -28,9 +28,7 @@ import javax.inject.Inject
 import kotlin.text.Charsets.UTF_8
 
 enum class ImportProcessStateConstants {
-    AWAITING_PERMISSIONS, // IDLE
-    PERMISSIONS_GRANTED,
-    PERMISSIONS_DENIED,
+    IDLE,
     START_ADVERTISING,
     ADVERTISING,
     DISCOVERED,
@@ -50,7 +48,7 @@ const val endpointId = "com.exner.tools.ActivityTimer"
 const val userName = "Activity Timer for TV"
 
 data class ImportProcessState(
-    val currentState: ImportProcessStateConstants = ImportProcessStateConstants.AWAITING_PERMISSIONS,
+    val currentState: ImportProcessStateConstants = ImportProcessStateConstants.IDLE,
     val message: String = "Idle"
 )
 
@@ -179,12 +177,8 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
         // there is a lot of logic to do here!
         // DO NOT USE RECURSIVELY!
         when (newState) {
-            ImportProcessStateConstants.PERMISSIONS_GRANTED -> {
+            ImportProcessStateConstants.IDLE -> {
                 _processStateFlow.value = ImportProcessState(newState, "OK")
-            }
-
-            ImportProcessStateConstants.PERMISSIONS_DENIED -> {
-                _processStateFlow.value = ImportProcessState(newState, "Denied: $message")
             }
 
             ImportProcessStateConstants.CANCELLED -> {
@@ -224,10 +218,6 @@ class ImportFromNearbyDeviceViewModel @Inject constructor(
                     _processStateFlow.value = ImportProcessState(newState, errorMessage)
                     Log.d("ADVSTARTED", "Error: $errorMessage")
                 }
-            }
-
-            ImportProcessStateConstants.AWAITING_PERMISSIONS -> {
-                _processStateFlow.value = ImportProcessState(newState, "OK")
             }
 
             ImportProcessStateConstants.ADVERTISING -> {

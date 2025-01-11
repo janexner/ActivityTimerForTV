@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,31 +30,29 @@ import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
-import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.ConnectedProcessStateConstants
 import com.exner.tools.activitytimerfortv.ui.ConnectedViewModel
+import com.exner.tools.activitytimerfortv.ui.destination.wrappers.AskForPermissionsOnTVWrapper
 import com.exner.tools.activitytimerfortv.ui.tools.BodyText
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.nearby.Nearby
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Destination<RootGraph>
+@Destination<RootGraph>(
+    wrappers = [AskForPermissionsOnTVWrapper::class]
+)
 @Composable
 fun Connected(
     connectedViewModel: ConnectedViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val context = LocalContext.current
-    val permissions = Permissions(context = context)
-    val permissionsNeeded =
-        rememberMultiplePermissionsState(permissions = permissions.getAllNecessaryPermissionsAsListOfStrings())
 
     val processState by connectedViewModel.processStateFlow.collectAsState()
 
@@ -66,13 +63,6 @@ fun Connected(
 
     connectedViewModel.provideConnectionsClient(Nearby.getConnectionsClient(context))
 
-    // some sanity checking for state
-    if (processState.currentState == ConnectedProcessStateConstants.IDLE) {
-        connectedViewModel.transitionToNewState(ConnectedProcessStateConstants.AWAITING_PERMISSIONS)
-    } else if (processState.currentState == ConnectedProcessStateConstants.AWAITING_PERMISSIONS && permissionsNeeded.allPermissionsGranted) {
-        connectedViewModel.transitionToNewState(ConnectedProcessStateConstants.PERMISSIONS_GRANTED)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -81,22 +71,10 @@ fun Connected(
         // buttons
         Row {
             when (processState.currentState) {
-                ConnectedProcessStateConstants.AWAITING_PERMISSIONS,
-                ConnectedProcessStateConstants.PERMISSIONS_DENIED -> {
-                    StandardButton(
-                        onClick = {
-                            permissionsNeeded.launchMultiplePermissionRequest()
-                        },
-                        imageVector = Icons.Default.CheckCircle,
-                        text = "Request permissions"
-                    )
-                }
-
-                ConnectedProcessStateConstants.PERMISSIONS_GRANTED,
+                ConnectedProcessStateConstants.IDLE,
                 ConnectedProcessStateConstants.CANCELLED,
                 ConnectedProcessStateConstants.DONE -> {
                     Button(
-                        enabled = permissionsNeeded.allPermissionsGranted,
                         onClick = {
                             connectedViewModel.transitionToNewState(
                                 ConnectedProcessStateConstants.START_ADVERTISING
@@ -117,7 +95,7 @@ fun Connected(
                 else -> {}
             }
             Spacer(modifier = Modifier.weight(0.9f))
-            if (processState.currentState == ConnectedProcessStateConstants.CANCELLED || processState.currentState == ConnectedProcessStateConstants.DONE || processState.currentState == ConnectedProcessStateConstants.AWAITING_PERMISSIONS) {
+            if (processState.currentState == ConnectedProcessStateConstants.CANCELLED || processState.currentState == ConnectedProcessStateConstants.DONE) {
                 StandardButton(
                     onClick = {
                         navigator.navigateUp()

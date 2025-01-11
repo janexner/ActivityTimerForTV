@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
@@ -36,17 +35,16 @@ import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
-import com.exner.tools.activitytimerfortv.network.Permissions
 import com.exner.tools.activitytimerfortv.ui.EndpointConnectionInformation
 import com.exner.tools.activitytimerfortv.ui.ImportFromNearbyDeviceViewModel
 import com.exner.tools.activitytimerfortv.ui.ImportProcessStateConstants
+import com.exner.tools.activitytimerfortv.ui.destination.wrappers.AskForPermissionsOnTVWrapper
 import com.exner.tools.activitytimerfortv.ui.tools.DefaultSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.IconSpacer
 import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.exner.tools.activitytimerfortv.ui.tools.StandardButton
 import com.exner.tools.activitytimerfortv.ui.tools.StandardDialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.nearby.Nearby
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -54,16 +52,15 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Destination<RootGraph>
+@Destination<RootGraph>(
+    wrappers = [AskForPermissionsOnTVWrapper::class]
+)
 @Composable
 fun ImportFromNearbyDevice(
     importFromNearbyDeviceViewModel: ImportFromNearbyDeviceViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val context = LocalContext.current
-    val permissions = Permissions(context = context)
-    val permissionsNeeded =
-        rememberMultiplePermissionsState(permissions = permissions.getAllNecessaryPermissionsAsListOfStrings())
 
     val processState by importFromNearbyDeviceViewModel.processStateFlow.collectAsState()
 
@@ -81,23 +78,11 @@ fun ImportFromNearbyDevice(
         // buttons
         Row {
             when (processState.currentState) {
-                ImportProcessStateConstants.AWAITING_PERMISSIONS,
-                ImportProcessStateConstants.PERMISSIONS_DENIED -> {
-                    StandardButton(
-                        onClick = {
-                            permissionsNeeded.launchMultiplePermissionRequest()
-                        },
-                        imageVector = Icons.Default.CheckCircle,
-                        text = "Request permissions"
-                    )
-                }
-
-                ImportProcessStateConstants.PERMISSIONS_GRANTED,
+                ImportProcessStateConstants.IDLE,
                 ImportProcessStateConstants.CANCELLED,
                 ImportProcessStateConstants.DONE -> {
                     if (importFromNearbyDeviceViewModel.receivedProcesses.isEmpty()) {
                         Button(
-                            enabled = permissionsNeeded.allPermissionsGranted,
                             onClick = {
                                 importFromNearbyDeviceViewModel.transitionToNewState(
                                     ImportProcessStateConstants.START_ADVERTISING
@@ -173,11 +158,6 @@ fun ImportFromNearbyDevice(
         // spacer
         Spacer(modifier = Modifier.weight(0.1f))
 
-        // some sanity checking for state
-        if (processState.currentState == ImportProcessStateConstants.AWAITING_PERMISSIONS && permissionsNeeded.allPermissionsGranted) {
-            importFromNearbyDeviceViewModel.transitionToNewState(ImportProcessStateConstants.PERMISSIONS_GRANTED)
-        }
-
         // display received processes
         if (importFromNearbyDeviceViewModel.receivedProcesses.isNotEmpty()) {
             Text(text = "Processes received. Select a process to import it.")
@@ -222,13 +202,7 @@ fun ImportFromNearbyDevice(
 
         // UI, depending on state
         when (processState.currentState) {
-            ImportProcessStateConstants.AWAITING_PERMISSIONS -> {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "If you would like to receive processes from your phone, this app needs permission for Bluetooth, WiFi, and the discovery of nearby devices, which may also need location permissions.")
-                }
-            }
-
-            ImportProcessStateConstants.PERMISSIONS_GRANTED -> {
+            ImportProcessStateConstants.IDLE -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "All permissions OK, ready to advertise our presence.")
                 }
@@ -237,12 +211,6 @@ fun ImportFromNearbyDevice(
             ImportProcessStateConstants.START_ADVERTISING -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(text = "Starting advertising...")
-                }
-            }
-
-            ImportProcessStateConstants.PERMISSIONS_DENIED -> {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "Without the necessary permissions, importing from nearby devices is not possible.")
                 }
             }
 

@@ -28,9 +28,6 @@ import javax.inject.Inject
 
 enum class ConnectedProcessStateConstants {
     IDLE,
-    AWAITING_PERMISSIONS,
-    PERMISSIONS_GRANTED,
-    PERMISSIONS_DENIED,
     START_ADVERTISING,
     ADVERTISING,
     DISCOVERED,
@@ -183,21 +180,9 @@ class ConnectedViewModel @Inject constructor(
         // there is a lot of logic to do here!
         // DO NOT USE RECURSIVELY!
         when (newState) {
-            ConnectedProcessStateConstants.IDLE -> {}
-
-            ConnectedProcessStateConstants.AWAITING_PERMISSIONS -> {
-                postMessage("If you would like to receive processes from your phone, this app needs permission for Bluetooth, WiFi, and the discovery of nearby devices, which may also need location permissions.")
-                _processStateFlow.value = ConnectedProcessState(newState, "OK")
-            }
-
-            ConnectedProcessStateConstants.PERMISSIONS_GRANTED -> {
+            ConnectedProcessStateConstants.IDLE -> {
                 postMessage("Permissions granted.")
                 _processStateFlow.value = ConnectedProcessState(newState, "OK")
-            }
-
-            ConnectedProcessStateConstants.PERMISSIONS_DENIED -> {
-                postMessage("Permissions denied.")
-                _processStateFlow.value = ConnectedProcessState(newState, "Denied: $message")
             }
 
             ConnectedProcessStateConstants.CANCELLED -> {
@@ -274,7 +259,7 @@ class ConnectedViewModel @Inject constructor(
                 postMessage("Connection established.")
                 _processStateFlow.value = ConnectedProcessState(newState, "Connection established")
                 postMessage("Preparing data to send...")
-                viewModelScope.launch() {
+                viewModelScope.launch {
                     val allProcesses = repository.getAllProcesses()
                     val allCategories = repository.getAllCategories()
                     val allData = AllDataHolder(processes = allProcesses, categories = allCategories)
