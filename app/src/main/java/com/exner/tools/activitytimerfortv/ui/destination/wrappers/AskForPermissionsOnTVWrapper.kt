@@ -38,29 +38,29 @@ object AskForPermissionsOnTVWrapper : DestinationWrapper {
                 }
             )
 
-        // UI when we need permissions
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 48.dp, vertical = 24.dp)
-        ) {
-            // buttons
-            Row {
-                StandardButton(
-                    onClick = {
-                        permissionsNeeded.launchMultiplePermissionRequest()
-                    },
-                    imageVector = Icons.Default.CheckCircle,
-                    text = "Request permissions"
-                )
-            }
-            Spacer(modifier = Modifier.weight(0.1f))
-            Text(text = "If you would like to receive processes from your phone, this app needs permission for Bluetooth, WiFi, and the discovery of nearby devices, which may also need location permissions.")
-        }
-
         // UI when all is good
         if (permissionsNeeded.allPermissionsGranted) {
             screenContent()
+        } else {
+            // UI when we need permissions
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 48.dp, vertical = 24.dp)
+            ) {
+                // buttons
+                Row {
+                    StandardButton(
+                        onClick = {
+                            permissionsNeeded.launchMultiplePermissionRequest()
+                        },
+                        imageVector = Icons.Default.CheckCircle,
+                        text = "Request permissions"
+                    )
+                }
+                Spacer(modifier = Modifier.weight(0.1f))
+                Text(text = "If you would like to receive processes from your phone, this app needs permission for Bluetooth, WiFi, and the discovery of nearby devices, which may also need location permissions.")
+            }
         }
     }
 }

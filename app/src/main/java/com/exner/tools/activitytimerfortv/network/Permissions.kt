@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
 
+private const val MINSDKVERSION = 29
+
 class Permissions(
     val context: Context
 ) {
@@ -14,9 +16,7 @@ class Permissions(
         val maxSdkVersion: Int? = null
     )
 
-    val MINSDKVERSION = 29
-
-    val allNecessaryPermissions = listOf(
+    private val allNecessaryPermissions = listOf(
         IndividualPermission(
             name = "android.permission.ACCESS_WIFI_STATE",
             minSdkVersion = MINSDKVERSION,
