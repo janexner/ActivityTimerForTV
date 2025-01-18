@@ -3,7 +3,6 @@ package com.exner.tools.activitytimerfortv.network
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.core.content.ContextCompat
 
 class Permissions(
@@ -15,18 +14,16 @@ class Permissions(
         val maxSdkVersion: Int? = null
     )
 
-    val MINSDKVERSION = 28
+    val MINSDKVERSION = 29
 
     val allNecessaryPermissions = listOf(
         IndividualPermission(
             name = "android.permission.ACCESS_WIFI_STATE",
             minSdkVersion = MINSDKVERSION,
-            maxSdkVersion = 35
         ),
         IndividualPermission(
             name = "android.permission.CHANGE_WIFI_STATE",
             minSdkVersion = MINSDKVERSION,
-            maxSdkVersion = 35
         ),
         IndividualPermission(
             name = "android.permission.BLUETOOTH",
@@ -39,30 +36,12 @@ class Permissions(
             maxSdkVersion = 30
         ),
         IndividualPermission(
-            name = "android.permission.ACCESS_COARSE_LOCATION",
-            minSdkVersion = MINSDKVERSION,
-            maxSdkVersion = 28
-        ),
-        IndividualPermission(
-            name = "android.permission.ACCESS_FINE_LOCATION",
-            minSdkVersion = 29,
-            maxSdkVersion = 31
-        ),
-        IndividualPermission(
             name = "android.permission.BLUETOOTH_ADVERTISE",
             minSdkVersion = 31,
         ),
         IndividualPermission(
             name = "android.permission.BLUETOOTH_CONNECT",
             minSdkVersion = 31,
-        ),
-        IndividualPermission(
-            name = "android.permission.BLUETOOTH_SCAN",
-            minSdkVersion = 31,
-        ),
-        IndividualPermission(
-            name = "android.permission.NEARBY_WIFI_DEVICES",
-            minSdkVersion = 32,
         ),
     )
 
