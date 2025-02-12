@@ -35,6 +35,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.AboutDestination
 import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
+import com.ramcosta.composedestinations.generated.destinations.ExportDataDestination
 import com.ramcosta.composedestinations.generated.destinations.ManageProcessesDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
 import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
@@ -147,6 +148,11 @@ fun ProcessList(
                 item {
                     Button(onClick = { navController.navigate(CategoryListDestination) }) {
                         Text(text = "Manage categories")
+                    }
+                }
+                item {
+                    Button(onClick = { navController.navigate(ExportDataDestination) }) {
+                        Text(text = "Export data (backup)")
                     }
                 }
                 item {

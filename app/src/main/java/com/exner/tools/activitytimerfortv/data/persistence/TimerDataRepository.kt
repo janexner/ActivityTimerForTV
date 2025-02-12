@@ -32,6 +32,11 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     }
 
     @WorkerThread
+    suspend fun getAllProcesses(): List<TimerProcess> {
+        return timerDataDAO.getAllProcesses()
+    }
+
+    @WorkerThread
     suspend fun getFeaturedProcessList(): List<TimerProcess> {
         return timerDataDAO.getAllProcesses().shuffled().take(5)
     }
@@ -49,6 +54,11 @@ class TimerDataRepository @Inject constructor(private val timerDataDAO: TimerDat
     @WorkerThread
     suspend fun getCategoryUsageById(id: Long): TimerCategoryIdNameCount? {
         return timerDataDAO.getCategoryUsageCountForId(id)
+    }
+
+    @WorkerThread
+    suspend fun getAllCategories(): List<TimerProcessCategory> {
+        return timerDataDAO.getAllCategories()
     }
 
     @WorkerThread

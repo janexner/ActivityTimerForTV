@@ -14,8 +14,8 @@ android {
         applicationId = "com.exner.tools.activitytimerfortv"
         minSdk = 29
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.2.0"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -44,6 +44,11 @@ android {
         }
     }
     buildToolsVersion = "35.0.0"
+
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
 
     applicationVariants.all {
         val variant = this
@@ -98,16 +103,21 @@ dependencies {
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
 
-    // retrofit
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.converter.gson)
-
     // nearby
     implementation(libs.play.services.nearby)
     implementation(libs.accompanist.permissions)
 
     // Async image loading
     implementation(libs.coil.compose)
+
+    // moshi
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    ksp(libs.moshi.codegen)
+
+    // filekit
+    implementation(libs.filekit.core)
+    implementation(libs.filekit.compose)
 }
 
 hilt {

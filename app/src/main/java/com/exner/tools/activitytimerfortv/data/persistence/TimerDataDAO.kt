@@ -34,6 +34,9 @@ interface TimerDataDAO {
     @Query("SELECT * FROM timerprocesscategory WHERE uid=:id")
     suspend fun getCategoryById(id: Long): TimerProcessCategory?
 
+    @Query("SELECT * FROM timerprocesscategory ORDER BY name")
+    suspend fun getAllCategories(): List<TimerProcessCategory>
+
     @Query("SELECT tp.* FROM timerprocess tp, timerprocesscategory tc " +
             "WHERE tc.name = :categoryName " +
             "AND tp.category_id = tc.uid")

@@ -1,24 +1,25 @@
 [versions]
-agp = "8.7.3"
-kotlin = "2.1.0"
+agp = "8.8.0"
+kotlin = "2.1.10"
 appcompat = "1.7.0"
-composeBom = "2024.12.01"
-tvFoundation = "1.0.0-alpha11"
+composeBom = "2025.01.01"
+tvFoundation = "1.0.0-alpha12"
 tvMaterial = "1.0.0"
-activityCompose = "1.9.3"
-hiltCompiler = "2.54"
-ksp = "2.1.0-1.0.28"
+activityCompose = "1.10.0"
+hiltCompiler = "2.55"
+ksp = "2.1.10-1.0.29"
 room = "2.6.1"
-composeDestinations = "2.1.0-beta15"
+composeDestinations = "2.1.0-beta16"
 androidxHiltNavigationCompose = "1.2.0"
 lifecycleRuntimeCompose = "2.8.7"
-datastorePreferences = "1.1.1"
-squareupRetrofit = "2.11.0"
+datastorePreferences = "1.1.2"
 playServicesNearby = "19.3.0"
 accompanistPermissions = "0.37.0"
 coil-compose = "2.7.0"
 material3Android = "1.3.1"
-junitJupiter = "5.11.3"
+junitJupiter = "5.11.4"
+moshi = "1.15.2"
+fileKit = "0.8.8"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -38,13 +39,16 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
-squareup-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "squareupRetrofit" }
-squareup-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "squareupRetrofit" }
 play-services-nearby = { group = "com.google.android.gms", name = "play-services-nearby", version.ref = "playServicesNearby" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "fileKit" }
+filekit-compose = { group = "io.github.vinceglb", name = "filekit-compose", version.ref = "fileKit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
