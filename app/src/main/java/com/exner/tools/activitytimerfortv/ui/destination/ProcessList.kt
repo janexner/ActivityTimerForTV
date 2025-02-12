@@ -34,9 +34,8 @@ import com.exner.tools.activitytimerfortv.ui.tools.ProcessCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.AboutDestination
-import com.ramcosta.composedestinations.generated.destinations.CategoryListDestination
 import com.ramcosta.composedestinations.generated.destinations.ExportDataDestination
-import com.ramcosta.composedestinations.generated.destinations.ManageProcessesDestination
+import com.ramcosta.composedestinations.generated.destinations.ManagementDestination
 import com.ramcosta.composedestinations.generated.destinations.ProcessDetailsDestination
 import com.ramcosta.composedestinations.generated.destinations.SettingsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -141,13 +140,8 @@ fun ProcessList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
             ) {
                 item {
-                    Button(onClick = { navController.navigate(ManageProcessesDestination) }) {
-                        Text(text = "Manage processes")
-                    }
-                }
-                item {
-                    Button(onClick = { navController.navigate(CategoryListDestination) }) {
-                        Text(text = "Manage categories")
+                    Button(onClick = { navController.navigate(ManagementDestination) }) {
+                        Text(text = "Manage processes & categories")
                     }
                 }
                 item {

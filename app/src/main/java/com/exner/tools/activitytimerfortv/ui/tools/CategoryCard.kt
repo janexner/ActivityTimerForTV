@@ -72,3 +72,56 @@ fun CategoryCard(
         }
     }
 }
+
+@Composable
+fun CompactCategoryCard(
+    modifier: Modifier = Modifier,
+    category: TimerProcessCategory,
+    usage: TimerCategoryIdNameCount?,
+    backgroundUriFallback: String?,
+    onClick: () -> Unit
+) {
+    Card(
+        onClick = { onClick() },
+        modifier = modifier
+            .widthIn(max = 200.dp)
+            .aspectRatio(16f / 9f),
+    ) {
+        val backgroundColour = MaterialTheme.colorScheme.background
+        val backgroundUri = category.backgroundUri
+            ?: (backgroundUriFallback ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png")
+
+        var usageText = "Unused"
+        if (null != usage) {
+            if (usage.usageCount > 0) {
+                usageText = "Used in ${usage.usageCount} processes"
+            }
+        }
+
+        Box {
+            AsyncImage(
+                model = backgroundUri,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
+            Box(
+                contentAlignment = Alignment.BottomStart,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .drawBehind {
+                        val brush = Brush.horizontalGradient(
+                            listOf(backgroundColour, Color.Transparent)
+                        )
+                        drawRect(brush)
+                    }
+            ) {
+                Column() {
+                    Text(text = category.name)
+                    DefaultSpacer()
+                    Text(text = usageText)
+                }
+            }
+        }
+    }
+}

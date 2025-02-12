@@ -2,7 +2,7 @@
 agp = "8.8.0"
 kotlin = "2.1.10"
 appcompat = "1.7.0"
-composeBom = "2025.01.01"
+composeBom = "2025.02.00"
 tvFoundation = "1.0.0-alpha12"
 tvMaterial = "1.0.0"
 activityCompose = "1.10.0"

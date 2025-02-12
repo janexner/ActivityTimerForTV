@@ -38,7 +38,8 @@ fun ProcessCard(
     ) {
         val backgroundColour = MaterialTheme.colorScheme.background
         val backgroundUri = process.backgroundUri
-            ?: (backgroundUriFallback ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png")
+            ?: (backgroundUriFallback
+                ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png")
 
 
         Box {
@@ -73,6 +74,52 @@ fun ProcessCard(
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun CompactProcessCard(
+    modifier: Modifier = Modifier,
+    process: TimerProcess,
+    backgroundUriFallback: String?,
+    onClick: () -> Unit,
+) {
+    Card(
+        onClick = { onClick() },
+        modifier = modifier
+            .widthIn(max = 200.dp)
+            .aspectRatio(16f / 9f),
+    ) {
+        val backgroundColour = MaterialTheme.colorScheme.background
+        val backgroundUri = process.backgroundUri
+            ?: (backgroundUriFallback
+                ?: "https://fototimer.net/assets/activitytimer/bg-breathing.png")
+
+        Box {
+            AsyncImage(
+                model = backgroundUri,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
+            Box(
+                contentAlignment = Alignment.BottomStart,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .drawBehind {
+                        val brush = Brush.horizontalGradient(
+                            listOf(backgroundColour, Color.Transparent)
+                        )
+                        drawRect(brush)
+                    }
+                    .padding(4.dp)
+            ) {
+                Text(
+                    text = process.name,
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     }
