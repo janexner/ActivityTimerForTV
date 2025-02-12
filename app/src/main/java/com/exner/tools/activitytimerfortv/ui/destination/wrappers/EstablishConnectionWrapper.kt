@@ -51,15 +51,10 @@ enum class ConnectedProcessStateConstants {
     IDLE,
     START_ADVERTISING,
     ADVERTISING,
-    DISCOVERED,
-    CONNECTION_INITIATED,
-    CONNECTION_ESTABLISHED,
     CONNECTION_FAILED,
     AUTHENTICATION_REQUESTED,
     AUTHENTICATION_OK,
     AUTHENTICATION_DENIED,
-    RECEIVING_DATA,
-    SENDING_DATA,
     DONE,
     CANCELLED,
     ERROR
@@ -116,22 +111,24 @@ object EstablishConnectionWrapper : DestinationWrapper {
                 when (result.status.statusCode) {
                     ConnectionsStatusCodes.STATUS_OK -> {
                         // We're connected! Can now start sending and receiving data.
-//                     postMessage("Connection established.")
-                        mainActivityViewModel.updateConnectionUIState(ConnectedProcessStateConstants.CONNECTION_ESTABLISHED)
+                        mainActivityViewModel.updateConnectedToCompanion(isConnected = true)
                     }
                     ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED -> {
                         // The connection was rejected by one or both sides.
                         mainActivityViewModel.updateConnectionUIState(ConnectedProcessStateConstants.CONNECTION_FAILED)
+                        mainActivityViewModel.updateConnectedToCompanion(isConnected = false)
                     }
                     ConnectionsStatusCodes.STATUS_ERROR -> {
                         // The connection broke before it was able to be accepted.
                         mainActivityViewModel.updateConnectionUIState(ConnectedProcessStateConstants.CONNECTION_FAILED)
+                        mainActivityViewModel.updateConnectedToCompanion(isConnected = false)
                     }
                 }
             }
 
             override fun onDisconnected(endpointId: String) {
                 mainActivityViewModel.updateConnectionUIState(ConnectedProcessStateConstants.DONE)
+                mainActivityViewModel.updateConnectedToCompanion(isConnected = false)
             }
         }
 
@@ -139,9 +136,7 @@ object EstablishConnectionWrapper : DestinationWrapper {
             override fun onPayloadReceived(endpointId: String, payload: Payload) {
                 Log.d(TAG, "Payload received ${payload.id}")
                 if (payload.type == Payload.Type.BYTES) {
-//                payloadReceived(endpointId, payload)
-//                val receivedProcessName = decodePayloadToString(payload)
-//                Log.d(TAG, "Process received: $receivedProcessName")
+                    Log.d(TAG, "Correct payload type ${payload.type}")
                     // TODO add it to the database
                 }
             }
